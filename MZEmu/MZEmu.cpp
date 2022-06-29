@@ -8,17 +8,30 @@ Bus bus;
 
 int main()
 {
+    bus.writeMemory(0x7FFB, 0x00);
+    bus.writeMemory(0x7FFC, 0x00);
+    bus.writeMemory(0x7FFD, 0x00);
+    bus.writeMemory(0x7FFE, 0x00);
+    bus.writeMemory(0x7FFF, 0x00);
+    bus.writeMemory(0x8000, 0xC6); //----------
+    bus.writeMemory(0x8001, 0xF2);
+    bus.writeMemory(0x8002, 0x00);
+    bus.writeMemory(0x8003, 0x00);
+    bus.writeMemory(0x8004, 0x00);
+    bus.writeMemory(0x8005, 0x00);
 
-    bus.writeMemory(0x0000, 0xC6);
-    bus.writeMemory(0x0001, 0xF2);
-    bus.writeMemory(0x0002, 0xF2);
-    bus.writeMemory(0x0003, 0x0A);
-
+    bus.cpu.PC = 0x8000;
     bus.cpu.A = 0x6C;
-    //while(true)
-        bus.cpu.tick();
-    
-    //std::cout << "data:" << std::to_string(bus.readMemory(0xFFF0)) << "\n";*/
+
+    std::cout << bus.cpu.getCpuInfo();
+
+    while(true) {
+        system("pause");
+
+        //bus.cpu.tick();
+        bus.cpu.step();
+        std::cout << bus.cpu.getCpuInfo();       
+    }
 
     return 0;
 }

@@ -187,7 +187,10 @@ void Z80::writeToRgister(uint8_t dest, uint8_t v)
 
 void Z80::step()
 {
-
+	do
+	{
+		tick();
+	} while (clockCycles != 0);
 }
 
 void Z80::tick()

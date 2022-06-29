@@ -74,6 +74,12 @@ public:
     void step();
     void reset(bool hardReset = false);
 
+    template<class T>
+    std::string tostringX(T v);
+    template<class T>
+    std::string tostringB(T v);
+    std::string getCpuInfo();
+
 private:
 
     struct Instruction

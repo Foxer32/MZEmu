@@ -38,5 +38,8 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Z80.InitInstructions.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Z80.Debug.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
