@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Label="Globals">
+    <MSBuildAllProjects Condition="'$(MSBuildVersion)' == '' Or '$(MSBuildVersion)' &lt; '16.0'">$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <ItemsProjectGuid>{0943dc83-8ea8-4f07-93b4-3ef5edf75fb9}</ItemsProjectGuid>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(MSBuildThisFileDirectory)</AdditionalIncludeDirectories>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ProjectCapability Include="SourceItemsFromImports" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Device.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)IBus.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Z80.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Z80.Instructions_Arithmetic8.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Z80.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Z80.Helpers.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Z80.InitInstructions.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Z80.Instructions_General.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Z80.Instructions_Load8.cpp" />
+  </ItemGroup>
+</Project>
