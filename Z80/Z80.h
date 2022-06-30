@@ -149,8 +149,42 @@ private:
     uint8_t LDRA();
 
     //Load16
-    
+    uint8_t LDDDNN();//TODO later //LDBCNN LDDENN LDHLNN LDSPNN
+    uint8_t LDIXNN();//TODO later
+    uint8_t LDIYNN();//TODO later
+    uint8_t LDHLNN();//TODO later //LDHLFNN
+    uint8_t LDDDNN();//TODO later //LDBCFNN LDDEFNN LDHLFNN2 LDSPFNN
+    uint8_t LDIXNN();//TODO later //LDIXFNN
+    uint8_t LDIYNN();//TODO later //LDIYFNN
+    uint8_t LDNNHL();//TODO later
+    uint8_t LDNNDD();//TODO later //LDNNBC LDNNDE LDNNHL2 ? LDNNSP
+    uint8_t LDNNIX();//TODO later
+    uint8_t LDNNIY();//TODO later
+    uint8_t LDSPHL();//TODO later
+    uint8_t LDSPIX();//TODO later
+    uint8_t LDSPIY();//TODO later
+    uint8_t PUSHQQ();//TODO later //PUSHBC PUSHDE PUSHHL PUSHAF
+    uint8_t PUSHIX();//TODO later
+    uint8_t PUSHIY();//TODO later
+    uint8_t POPQQ();//TODO later //POPBC POPDE POPHL POPAF
+    uint8_t POPIX();//TODO later
+    uint8_t POPIY();//TODO later
+
     //ExchangeBlockTransferAndSearch
+    uint8_t EXDEHL();//TODO later
+    uint8_t EXAFAF();//TODO later
+    uint8_t EXX();//TODO later
+    uint8_t EXSPHL();//TODO later
+    uint8_t EXSPIX();//TODO later
+    uint8_t EXSPIY();//TODO later
+    uint8_t LDI();//TODO later
+    uint8_t LDIR();//TODO later
+    uint8_t LDD();//TODO later
+    uint8_t LDDR();//TODO later
+    uint8_t CPI();//TODO later
+    uint8_t CPIR();//TODO later
+    uint8_t CPD();//TODO later
+    uint8_t CPDR();//TODO later
 
     //Arithmetic8
     uint8_t ADDAR();//TODO later
@@ -217,17 +251,178 @@ private:
     uint8_t IM2();//TODO later
 
     //Arithmetic16
+    uint8_t ADDHLSS();//TODO later
+    uint8_t ADCHLSS();//TODO later
+    uint8_t SBCHLSS();//TODO later
+    uint8_t ADDIXPP();//TODO later
+    uint8_t ADDIYRR();//TODO later //ADDITPP
+    uint8_t INCSS();//TODO later
+    uint8_t INCIX();//TODO later
+    uint8_t INCIY();//TODO later
+    uint8_t DECSS();//TODO later
+    uint8_t DECIX();//TODO later
+    uint8_t DECIY();//TODO later
 
     //RotateAndShift
+    uint8_t RLCA();//TODO later
+    uint8_t RLA();//TODO later
+    uint8_t RRCA();//TODO later
+    uint8_t RRA();//TODO later
+    uint8_t RLCR();//TODO later
+    uint8_t RLCHL();//TODO later
+    uint8_t RLCIXD();//TODO later
+    uint8_t RLCIYD();//TODO later
+    uint8_t RLR();//TODO later
+    uint8_t RLHL();//TODO later
+    uint8_t RLIXD();//TODO later
+    uint8_t RLIYD();//TODO later
+    uint8_t RRCR();//TODO later
+    uint8_t RRCHL();//TODO later
+    uint8_t RRCIXD();//TODO later
+    uint8_t RRCIYD();//TODO later
+    uint8_t RRR();//TODO later
+    uint8_t RRHL();//TODO later
+    uint8_t RRIXD();//TODO later
+    uint8_t RRIYD();//TODO later
+    uint8_t SLAR();//TODO later
+    uint8_t SLAHL();//TODO later
+    uint8_t SLAIXD();//TODO later
+    uint8_t SLAIYD();//TODO later
+    uint8_t SRAR();//TODO later
+    uint8_t SRAHL();//TODO later
+    uint8_t SRAIXD();//TODO later
+    uint8_t SRAIYD();//TODO later
+    uint8_t SRLR();//TODO later
+    uint8_t SRLHL();//TODO later
+    uint8_t SRLIXD();//TODO later
+    uint8_t SRLIYD();//TODO later
+    uint8_t RLD();//TODO later
+    uint8_t RRD();//TODO later
 
     //Bit
+    uint8_t BITBR();//TODO later
+    uint8_t BITBHL();//TODO later //BITHL
+    uint8_t BITBIXD();//TODO later //BITIXD
+    uint8_t BITBIYD();//TODO later //BITIYD
+    uint8_t SETBR();//TODO later
+    uint8_t SETBHL();//TODO later //SETHL
+    uint8_t SETBIXD();//TODO later //SETIXD
+    uint8_t SETBIYD();//TODO later //SETIYD
+    uint8_t RESBR();//TODO later
+    uint8_t RESBHL();//TODO later //RESHL
+    uint8_t RESBIXD();//TODO later //RESIXD
+    uint8_t RESBIYD();//TODO later //RESIYD
 
     //Jump
+    uint8_t JPNN();//TODO later
+    uint8_t JPCCNN();//TODO later
+    uint8_t JRE();//TODO later //JR
+    uint8_t JRCE();//TODO later //JRC
+    uint8_t JRNCE();//TODO later //JRNC
+    uint8_t JRZE();//TODO later //JRZ
+    uint8_t JRNZE();//TODO later //JRNZ
+    uint8_t JPHL();//TODO later
+    uint8_t JPIX();//TODO later
+    uint8_t JPIY();//TODO later
+    uint8_t DJNZE();//TODO later //DJNZ
 
     //CallReturn
+    uint8_t CALLNN();//TODO later //CALL
+    uint8_t CALLCCNN();//TODO later //CALLCC
+    uint8_t RET();//TODO later
+    uint8_t RETCC();//TODO later
+    uint8_t RETI();//TODO later
+    uint8_t RETN();//TODO later
+    uint8_t RSTP();//TODO later //RST
 
     //InputOutput
-    
+    uint8_t INAN();//TODO later //INA
+    uint8_t INRC();//TODO later //INR
+    uint8_t INI();//TODO later
+    uint8_t INIR();//TODO later
+    uint8_t IND();//TODO later
+    uint8_t INDR();//TODO later
+    uint8_t OUTNA();//TODO later //OUTA
+    uint8_t OUTCR();//TODO later //OUTR
+    uint8_t OUTI();//TODO later
+    uint8_t OTIR();//TODO later
+    uint8_t OUTD();//TODO later
+    uint8_t OTDR();//TODO later
+
+    //Undocumented
+    /*
+    Load16:
+    LDNNHL2 ?
+    LDIXHN
+    LDIYHN
+    LDIXLN
+    LDIYLN
+    LDRIXH
+    LDRIYH
+    LDRIXL
+    LDRIYL
+    LDIXHR
+    LDIYHR
+    LDIXLR
+    LDIYLR
+    LDIXHIXH
+    LDIXLIXL
+    LDIXHIXL
+    LDIXLIXH
+    LDIYHIYH
+    LDIYLIYL
+    LDIYHIYL
+    LDIYLIYH
+
+    Arithmetic16:
+    INCIXH
+    INCIXL
+    INCIYH
+    INCIYL
+    DECIXH
+    DECIYH
+    DECIXL
+    DECIYL
+    ADDAIXH
+    ADDAIXL
+    ADDAIYH
+    ADDAIYL
+    ADCAIXH
+    ADCAIXL
+    ADCAIYH
+    ADCAIYL
+    SUBAIXH
+    SUBAIXL
+    SUBAIYH
+    SUBAIYL
+    SBCAIXH
+    SBCAIXL
+    SBCAIYH
+    SBCAIYL
+    ANDIXH
+    ANDIXL
+    ANDIYH
+    ANDIYL
+    XORIXH
+    XORIXL
+    XORIYH
+    XORIYL
+    ORIXH
+    ORIXL
+    ORIYH
+    ORIYL
+    CPIXH
+    CPIXL
+    CPIYH
+    CPIYL
+
+    RotateAndShift:
+    SLSR
+    SLSHL
+    SLSIXD
+    SLSIYD
+
+    */
 
 
 };
