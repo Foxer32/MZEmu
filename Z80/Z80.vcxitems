@@ -20,11 +20,19 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="$(MSBuildThisFileDirectory)Z80.Debug.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Z80.Instructions_Arithmetic16.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Z80.Instructions_Arithmetic8.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Z80.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Z80.Helpers.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Z80.InitInstructions.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Z80.Instructions_Bit.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Z80.Instructions_CallReturn.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Z80.Instructions_Exchange.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Z80.Instructions_General.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Z80.Instructions_InputOutput.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Z80.Instructions_Jump.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Z80.Instructions_Load16.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Z80.Instructions_Load8.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Z80.Instructions_RotateShift.cpp" />
   </ItemGroup>
 </Project>

@@ -153,11 +153,11 @@ private:
     uint8_t LDIXNN();//TODO later
     uint8_t LDIYNN();//TODO later
     uint8_t LDHLNN();//TODO later //LDHLFNN
-    uint8_t LDDDNN();//TODO later //LDBCFNN LDDEFNN LDHLFNN2 LDSPFNN
-    uint8_t LDIXNN();//TODO later //LDIXFNN
-    uint8_t LDIYNN();//TODO later //LDIYFNN
+    uint8_t LDDDFNN();//TODO later //LDBCFNN LDDEFNN LDHLFNN2 LDSPFNN
+    uint8_t LDIXFNN();//TODO later
+    uint8_t LDIYFNN();//TODO later
     uint8_t LDNNHL();//TODO later
-    uint8_t LDNNDD();//TODO later //LDNNBC LDNNDE LDNNHL2 ? LDNNSP
+    uint8_t LDNNDD();//TODO later //LDNNBC LDNNDE LDNNHL2 LDNNSP
     uint8_t LDNNIX();//TODO later
     uint8_t LDNNIY();//TODO later
     uint8_t LDSPHL();//TODO later
@@ -169,8 +169,29 @@ private:
     uint8_t POPQQ();//TODO later //POPBC POPDE POPHL POPAF
     uint8_t POPIX();//TODO later
     uint8_t POPIY();//TODO later
+    //Undocumented
+    uint8_t LDIXHN();//TODO later
+    uint8_t LDIYHN();//TODO later
+    uint8_t LDIXLN();//TODO later
+    uint8_t LDIYLN();//TODO later
+    uint8_t LDRIXH();//TODO later
+    uint8_t LDRIYH();//TODO later
+    uint8_t LDRIXL();//TODO later
+    uint8_t LDRIYL();//TODO later
+    uint8_t LDIXHR();//TODO later
+    uint8_t LDIYHR();//TODO later
+    uint8_t LDIXLR();//TODO later
+    uint8_t LDIYLR();//TODO later
+    uint8_t LDIXHIXH();//TODO later
+    uint8_t LDIXLIXL();//TODO later
+    uint8_t LDIXHIXL();//TODO later
+    uint8_t LDIXLIXH();//TODO later
+    uint8_t LDIYHIYH();//TODO later
+    uint8_t LDIYLIYL();//TODO later
+    uint8_t LDIYHIYL();//TODO later
+    uint8_t LDIYLIYH();//TODO later
 
-    //ExchangeBlockTransferAndSearch
+    //Exchange
     uint8_t EXDEHL();//TODO later
     uint8_t EXAFAF();//TODO later
     uint8_t EXX();//TODO later
@@ -262,8 +283,49 @@ private:
     uint8_t DECSS();//TODO later
     uint8_t DECIX();//TODO later
     uint8_t DECIY();//TODO later
+    //Undocumented
+    uint8_t INCIXH();//TODO later
+    uint8_t INCIXL();//TODO later
+    uint8_t INCIYH();//TODO later
+    uint8_t INCIYL();//TODO later
+    uint8_t DECIXH();//TODO later
+    uint8_t DECIYH();//TODO later
+    uint8_t DECIXL();//TODO later
+    uint8_t DECIYL();//TODO later
+    uint8_t ADDAIXH();//TODO later
+    uint8_t ADDAIXL();//TODO later
+    uint8_t ADDAIYH();//TODO later
+    uint8_t ADDAIYL();//TODO later
+    uint8_t ADCAIXH();//TODO later
+    uint8_t ADCAIXL();//TODO later
+    uint8_t ADCAIYH();//TODO later
+    uint8_t ADCAIYL();//TODO later
+    uint8_t SUBAIXH();//TODO later
+    uint8_t SUBAIXL();//TODO later
+    uint8_t SUBAIYH();//TODO later
+    uint8_t SUBAIYL();//TODO later
+    uint8_t SBCAIXH();//TODO later
+    uint8_t SBCAIXL();//TODO later
+    uint8_t SBCAIYH();//TODO later
+    uint8_t SBCAIYL();//TODO later
+    uint8_t ANDIXH();//TODO later
+    uint8_t ANDIXL();//TODO later
+    uint8_t ANDIYH();//TODO later
+    uint8_t ANDIYL();//TODO later
+    uint8_t XORIXH();//TODO later
+    uint8_t XORIXL();//TODO later
+    uint8_t XORIYH();//TODO later
+    uint8_t XORIYL();//TODO later
+    uint8_t ORIXH();//TODO later
+    uint8_t ORIXL();//TODO later
+    uint8_t ORIYH();//TODO later
+    uint8_t ORIYL();//TODO later
+    uint8_t CPIXH();//TODO later
+    uint8_t CPIXL();//TODO later
+    uint8_t CPIYH();//TODO later
+    uint8_t CPIYL();//TODO later
 
-    //RotateAndShift
+    //RotateShift
     uint8_t RLCA();//TODO later
     uint8_t RLA();//TODO later
     uint8_t RRCA();//TODO later
@@ -298,6 +360,11 @@ private:
     uint8_t SRLIYD();//TODO later
     uint8_t RLD();//TODO later
     uint8_t RRD();//TODO later
+    //Undocumented
+    uint8_t SLSR();//TODO later
+    uint8_t SLSHL();//TODO later
+    uint8_t SLSIXD();//TODO later
+    uint8_t SLSIYD();//TODO later
 
     //Bit
     uint8_t BITBR();//TODO later
@@ -349,81 +416,4 @@ private:
     uint8_t OUTD();//TODO later
     uint8_t OTDR();//TODO later
 
-    //Undocumented
-    /*
-    Load16:
-    LDNNHL2 ?
-    LDIXHN
-    LDIYHN
-    LDIXLN
-    LDIYLN
-    LDRIXH
-    LDRIYH
-    LDRIXL
-    LDRIYL
-    LDIXHR
-    LDIYHR
-    LDIXLR
-    LDIYLR
-    LDIXHIXH
-    LDIXLIXL
-    LDIXHIXL
-    LDIXLIXH
-    LDIYHIYH
-    LDIYLIYL
-    LDIYHIYL
-    LDIYLIYH
-
-    Arithmetic16:
-    INCIXH
-    INCIXL
-    INCIYH
-    INCIYL
-    DECIXH
-    DECIYH
-    DECIXL
-    DECIYL
-    ADDAIXH
-    ADDAIXL
-    ADDAIYH
-    ADDAIYL
-    ADCAIXH
-    ADCAIXL
-    ADCAIYH
-    ADCAIYL
-    SUBAIXH
-    SUBAIXL
-    SUBAIYH
-    SUBAIYL
-    SBCAIXH
-    SBCAIXL
-    SBCAIYH
-    SBCAIYL
-    ANDIXH
-    ANDIXL
-    ANDIYH
-    ANDIYL
-    XORIXH
-    XORIXL
-    XORIYH
-    XORIYL
-    ORIXH
-    ORIXL
-    ORIYH
-    ORIYL
-    CPIXH
-    CPIXL
-    CPIYH
-    CPIYL
-
-    RotateAndShift:
-    SLSR
-    SLSHL
-    SLSIXD
-    SLSIYD
-
-    */
-
-
 };
-
