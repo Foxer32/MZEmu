@@ -1,7 +1,7 @@
 #pragma once
 #include "Device.h"
 #include <string>
-#include <map>
+#include <vector>
 
 class Z80 : public Device
 {
@@ -90,11 +90,13 @@ private:
         uint8_t tCycles;
     };
 
-    std::map<uint8_t, Instruction> rootInstructions;
-    std::map<uint8_t, Instruction> ddInstructions;
-    std::map<uint8_t, Instruction> fdInstructions;
-    std::map<uint8_t, Instruction> edInstructions;
-    std::map<uint8_t, Instruction> cbInstructions;
+    std::vector <Instruction> rootInstructions;
+    std::vector <Instruction> ddInstructions;
+    std::vector <Instruction> fdInstructions;
+    std::vector <Instruction> edInstructions;
+    std::vector <Instruction> cbInstructions;
+    std::vector <Instruction> ddcbInstructions;
+    std::vector <Instruction> fdcbInstructions;
 
     uint16_t absoluteAddress = 0x0000;
     uint8_t currentOpCode = 0x00;
@@ -276,7 +278,7 @@ private:
     uint8_t ADCHLSS();//TODO later
     uint8_t SBCHLSS();//TODO later
     uint8_t ADDIXPP();//TODO later
-    uint8_t ADDIYRR();//TODO later //ADDITPP
+    uint8_t ADDIYRR();//TODO later //ADDIYPP
     uint8_t INCSS();//TODO later
     uint8_t INCIX();//TODO later
     uint8_t INCIY();//TODO later
