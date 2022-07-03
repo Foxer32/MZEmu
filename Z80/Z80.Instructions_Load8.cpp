@@ -7,6 +7,7 @@ uint8_t Z80::LDRR()
 
 	uint8_t srcReg = readFromRegister(src);
 	writeToRgister(dest, srcReg);
+	resetQ();
 
 	return 0;
 }
@@ -17,6 +18,7 @@ uint8_t Z80::LDRN()
 	uint8_t n = readMemoryNext();
 
 	writeToRgister(dest, n);
+	resetQ();
 
 	return 0;
 }
@@ -27,6 +29,7 @@ uint8_t Z80::LDRHL()
 	uint8_t n = readMemory(readRegisterPair(RegisterPairs::HL));
 
 	writeToRgister(dest, n);
+	resetQ();
 
 	return 0;
 }
@@ -41,6 +44,9 @@ uint8_t Z80::LDRIXD()
 
 	writeToRgister(dest, n);
 
+	resetQ();
+	MEMPTR = absoluteAddress;
+
 	return 0;
 }
 
@@ -54,6 +60,10 @@ uint8_t Z80::LDRIYD()
 
 	writeToRgister(dest, n);
 
+	
+	resetQ();
+	MEMPTR = absoluteAddress;
+
 	return 0;
 }
 
@@ -63,6 +73,7 @@ uint8_t Z80::LDHLR()
 	uint8_t n = readFromRegister(src);
 
 	writeMemory(readRegisterPair(RegisterPairs::HL), n);
+	resetQ();
 
 	return 0;
 }
@@ -72,9 +83,12 @@ uint8_t Z80::LDIXDR()
 	uint8_t src = currentOpCode & 0b00000111;
 	uint8_t n = readFromRegister(src);
 	int8_t d = readMemoryNext();
-	uint16_t addr = IX + d;
+	absoluteAddress = IX + d;
 
-	writeMemory(addr,n);
+	writeMemory(absoluteAddress,n);
+
+	resetQ();
+	MEMPTR = absoluteAddress;
 
 	return 0;
 }
@@ -84,9 +98,12 @@ uint8_t Z80::LDIYDR()
 	uint8_t src = currentOpCode & 0b00000111;
 	uint8_t n = readFromRegister(src);
 	int8_t d = readMemoryNext();
-	uint16_t addr = IY + d;
+	absoluteAddress = IY + d;
 
-	writeMemory(addr, n);
+	writeMemory(absoluteAddress, n);
+
+	resetQ();
+	MEMPTR = absoluteAddress;
 
 	return 0;
 }
@@ -96,6 +113,8 @@ uint8_t Z80::LDHLN()
 	uint8_t n = readMemoryNext();
 	writeMemory(readRegisterPair(RegisterPairs::HL), n);
 
+	resetQ();
+
 	return 0;
 }
 
@@ -103,9 +122,12 @@ uint8_t Z80::LDIXDN()
 {
 	int8_t d = readMemoryNext();
 	uint8_t n = readMemoryNext();
-	uint16_t addr = IX + d;
+	absoluteAddress = IX + d;
 
-	writeMemory(addr,n);
+	writeMemory(absoluteAddress,n);
+
+	resetQ();
+	MEMPTR = absoluteAddress;
 
 	return 0;
 }
@@ -118,6 +140,9 @@ uint8_t Z80::LDIYDN()
 
 	writeMemory(addr, n);
 
+	resetQ();
+	MEMPTR = addr;
+
 	return 0;
 }
 
@@ -125,6 +150,9 @@ uint8_t Z80::LDABC()
 {
 	absoluteAddress = readRegisterPair(RegisterPairs::BC);
 	A = readMemory(absoluteAddress);
+
+	resetQ();
+	MEMPTR = ++absoluteAddress;
 
 	return 0;
 }
@@ -134,6 +162,9 @@ uint8_t Z80::LDADE()
 	absoluteAddress = readRegisterPair(RegisterPairs::DE);
 	A = readMemory(absoluteAddress);
 
+	resetQ();
+	MEMPTR = ++absoluteAddress;
+
 	return 0;
 }
 
@@ -141,24 +172,36 @@ uint8_t Z80::LDANN()
 {
 	uint8_t lobyte = readMemoryNext();
 	uint8_t hibyte = readMemoryNext();
+	absoluteAddress = (hibyte << 8) | lobyte;
 
-	uint16_t addr = (hibyte << 8) | lobyte;
-	absoluteAddress = addr;
 	A = readMemory(absoluteAddress);
+
+	resetQ();
+	MEMPTR = ++absoluteAddress;
 
 	return 0;
 }
 
 uint8_t Z80::LDBCA()
 {
-	writeMemory(readRegisterPair(RegisterPairs::BC), A);
+	absoluteAddress = readRegisterPair(RegisterPairs::BC);
+
+	writeMemory(absoluteAddress, A);
+
+	resetQ();
+	MEMPTR = (A << 8) | (++absoluteAddress & 0xFF);
 
 	return 0;
 }
 
 uint8_t Z80::LDDEA()
 {
-	writeMemory(readRegisterPair(RegisterPairs::DE), A);
+	absoluteAddress = readRegisterPair(RegisterPairs::DE);
+
+	writeMemory(absoluteAddress, A);
+
+	resetQ();
+	MEMPTR = (A << 8) | (++absoluteAddress & 0xFF);
 
 	return 0;
 }
@@ -167,9 +210,12 @@ uint8_t Z80::LDNNA()
 {
 	uint8_t lobyte = readMemoryNext();
 	uint8_t hibyte = readMemoryNext();
+	absoluteAddress = (hibyte << 8) | lobyte;
 
-	uint16_t addr = (hibyte << 8) | lobyte;
-	writeMemory(addr,A);
+	writeMemory(absoluteAddress,A);
+
+	resetQ();
+	MEMPTR = (A << 8) | (++absoluteAddress & 0xFF);
 
 	return 0;
 }
@@ -184,10 +230,11 @@ uint8_t Z80::LDAI()
 	setFlag(Flags::P, IFF2);
 	setFlag(Flags::N, false);	
 
-	// TODO: if an interrupt occurs during this instruction, reset P/V
-	//setFlag(Flags::X, sum & 0x08);
-	//setFlag(Flags::U, sum & 0x20);
-	//setQ();
+	//TODO: if an interrupt occurs during this instruction, reset P/V
+	setFlag(Flags::P, IFF2);
+	setFlag(Flags::X, A & 0x08);
+	setFlag(Flags::U, A & 0x20);
+	setQ();
 
 	return 0;
 }
@@ -202,10 +249,11 @@ uint8_t Z80::LDAR()
 	setFlag(Flags::P, IFF2);
 	setFlag(Flags::N, false);
 
-	// TODO: if an interrupt occurs during this instruction, reset P/V
-	//setFlag(Flags::X, sum & 0x08);
-	//setFlag(Flags::U, sum & 0x20);
-	//setQ();
+	//TODO: if an interrupt occurs during this instruction, reset P/V
+	setFlag(Flags::P, IFF2);
+	setFlag(Flags::X, A & 0x08);
+	setFlag(Flags::U, A & 0x20);
+	setQ();
 
 	return 0;
 }
@@ -213,6 +261,7 @@ uint8_t Z80::LDAR()
 uint8_t Z80::LDIA()
 {
 	I = A;
+	resetQ();
 
 	return 0;
 }
@@ -220,6 +269,7 @@ uint8_t Z80::LDIA()
 uint8_t Z80::LDRA()
 {
 	R = A;
+	resetQ();
 
 	return 0;
 }

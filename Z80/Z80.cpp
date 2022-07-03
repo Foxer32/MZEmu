@@ -17,7 +17,7 @@ Z80::~Z80()
 {
 
 }
-/*
+
 void Z80::setQ()
 {
 	Q = F;
@@ -27,7 +27,7 @@ void Z80::resetQ()
 {
 	Q = 0x00;
 }
-*/
+
 bool Z80::getFlag(Flags flag)
 {
 	return F & static_cast<uint8_t>(flag);
@@ -254,13 +254,13 @@ void Z80::reset(bool hardReset)
 	IFF1 = IFF2 = false;
 	interruptMode = InterruptModes::Mode0;
 	isHalted = false;
-	//Q = 0x00;
+	Q = 0x00;
 
 	if (hardReset)
 	{
 		B = C = D = E = H = L = 0x00;
 		B1 = C1 = D1 = E1 = H1 = L1 = 0x00;
 		IX = IY = 0x0000;
-		//MEMPTR = 0x0000;
+		MEMPTR = 0x0000;
 	}
 }

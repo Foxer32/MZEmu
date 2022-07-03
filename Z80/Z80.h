@@ -51,9 +51,9 @@ public:
         C = 1 << 0,
         N = 1 << 1,
         P = 1 << 2,
-        //X = 1 << 3,
+        X = 1 << 3,
         H = 1 << 4,
-        //U = 1 << 5,
+        U = 1 << 5,
         Z = 1 << 6,
         S = 1 << 7,
     };
@@ -67,8 +67,8 @@ public:
 
     InterruptModes interruptMode = InterruptModes::Mode0;
 
-    //uint16_t MEMPTR = 0x0000;
-    //uint8_t Q = 0x00;
+    uint16_t MEMPTR = 0x0000;
+    uint8_t Q = 0x00;
 
     void tick();
     void step();
@@ -103,8 +103,8 @@ private:
     Instruction* currentInstruction;
     uint8_t clockCycles = 0;
 
-    //void setQ();
-    //void resetQ();
+    void setQ();
+    void resetQ();
 
     bool getFlag(Flags flag);
     void setFlag(Flags flag, bool v);
@@ -122,6 +122,8 @@ private:
     uint8_t readMemoryNext();
     void initInstructions();
 
+    //Helpers
+    void writeDD(uint16_t v, uint8_t dd);
     uint8_t add8(uint8_t a, uint8_t b, uint8_t c = 0);
 
     //Missing
@@ -151,47 +153,47 @@ private:
     uint8_t LDRA();
 
     //Load16
-    uint8_t LDDDNN();//TODO later //LDBCNN LDDENN LDHLNN LDSPNN
-    uint8_t LDIXNN();//TODO later
-    uint8_t LDIYNN();//TODO later
-    uint8_t LDHLNN();//TODO later //LDHLFNN
-    uint8_t LDDDFNN();//TODO later //LDBCFNN LDDEFNN LDHLFNN2 LDSPFNN
-    uint8_t LDIXFNN();//TODO later
-    uint8_t LDIYFNN();//TODO later
-    uint8_t LDNNHL();//TODO later
-    uint8_t LDNNDD();//TODO later //LDNNBC LDNNDE LDNNHL2 LDNNSP
-    uint8_t LDNNIX();//TODO later
-    uint8_t LDNNIY();//TODO later
-    uint8_t LDSPHL();//TODO later
-    uint8_t LDSPIX();//TODO later
-    uint8_t LDSPIY();//TODO later
-    uint8_t PUSHQQ();//TODO later //PUSHBC PUSHDE PUSHHL PUSHAF
-    uint8_t PUSHIX();//TODO later
-    uint8_t PUSHIY();//TODO later
-    uint8_t POPQQ();//TODO later //POPBC POPDE POPHL POPAF
-    uint8_t POPIX();//TODO later
-    uint8_t POPIY();//TODO later
+    uint8_t LDDDNN();
+    uint8_t LDIXNN();
+    uint8_t LDIYNN();
+    uint8_t LDHLNN();
+    uint8_t LDDDFNN();
+    uint8_t LDIXFNN();
+    uint8_t LDIYFNN();
+    uint8_t LDNNHL();
+    uint8_t LDNNDD();
+    uint8_t LDNNIX();
+    uint8_t LDNNIY();
+    uint8_t LDSPHL();
+    uint8_t LDSPIX();
+    uint8_t LDSPIY();
+    uint8_t PUSHQQ();
+    uint8_t PUSHIX();
+    uint8_t PUSHIY();
+    uint8_t POPQQ();
+    uint8_t POPIX();
+    uint8_t POPIY();
     //Undocumented
-    uint8_t LDIXHN();//TODO later
-    uint8_t LDIYHN();//TODO later
-    uint8_t LDIXLN();//TODO later
-    uint8_t LDIYLN();//TODO later
-    uint8_t LDRIXH();//TODO later
-    uint8_t LDRIYH();//TODO later
-    uint8_t LDRIXL();//TODO later
-    uint8_t LDRIYL();//TODO later
-    uint8_t LDIXHR();//TODO later
-    uint8_t LDIYHR();//TODO later
-    uint8_t LDIXLR();//TODO later
-    uint8_t LDIYLR();//TODO later
-    uint8_t LDIXHIXH();//TODO later
-    uint8_t LDIXLIXL();//TODO later
-    uint8_t LDIXHIXL();//TODO later
-    uint8_t LDIXLIXH();//TODO later
-    uint8_t LDIYHIYH();//TODO later
-    uint8_t LDIYLIYL();//TODO later
-    uint8_t LDIYHIYL();//TODO later
-    uint8_t LDIYLIYH();//TODO later
+    uint8_t LDIXHN();
+    uint8_t LDIYHN();
+    uint8_t LDIXLN();
+    uint8_t LDIYLN();
+    uint8_t LDRIXH();
+    uint8_t LDRIYH();
+    uint8_t LDRIXL();
+    uint8_t LDRIYL();
+    uint8_t LDIXHR();
+    uint8_t LDIYHR();
+    uint8_t LDIXLR();
+    uint8_t LDIYLR();
+    uint8_t LDIXHIXH();
+    uint8_t LDIXLIXL();
+    uint8_t LDIXHIXL();
+    uint8_t LDIXLIXH();
+    uint8_t LDIYHIYH();
+    uint8_t LDIYLIYL();
+    uint8_t LDIYHIYL();
+    uint8_t LDIYLIYH();
 
     //Exchange
     uint8_t EXDEHL();//TODO later

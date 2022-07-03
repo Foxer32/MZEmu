@@ -35,8 +35,9 @@ std::string Z80::getCpuInfo()
 {
     std::string buff = " A = " + tostringX(A) + "\t B = " + tostringX(B) + "\t C = " + tostringX(C) + "\t D = " + tostringX(D) + "\t E = " + tostringX(E) + "\t H = " + tostringX(H) + "\t L = " + tostringX(L) + '\n';
     buff += "A1 = " + tostringX(A1) + "\tB1 = " + tostringX(B1) + "\tC1 = " + tostringX(C1) + "\tD1 = " + tostringX(D1) + "\tE1 = " + tostringX(E1) + "\tH1 = " + tostringX(H1) + "\tL1 = " + tostringX(L1) + '\n';
-    buff += "\n F = " + tostringB(F) + "\tF1 = " + tostringB(F1) + "\t I = " + tostringX(I) + "\t R = " + tostringX(R) + "\n     SZUHXPNC\t     SZUHXPNC    SP = " + tostringX(SP) + "\tPC = " + tostringX(PC) + "\n";
-    buff += "\nCurrent(last) instruction: " + ( (&currentInstruction->mnemonic == NULL) ? "???" : currentInstruction->mnemonic ) + "\tClockCycles: " + std::to_string(clockCycles) + "\n\n";
+    buff += "\n F = " + tostringB(F) + "\tF1 = " + tostringB(F1) + "\tIX = " + tostringX(IX) + "    PC = " + tostringX(PC) + "\n     SZUHXPNC\t     SZUHXPNC\tIY = " + tostringX(IY) + "    SP = " + tostringX(SP) + "\n";
+    buff += "\n I = " + tostringX(I) + "\t R = " + tostringX(R);
+    buff += "\n\nCurrent(last) instruction: " + ( (&currentInstruction->mnemonic == NULL) ? "???" : currentInstruction->mnemonic ) + "\tClockCycles: " + std::to_string(clockCycles) + "\n\n";
 
     return buff;
 }
