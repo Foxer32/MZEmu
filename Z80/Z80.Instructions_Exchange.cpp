@@ -176,15 +176,15 @@ uint8_t Z80::LDDR()
 
 uint8_t Z80::CPI()
 {
-	int8_t n = readMemory(readRegisterPair(RegisterPairs::HL));
-	int8_t diff = A - n;
+	uint8_t n = readMemory(readRegisterPair(RegisterPairs::HL));
+	uint8_t diff = A - n;
 
 	incRegisterPair(RegisterPairs::HL);
 	incRegisterPair(RegisterPairs::BC, -1);
 
 	setFlag(Flags::S, diff & 0x80);
 	setFlag(Flags::Z, !diff);
-	setFlag(Flags::H,(A & 0x0F) < (n & 0x0F));
+	setFlag(Flags::H, (A & 0x0F) < (n & 0x0F));
 	setFlag(Flags::P, readRegisterPair(RegisterPairs::BC));
 	setFlag(Flags::N, true);
 
@@ -217,8 +217,8 @@ uint8_t Z80::CPIR()
 
 uint8_t Z80::CPD()
 {
-	int8_t n = readMemory(readRegisterPair(RegisterPairs::HL));
-	int8_t diff = A - n;
+	uint8_t n = readMemory(readRegisterPair(RegisterPairs::HL));
+	uint8_t diff = A - n;
 
 	incRegisterPair(RegisterPairs::HL, -1);
 	incRegisterPair(RegisterPairs::BC, -1);

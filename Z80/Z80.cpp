@@ -147,6 +147,8 @@ uint8_t Z80::readFromRegister(uint8_t src)
 		return H;
 	case 5:
 		return L;
+	case 6:
+		return F;
 	case 7:
 		return A;
 	default:

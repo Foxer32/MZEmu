@@ -127,6 +127,14 @@ private:
     //Helpers
     void writeDD(uint16_t v, uint8_t dd);
     uint8_t add8(uint8_t a, uint8_t b, uint8_t c = 0);
+    uint8_t sub8(uint8_t a, uint8_t b, uint8_t c = 0);
+    bool parity(uint16_t v);
+    uint8_t andAB(uint8_t a,uint8_t b);
+    uint8_t orAB(uint8_t a, uint8_t b);
+    uint8_t xorAB(uint8_t a, uint8_t b);
+    void setComparsionFlags(uint8_t n, uint16_t diff);
+    void setIncFlags(uint8_t val, uint8_t incVal);
+    void setDecFlags(uint8_t val, uint8_t decVal);
 
     //Missing
     uint8_t XXX();
@@ -214,54 +222,54 @@ private:
     uint8_t CPDR();
 
     //Arithmetic8
-    uint8_t ADDAR();//TODO later
+    uint8_t ADDAR();
     uint8_t ADDAN();
-    uint8_t ADDAHL();//TODO later
-    uint8_t ADDAIXD();//TODO later //ADDAIXDN
-    uint8_t ADDAIYD();//TODO later //ADDAIYDN
-    uint8_t ADCAR();//TODO later
+    uint8_t ADDAHL();
+    uint8_t ADDAIXD();
+    uint8_t ADDAIYD();
+    uint8_t ADCAR();
     uint8_t ADCAN();
-    uint8_t ADCAHL();//TODO later
-    uint8_t ADCAIXD();//TODO later //ADCAIXDN
-    uint8_t ADCAIYD();//TODO later //ADCAIYDN
-    uint8_t SUBR();//TODO later //SUBAR
-    uint8_t SUBN();//TODO later //SUBAN
-    uint8_t SUBHL();//TODO later //SUBAHL
-    uint8_t SUBIXD();//TODO later //SUBAIXDN
-    uint8_t SUBIYD();//TODO later //SUBAIYDN
-    uint8_t SBCAR();//TODO later
-    uint8_t SBCAN();//TODO later
-    uint8_t SBCAHL();//TODO later
-    uint8_t SBCAIXD();//TODO later //SBCAIXDN
-    uint8_t SBCAIYD();//TODO later //SBCAIYDN
-    uint8_t ANDR();//TODO later
-    uint8_t ANDN();//TODO later
-    uint8_t ANDHL();//TODO later
-    uint8_t ANDIXD();//TODO later
-    uint8_t ANDIYD();//TODO later
-    uint8_t ORR();//TODO later
-    uint8_t ORN();//TODO later
-    uint8_t ORHL();//TODO later
-    uint8_t ORIXD();//TODO later
-    uint8_t ORIYD();//TODO later
-    uint8_t XORR();//TODO later
-    uint8_t XORN();//TODO later
-    uint8_t XORHL();//TODO later
-    uint8_t XORIXD();//TODO later
-    uint8_t XORIYD();//TODO later
-    uint8_t CPR();//TODO later
-    uint8_t CPN();//TODO later
-    uint8_t CPHL();//TODO later
-    uint8_t CPIXD();//TODO later
-    uint8_t CPIYD();//TODO later
-    uint8_t INCR();//TODO later
-    uint8_t INCHL();//TODO later
-    uint8_t INCIXD();//TODO later
-    uint8_t INCIYD();//TODO later
-    uint8_t DECR();//TODO later
-    uint8_t DECHL();//TODO later
-    uint8_t DECIXD();//TODO later
-    uint8_t DECIYD();//TODO later
+    uint8_t ADCAHL();
+    uint8_t ADCAIXD();
+    uint8_t ADCAIYD();
+    uint8_t SUBR();
+    uint8_t SUBN();
+    uint8_t SUBHL();
+    uint8_t SUBIXD();
+    uint8_t SUBIYD();
+    uint8_t SBCAR();
+    uint8_t SBCAN();
+    uint8_t SBCAHL();
+    uint8_t SBCAIXD();
+    uint8_t SBCAIYD();
+    uint8_t ANDR();
+    uint8_t ANDN();
+    uint8_t ANDHL();
+    uint8_t ANDIXD();
+    uint8_t ANDIYD();
+    uint8_t ORR();
+    uint8_t ORN();
+    uint8_t ORHL();
+    uint8_t ORIXD();
+    uint8_t ORIYD();
+    uint8_t XORR();
+    uint8_t XORN();
+    uint8_t XORHL();
+    uint8_t XORIXD();
+    uint8_t XORIYD();
+    uint8_t CPR();
+    uint8_t CPN();
+    uint8_t CPHL();
+    uint8_t CPIXD();
+    uint8_t CPIYD();
+    uint8_t INCR();
+    uint8_t INCHL();
+    uint8_t INCIXD();
+    uint8_t INCIYD();
+    uint8_t DECR();
+    uint8_t DECHL();
+    uint8_t DECIXD();
+    uint8_t DECIYD();
 
     //General
     uint8_t DAA();//TODO later
