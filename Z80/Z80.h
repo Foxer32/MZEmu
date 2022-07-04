@@ -119,6 +119,8 @@ private:
     uint8_t readFromRegister(uint8_t src);
     void writeToRgister(uint8_t dest, uint8_t v);
 
+    void incRegisterPair(RegisterPairs rp, int16_t v = 1);
+
     uint8_t readMemoryNext();
     void initInstructions();
 
@@ -196,20 +198,20 @@ private:
     uint8_t LDIYLIYH();
 
     //Exchange
-    uint8_t EXDEHL();//TODO later
-    uint8_t EXAFAF();//TODO later
-    uint8_t EXX();//TODO later
-    uint8_t EXSPHL();//TODO later
-    uint8_t EXSPIX();//TODO later
-    uint8_t EXSPIY();//TODO later
-    uint8_t LDI();//TODO later
-    uint8_t LDIR();//TODO later
-    uint8_t LDD();//TODO later
-    uint8_t LDDR();//TODO later
-    uint8_t CPI();//TODO later
-    uint8_t CPIR();//TODO later
-    uint8_t CPD();//TODO later
-    uint8_t CPDR();//TODO later
+    uint8_t EXDEHL();
+    uint8_t EXAFAF();
+    uint8_t EXX();
+    uint8_t EXSPHL();
+    uint8_t EXSPIX();
+    uint8_t EXSPIY();
+    uint8_t LDI();
+    uint8_t LDIR();
+    uint8_t LDD();
+    uint8_t LDDR();
+    uint8_t CPI();
+    uint8_t CPIR();
+    uint8_t CPD();
+    uint8_t CPDR();
 
     //Arithmetic8
     uint8_t ADDAR();//TODO later

@@ -185,6 +185,11 @@ void Z80::writeToRgister(uint8_t dest, uint8_t v)
 	}
 }
 
+void Z80::incRegisterPair(RegisterPairs rp, int16_t v)
+{
+	writeRegisterPair(rp, readRegisterPair(rp) + v);
+}
+
 void Z80::step()
 {
 	do
