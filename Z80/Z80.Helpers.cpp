@@ -129,7 +129,7 @@ uint8_t Z80::xorAB(uint8_t a, uint8_t b)
 	return res;
 }
 
-void Z80::setComparsionFlags(uint8_t n, uint16_t diff)
+void Z80::setComparsionFlags(uint8_t n, uint8_t diff)
 {
 	setFlag(Flags::S, diff & 0x80);
 	setFlag(Flags::Z, !diff);
@@ -167,5 +167,92 @@ void Z80::setDecFlags(uint8_t val, uint8_t decVal)
 	setFlag(Flags::X, decVal & 0x08);
 	setFlag(Flags::U, decVal & 0x20);
 	setQ();
+}
+
+uint16_t Z80::readRegisterPair2(uint8_t src, uint16_t self, bool haveSelf)
+{
+	switch (src)
+	{
+	case 0:
+		return readRegisterPair(RegisterPairs::BC);
+	case 1:
+		return readRegisterPair(RegisterPairs::DE);
+	case 2:
+		return haveSelf? self : readRegisterPair(RegisterPairs::HL);
+	case 3:
+		return SP;
+	default:
+		return 0x0000;
+	}
+}
+
+void Z80::writeRegisterPair2(uint8_t dest, uint16_t v)
+{
+	switch (dest)
+	{
+	case 0:
+		B = v >> 8;
+		C = v & 0xFF;
+		break;
+	case 1:
+		D = v >> 8;
+		E = v & 0xFF;
+		break;
+	case 2:
+		H = v >> 8;
+		L = v & 0xFF;
+		break;
+	case 3:
+		SP = v;
+		break;
+	}
+}
+
+uint16_t Z80::add16(uint16_t a, uint16_t b, uint8_t c, bool withCarry)
+{
+	uint32_t sum = a + b + c;
+	b += c;
+
+	setFlag(Flags::H, ((a & 0x0FFF) + (b & 0x0FFF)) & 0xF000);
+	setFlag(Flags::N, false);
+	setFlag(Flags::C, sum & 0xFFFF0000);
+
+	if (withCarry)
+	{
+		setFlag(Flags::S, sum & 0x8000);
+		setFlag(Flags::Z, !(sum & 0xFFFF));
+		setFlag(Flags::P, (~(a ^ b) & (a ^ sum)) & 0x8000);
+	}
+
+	setFlag(Flags::X, sum & 0x0800);
+	setFlag(Flags::U, sum & 0x2000);
+
+	MEMPTR = ++a;
+
+	setQ();
+
+	return sum;
+}
+
+uint16_t Z80::sub16(uint16_t a, uint16_t b, uint8_t c)
+{
+	uint32_t diff = a - b - c;
+	b += c;
+
+	setFlag(Flags::S, diff & 0x8000);
+	setFlag(Flags::Z, !(diff & 0xFFFF));
+	setFlag(Flags::H, (a & 0x0FFF) < (b & 0x0FFF));
+	setFlag(Flags::P, (~(a ^ b) & (b ^ diff)) & 0x8000);
+	setFlag(Flags::N, true);
+	setFlag(Flags::C, diff & 0xFFFF0000);
+
+	setFlag(Flags::X, diff & 0x0800);
+	setFlag(Flags::U, diff & 0x2000);
+
+	MEMPTR = ++a;
+
+	setQ();
+
+	return diff;
 }
 

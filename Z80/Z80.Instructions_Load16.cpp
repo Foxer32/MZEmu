@@ -206,7 +206,7 @@ uint8_t Z80::LDSPIY()
 
 uint8_t Z80::PUSHQQ()
 {
-	uint8_t qq = 0x00;
+	uint16_t qq = 0x0000;
 
 	switch ((currentOpCode & 0b00110000) >> 4)
 	{
@@ -220,12 +220,12 @@ uint8_t Z80::PUSHQQ()
 		qq = readRegisterPair(RegisterPairs::HL);
 		break;
 	case 3:
-		qq =  readRegisterPair(RegisterPairs::AF);
+		qq = readRegisterPair(RegisterPairs::AF);
 		break;
 	}
 
 	SP--;
-	writeMemory(SP,qq >> 8);
+	writeMemory(SP, qq >> 8);
 	SP--;
 	writeMemory(SP, qq & 0xFF);
 	
@@ -262,26 +262,26 @@ uint8_t Z80::POPQQ()
 {
 	uint8_t dest = (currentOpCode & 0b00110000) >> 4;
 
-	uint8_t hi = readMemory(SP++);
 	uint8_t lo = readMemory(SP++);
+	uint8_t hi = readMemory(SP++);
 
 	switch (dest)
 	{
 	case 0:
-		B = lo;
-		C = hi;
+		B = hi;
+		C = lo;
 		break;
 	case 1:
-		D = lo;
-		E = hi;
+		D = hi;
+		E = lo;
 		break;
 	case 2:
-		H = lo;
-		L = hi;
+		H = hi;
+		L = lo;
 		break;
 	case 3:
-		A = lo;
-		F = hi;
+		A = hi;
+		F = lo;
 		break;
 	}
 
