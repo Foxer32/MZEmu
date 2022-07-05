@@ -202,16 +202,11 @@ void Z80::step()
 
 void Z80::tick()
 {
-	if (clockCycles == 0)
-	{
-		
+	if (clockCycles == 0 && !isHalted)
+	{	
 		currentOpCode = readMemory(PC);
-
-		if (rootInstructions[currentOpCode].mnemonic != "HALT")
-		{
-			PC++;
-		}
-
+		PC++;
+		
 		switch (currentOpCode)
 		{
 		case 0xDD:
