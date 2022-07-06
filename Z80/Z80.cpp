@@ -43,8 +43,7 @@ void Z80::setFlag(Flags flag, bool v)
 
 uint8_t Z80::readMemoryNext()
 {
-	absoluteAddress = PC++;
-	return readMemory(absoluteAddress);
+	return readMemory(++PC);
 }
 
 uint8_t Z80::readMemory(uint16_t addr)
@@ -204,32 +203,43 @@ void Z80::tick()
 {
 	if (clockCycles == 0 && !isHalted)
 	{	
-		currentOpCode = readMemory(PC);
-		PC++;
+		currentOpCode = readMemory(PC++);
 		
 		switch (currentOpCode)
 		{
 		case 0xDD:
-			currentOpCode = readMemory(PC);
-			PC++;
+			currentOpCode = readMemory(PC++);
+
+			if (currentOpCode == 0xCB)
+			{
+				PC++;
+				currentOpCode = readMemory(PC++);
+				currentInstruction = &ddcbInstructions[currentOpCode];
+				break;
+			}
 
 			currentInstruction = &ddInstructions[currentOpCode];
 			break;
 		case 0xFD:
-			currentOpCode = readMemory(PC);
-			PC++;
+			currentOpCode = readMemory(PC++);
+
+			if (currentOpCode == 0xCB)
+			{
+				PC++;
+				currentOpCode = readMemory(PC++);
+				currentInstruction = &fdcbInstructions[currentOpCode];
+				break;
+			}
 
 			currentInstruction = &fdInstructions[currentOpCode];
 			break;
 		case 0xED:
-			currentOpCode = readMemory(PC);
-			PC++;
+			currentOpCode = readMemory(PC++);
 
 			currentInstruction = &edInstructions[currentOpCode];
 			break;
 		case 0xCB:
-			currentOpCode = readMemory(PC);
-			PC++;
+			currentOpCode = readMemory(PC++);
 
 			currentInstruction = &cbInstructions[currentOpCode];
 			break;

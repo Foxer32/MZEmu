@@ -139,6 +139,7 @@ private:
     void writeRegisterPair2(uint8_t dest, uint16_t v);
     uint16_t add16(uint16_t a, uint16_t b, uint8_t c = 0, bool withCarry = false);
     uint16_t sub16(uint16_t a, uint16_t b, uint8_t c = 0);
+    void setRotateFlags(uint8_t n, bool resetS = false);
 
     //Missing
     uint8_t XXX();
@@ -344,45 +345,45 @@ private:
     uint8_t CPIYL();
 
     //RotateShift
-    uint8_t RLCA();//TODO later
-    uint8_t RLA();//TODO later
-    uint8_t RRCA();//TODO later
-    uint8_t RRA();//TODO later
-    uint8_t RLCR();//TODO later
-    uint8_t RLCHL();//TODO later
-    uint8_t RLCIXD();//TODO later
-    uint8_t RLCIYD();//TODO later
-    uint8_t RLR();//TODO later
-    uint8_t RLHL();//TODO later
-    uint8_t RLIXD();//TODO later
-    uint8_t RLIYD();//TODO later
-    uint8_t RRCR();//TODO later
-    uint8_t RRCHL();//TODO later
-    uint8_t RRCIXD();//TODO later
-    uint8_t RRCIYD();//TODO later
-    uint8_t RRR();//TODO later
-    uint8_t RRHL();//TODO later
-    uint8_t RRIXD();//TODO later
-    uint8_t RRIYD();//TODO later
-    uint8_t SLAR();//TODO later
-    uint8_t SLAHL();//TODO later
-    uint8_t SLAIXD();//TODO later
-    uint8_t SLAIYD();//TODO later
-    uint8_t SRAR();//TODO later
-    uint8_t SRAHL();//TODO later
-    uint8_t SRAIXD();//TODO later
-    uint8_t SRAIYD();//TODO later
-    uint8_t SRLR();//TODO later
-    uint8_t SRLHL();//TODO later
-    uint8_t SRLIXD();//TODO later
-    uint8_t SRLIYD();//TODO later
-    uint8_t RLD();//TODO later
-    uint8_t RRD();//TODO later
+    uint8_t RLCA();
+    uint8_t RLA();
+    uint8_t RRCA();
+    uint8_t RRA();
+    uint8_t RLCR();
+    uint8_t RLCHL();
+    uint8_t RLCIXD();
+    uint8_t RLCIYD();
+    uint8_t RLR();
+    uint8_t RLHL();
+    uint8_t RLIXD();
+    uint8_t RLIYD();
+    uint8_t RRCR();
+    uint8_t RRCHL();
+    uint8_t RRCIXD();
+    uint8_t RRCIYD();
+    uint8_t RRR();
+    uint8_t RRHL();
+    uint8_t RRIXD();
+    uint8_t RRIYD();
+    uint8_t SLAR();
+    uint8_t SLAHL();
+    uint8_t SLAIXD();
+    uint8_t SLAIYD();
+    uint8_t SRAR();
+    uint8_t SRAHL();
+    uint8_t SRAIXD();
+    uint8_t SRAIYD();
+    uint8_t SRLR();
+    uint8_t SRLHL();
+    uint8_t SRLIXD();
+    uint8_t SRLIYD();
+    uint8_t RLD();
+    uint8_t RRD();
     //Undocumented
-    uint8_t SLSR();//TODO later
-    uint8_t SLSHL();//TODO later
-    uint8_t SLSIXD();//TODO later
-    uint8_t SLSIYD();//TODO later
+    uint8_t SLSR();
+    uint8_t SLSHL();
+    uint8_t SLSIXD();
+    uint8_t SLSIYD();
 
     //Bit
     uint8_t BITBR();//TODO later

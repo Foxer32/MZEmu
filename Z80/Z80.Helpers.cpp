@@ -256,3 +256,17 @@ uint16_t Z80::sub16(uint16_t a, uint16_t b, uint8_t c)
 	return diff;
 }
 
+void Z80::setRotateFlags(uint8_t n, bool resetS)
+{
+	setFlag(Flags::S, (n & 0x80) && !resetS);
+	setFlag(Flags::Z, !n);
+	setFlag(Flags::H, false);
+	setFlag(Flags::P, parity(n));
+	setFlag(Flags::N, false);
+
+	setFlag(Flags::X, n & 0x08);
+	setFlag(Flags::U, n & 0x20);
+	setQ();
+}
+
+
