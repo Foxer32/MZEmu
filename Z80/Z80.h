@@ -140,6 +140,10 @@ private:
     uint16_t add16(uint16_t a, uint16_t b, uint8_t c = 0, bool withCarry = false);
     uint16_t sub16(uint16_t a, uint16_t b, uint8_t c = 0);
     void setRotateFlags(uint8_t n, bool resetS = false);
+    bool evaluateCC(uint8_t cc);
+
+    //
+    uint8_t JRif(bool c);
 
     //Missing
     uint8_t XXX();
@@ -400,17 +404,17 @@ private:
     uint8_t RESBIYD();
 
     //Jump
-    uint8_t JPNN();//TODO later
-    uint8_t JPCCNN();//TODO later
-    uint8_t JRE();//TODO later //JR
-    uint8_t JRCE();//TODO later //JRC
-    uint8_t JRNCE();//TODO later //JRNC
-    uint8_t JRZE();//TODO later //JRZ
-    uint8_t JRNZE();//TODO later //JRNZ
-    uint8_t JPHL();//TODO later
-    uint8_t JPIX();//TODO later
-    uint8_t JPIY();//TODO later
-    uint8_t DJNZE();//TODO later //DJNZ
+    uint8_t JPNN();
+    uint8_t JPCCNN();
+    uint8_t JRE();
+    uint8_t JRCE();
+    uint8_t JRNCE();
+    uint8_t JRZE();
+    uint8_t JRNZE();
+    uint8_t JPHL();
+    uint8_t JPIX();
+    uint8_t JPIY();
+    uint8_t DJNZE();
 
     //CallReturn
     uint8_t CALLNN();//TODO later //CALL

@@ -269,4 +269,44 @@ void Z80::setRotateFlags(uint8_t n, bool resetS)
 	setQ();
 }
 
+bool Z80::evaluateCC(uint8_t cc)
+{
+	switch (cc)
+	{
+	case 0:
+		return !getFlag(Flags::Z);
+	case 1:
+		return getFlag(Flags::Z);
+	case 2:
+		return !getFlag(Flags::C);
+	case 3:
+		return getFlag(Flags::C);
+	case 4:
+		return !getFlag(Flags::P);
+	case 5:
+		return getFlag(Flags::P);
+	case 6:
+		return !getFlag(Flags::S);
+	case 7:
+		return getFlag(Flags::S);
+	default:
+		return false;
+	}
+}
 
+
+
+uint8_t Z80::JRif(bool c)
+{
+	resetQ();
+
+	if (c)
+	{
+		PC += (int8_t)readMemoryNext();
+		MEMPTR = PC;
+		return 5;
+	}
+
+	PC++;
+	return 0;
+}

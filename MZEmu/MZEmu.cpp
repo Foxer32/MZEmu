@@ -13,10 +13,10 @@ int main()
     bus.writeMemory(0x7FFD, 0x00);
     bus.writeMemory(0x7FFE, 0x00);
     bus.writeMemory(0x7FFF, 0x00);
-    bus.writeMemory(0x8000, 0xFD); //----------
-    bus.writeMemory(0x8001, 0xCB);
-    bus.writeMemory(0x8002, 0xA2);
-    bus.writeMemory(0x8003, 0xAE);
+    bus.writeMemory(0x8000, 0x06); //----------
+    bus.writeMemory(0x8001, 0xE0);
+    bus.writeMemory(0x8002, 0x10);
+    bus.writeMemory(0x8003, 0xFE);
     bus.writeMemory(0x8004, 0x07);
     bus.writeMemory(0x8005, 0x00);
 

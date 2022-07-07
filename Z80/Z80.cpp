@@ -43,7 +43,7 @@ void Z80::setFlag(Flags flag, bool v)
 
 uint8_t Z80::readMemoryNext()
 {
-	return readMemory(++PC);
+	return bus->readMemory(PC++);
 }
 
 uint8_t Z80::readMemory(uint16_t addr)
@@ -203,17 +203,17 @@ void Z80::tick()
 {
 	if (clockCycles == 0 && !isHalted)
 	{	
-		currentOpCode = readMemory(PC++);
+		currentOpCode = readMemoryNext();
 		
 		switch (currentOpCode)
 		{
 		case 0xDD:
-			currentOpCode = readMemory(PC++);
+			currentOpCode = readMemoryNext();
 
 			if (currentOpCode == 0xCB)
 			{
 				PC++;
-				currentOpCode = readMemory(PC++);
+				currentOpCode = readMemoryNext();
 				currentInstruction = &ddcbInstructions[currentOpCode];
 				break;
 			}
@@ -221,12 +221,12 @@ void Z80::tick()
 			currentInstruction = &ddInstructions[currentOpCode];
 			break;
 		case 0xFD:
-			currentOpCode = readMemory(PC++);
+			currentOpCode = readMemoryNext();
 
 			if (currentOpCode == 0xCB)
 			{
 				PC++;
-				currentOpCode = readMemory(PC++);
+				currentOpCode = readMemoryNext();
 				currentInstruction = &fdcbInstructions[currentOpCode];
 				break;
 			}
@@ -234,12 +234,12 @@ void Z80::tick()
 			currentInstruction = &fdInstructions[currentOpCode];
 			break;
 		case 0xED:
-			currentOpCode = readMemory(PC++);
+			currentOpCode = readMemoryNext();
 
 			currentInstruction = &edInstructions[currentOpCode];
 			break;
 		case 0xCB:
-			currentOpCode = readMemory(PC++);
+			currentOpCode = readMemoryNext();
 
 			currentInstruction = &cbInstructions[currentOpCode];
 			break;

@@ -461,7 +461,7 @@ uint8_t Z80::DECHL()
 	uint8_t decVal = val - 1;
 	writeMemory(readRegisterPair(RegisterPairs::HL), decVal);
 
-	setIncFlags(val, decVal);
+	setDecFlags(val, decVal);
 
 	return 0;
 }
@@ -476,7 +476,7 @@ uint8_t Z80::DECIXD()
 	uint8_t decVal = val - 1;
 	writeMemory(absoluteAddress, decVal);
 
-	setIncFlags(val, decVal);
+	setDecFlags(val, decVal);
 	MEMPTR = absoluteAddress;
 
 	return 0;
@@ -492,7 +492,7 @@ uint8_t Z80::DECIYD()
 	uint8_t decVal = val - 1;
 	writeMemory(absoluteAddress, decVal);
 
-	setIncFlags(val, decVal);
+	setDecFlags(val, decVal);
 	MEMPTR = absoluteAddress;
 
 	return 0;
