@@ -144,12 +144,14 @@
     <ClCompile Include="Bus.cpp" />
     <ClCompile Include="MZEmu.cpp" />
     <ClCompile Include="TestMemory_64K.cpp" />
+    <ClCompile Include="TestPeripheral.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Bus.h" />
     <ClInclude Include="IMemory.h" />
     <ClInclude Include="IPeripheral.h" />
     <ClInclude Include="TestMemory_64K.h" />
+    <ClInclude Include="TestPeripheral.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

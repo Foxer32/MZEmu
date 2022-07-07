@@ -1,20 +1,24 @@
 #include "Bus.h"
 #include "Z80.h"
 #include "TestMemory_64K.h"
+#include "TestPeripheral.h"
 
 Bus::Bus()
 {
 	cpu.connectBus(this);
 
 
-	memDevices.push_back( ( new TestMemory_64K) );
+	memDevices.push_back(new TestMemory_64K);
+	perDevices.push_back(new TestPeripheral);
 
 	for (auto& i : memDevices) i->connectBus(this);
+	for (auto& i : perDevices) i->connectBus(this);
 }
 
 Bus::~Bus()
 {
 	for (auto& i : memDevices) delete i;
+	for (auto& i : perDevices) delete i;
 }
 
 uint8_t Bus::readMemory(uint16_t addr)

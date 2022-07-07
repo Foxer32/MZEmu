@@ -24,6 +24,9 @@
     <ClCompile Include="TestMemory_64K.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="TestPeripheral.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Bus.h">
@@ -36,6 +39,9 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="TestMemory_64K.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="TestPeripheral.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>

@@ -311,6 +311,16 @@ void Z80::popPC()
 	resetQ();
 }
 
+void Z80::setUndocIOFlags(uint16_t k, uint8_t n)
+{
+	uint16_t x = (k & 7) ^ B;
+	setFlag(Flags::H, k & 0xFF00);
+	setFlag(Flags::P, parity(x));
+	setFlag(Flags::N, n & 0x80);
+	setFlag(Flags::C, k & 0xFF00);
+	setQ();
+}
+
 
 
 uint8_t Z80::JRif(bool c)
@@ -325,5 +335,16 @@ uint8_t Z80::JRif(bool c)
 	}
 
 	PC++;
+	return 0;
+}
+
+uint8_t Z80::IOr()
+{
+	if (B)
+	{
+		PC -= 2;
+		return 5;
+	}
+
 	return 0;
 }

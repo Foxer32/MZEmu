@@ -143,9 +143,11 @@ private:
     bool evaluateCC(uint8_t cc);
     void pushPC();
     void popPC();
+    void setUndocIOFlags(uint16_t k, uint8_t n);
 
     //
     uint8_t JRif(bool c);
+    uint8_t IOr();
 
     //Missing
     uint8_t XXX();
@@ -428,17 +430,17 @@ private:
     uint8_t RSTP();
 
     //InputOutput
-    uint8_t INAN();//TODO later //INA
-    uint8_t INRC();//TODO later //INR
-    uint8_t INI();//TODO later
-    uint8_t INIR();//TODO later
-    uint8_t IND();//TODO later
-    uint8_t INDR();//TODO later
-    uint8_t OUTNA();//TODO later //OUTA
-    uint8_t OUTCR();//TODO later //OUTR
-    uint8_t OUTI();//TODO later
-    uint8_t OTIR();//TODO later
-    uint8_t OUTD();//TODO later
-    uint8_t OTDR();//TODO later
+    uint8_t INAN();
+    uint8_t INRC();
+    uint8_t INI();
+    uint8_t INIR();
+    uint8_t IND();
+    uint8_t INDR();
+    uint8_t OUTNA();
+    uint8_t OUTCR();
+    uint8_t OUTI();
+    uint8_t OTIR();
+    uint8_t OUTD();
+    uint8_t OTDR();
 
 };
