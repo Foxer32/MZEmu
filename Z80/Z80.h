@@ -386,18 +386,18 @@ private:
     uint8_t SLSIYD();
 
     //Bit
-    uint8_t BITBR();//TODO later
-    uint8_t BITBHL();//TODO later //BITHL
-    uint8_t BITBIXD();//TODO later //BITIXD
-    uint8_t BITBIYD();//TODO later //BITIYD
-    uint8_t SETBR();//TODO later
-    uint8_t SETBHL();//TODO later //SETHL
-    uint8_t SETBIXD();//TODO later //SETIXD
-    uint8_t SETBIYD();//TODO later //SETIYD
-    uint8_t RESBR();//TODO later
-    uint8_t RESBHL();//TODO later //RESHL
-    uint8_t RESBIXD();//TODO later //RESIXD
-    uint8_t RESBIYD();//TODO later //RESIYD
+    uint8_t BITBR();
+    uint8_t BITBHL();
+    uint8_t BITBIXD();
+    uint8_t BITBIYD();
+    uint8_t SETBR();
+    uint8_t SETBHL();
+    uint8_t SETBIXD();
+    uint8_t SETBIYD();
+    uint8_t RESBR();
+    uint8_t RESBHL();
+    uint8_t RESBIXD();
+    uint8_t RESBIYD();
 
     //Jump
     uint8_t JPNN();//TODO later

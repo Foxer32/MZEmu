@@ -16,7 +16,7 @@ int main()
     bus.writeMemory(0x8000, 0xFD); //----------
     bus.writeMemory(0x8001, 0xCB);
     bus.writeMemory(0x8002, 0xA2);
-    bus.writeMemory(0x8003, 0x37);
+    bus.writeMemory(0x8003, 0xAE);
     bus.writeMemory(0x8004, 0x07);
     bus.writeMemory(0x8005, 0x00);
 
