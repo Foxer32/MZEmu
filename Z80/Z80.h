@@ -141,6 +141,8 @@ private:
     uint16_t sub16(uint16_t a, uint16_t b, uint8_t c = 0);
     void setRotateFlags(uint8_t n, bool resetS = false);
     bool evaluateCC(uint8_t cc);
+    void pushPC();
+    void popPC();
 
     //
     uint8_t JRif(bool c);
@@ -417,13 +419,13 @@ private:
     uint8_t DJNZE();
 
     //CallReturn
-    uint8_t CALLNN();//TODO later //CALL
-    uint8_t CALLCCNN();//TODO later //CALLCC
-    uint8_t RET();//TODO later
-    uint8_t RETCC();//TODO later
-    uint8_t RETI();//TODO later
-    uint8_t RETN();//TODO later
-    uint8_t RSTP();//TODO later //RST
+    uint8_t CALLNN();
+    uint8_t CALLCCNN();
+    uint8_t RET();
+    uint8_t RETCC();
+    uint8_t RETI();
+    uint8_t RETN();
+    uint8_t RSTP();
 
     //InputOutput
     uint8_t INAN();//TODO later //INA

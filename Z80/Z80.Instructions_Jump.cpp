@@ -88,6 +88,5 @@ uint8_t Z80::JPIY()
 
 uint8_t Z80::DJNZE()
 {
-	B--;
-	return JRif(B);
+	return JRif(--B);
 }

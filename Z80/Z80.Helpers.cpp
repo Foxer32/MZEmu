@@ -16,8 +16,6 @@ void Z80::writeDD(uint16_t v, uint8_t dd)
 	case 3:
 		SP = v;
 		break;
-	default:
-		break;
 	}
 }
 
@@ -292,6 +290,25 @@ bool Z80::evaluateCC(uint8_t cc)
 	default:
 		return false;
 	}
+}
+
+void Z80::pushPC()
+{
+	uint8_t loByte = PC & 0xFF;
+	uint8_t hiByte = PC >> 8;
+
+	writeMemory(--SP, hiByte);
+	writeMemory(--SP, loByte);
+	resetQ();
+}
+
+void Z80::popPC()
+{
+	uint8_t loByte = readMemory(SP++);
+	uint8_t hiByte = readMemory(SP++);
+
+	PC = (hiByte << 8) | loByte;
+	resetQ();
 }
 
 
