@@ -62,38 +62,21 @@ uint8_t Z80::EXSPHL()
 	return 0;
 }
 
-uint8_t Z80::EXSPIX()
+uint8_t Z80::EXSPIR()
 {
 	uint8_t tempLo = readMemory(SP);
 	uint8_t tempHi = readMemory(SP + 1);
 
-	uint8_t ixL = IX & 0xFF;
-	uint8_t ixH = IX >> 8;
+	uint8_t irL = IR & 0xFF;
+	uint8_t irH = IR >> 8;
 
-	writeMemory(SP, ixL);
-	writeMemory(SP + 1, ixH);
+	writeMemory(SP, irL);
+	writeMemory(SP + 1, irH);
 
-	IX = (tempHi << 8) | tempLo;
+	IR = (tempHi << 8) | tempLo;
+	saveIR();
 
-	MEMPTR = IX;
-
-	return 0;
-}
-
-uint8_t Z80::EXSPIY()
-{
-	uint8_t tempLo = readMemory(SP);
-	uint8_t tempHi = readMemory(SP + 1);
-
-	uint8_t iyL = IY & 0xFF;
-	uint8_t iyH = IY >> 8;
-
-	writeMemory(SP, iyL);
-	writeMemory(SP + 1, iyH);
-
-	IY = (tempHi << 8) | tempLo;
-
-	MEMPTR = IY;
+	MEMPTR = IR;
 
 	return 0;
 }
@@ -124,16 +107,7 @@ uint8_t Z80::LDIR()
 {
 	LDI();
 
-	uint8_t extraTStates = 0;
-	if(readRegisterPair(RegisterPairs::BC))
-	{
-		PC -= 2;
-
-		extraTStates = 5;
-		MEMPTR = PC + 1;
-	}
-
-	return extraTStates;
+	return LDCPr(readRegisterPair(RegisterPairs::BC));
 }
 
 uint8_t Z80::LDD()
@@ -162,16 +136,7 @@ uint8_t Z80::LDDR()
 {
 	LDD();
 
-	uint8_t extraTStates = 0;
-	if (readRegisterPair(RegisterPairs::BC))
-	{
-		PC -= 2;
-
-		extraTStates = 5;
-		MEMPTR = PC + 1;
-	}
-
-	return extraTStates;
+	return LDCPr(readRegisterPair(RegisterPairs::BC));
 }
 
 uint8_t Z80::CPI()
@@ -203,16 +168,7 @@ uint8_t Z80::CPIR()
 {
 	CPI();
 
-	uint8_t extraTStates = 0;
-	if (readRegisterPair(RegisterPairs::BC) && !getFlag(Flags::Z))
-	{
-		PC -= 2;
-
-		extraTStates = 5;
-		MEMPTR = PC + 1;
-	}
-
-	return extraTStates;
+	return LDCPr(readRegisterPair(RegisterPairs::BC) && !getFlag(Flags::Z));
 }
 
 uint8_t Z80::CPD()
@@ -244,14 +200,5 @@ uint8_t Z80::CPDR()
 {
 	CPD();
 
-	uint8_t extraTStates = 0;
-	if (readRegisterPair(RegisterPairs::BC) && !getFlag(Flags::Z))
-	{
-		PC -= 2;
-
-		extraTStates = 5;
-		MEMPTR = PC + 1;
-	}
-
-	return extraTStates;
+	return LDCPr(readRegisterPair(RegisterPairs::BC) && !getFlag(Flags::Z));
 }

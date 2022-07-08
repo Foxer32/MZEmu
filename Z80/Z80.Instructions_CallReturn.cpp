@@ -2,38 +2,30 @@
 
 uint8_t Z80::CALLNN()
 {
-	uint8_t loByte = readMemoryNext();
-	uint8_t hiByte = readMemoryNext();
-	absoluteAddress = (hiByte << 8) | loByte;
+	absoluteAddress = readMemoryNext2Bytes();
 
 	pushPC();
-
-	PC = absoluteAddress;
-
+	MEMPTR = PC = absoluteAddress;
 	resetQ();
-	MEMPTR = absoluteAddress;
 
 	return 0;
 }
 
 uint8_t Z80::CALLCCNN()
 {
-	uint8_t loByte = readMemoryNext();
-	uint8_t hiByte = readMemoryNext();
-	absoluteAddress = (hiByte << 8) | loByte;
+	absoluteAddress = readMemoryNext2Bytes();
 
-	uint8_t additionalTStates = 0;
 	if (evaluateCC((currentOpCode & 0b00111000) >> 3))
 	{
 		pushPC();
-		PC = absoluteAddress;
-		additionalTStates = 7;
+		MEMPTR = PC = absoluteAddress;
+		return 7;
 	}
 
 	resetQ();
 	MEMPTR = absoluteAddress;
 
-	return additionalTStates;
+	return 0;
 }
 
 uint8_t Z80::RET()
@@ -47,12 +39,10 @@ uint8_t Z80::RET()
 
 uint8_t Z80::RETCC()
 {
-	uint8_t additionalTStates = 0;
 	if (evaluateCC((currentOpCode & 0b00111000) >> 3))
 	{
-		popPC();
-		MEMPTR = PC;
-		additionalTStates = 6;
+		RET();
+		return 6;
 	}
 
 	resetQ();
@@ -62,33 +52,24 @@ uint8_t Z80::RETCC()
 
 uint8_t Z80::RETI()
 {
-	popPC();
-	MEMPTR = PC;
-	resetQ();
+	RET();
 	//TODO: signal interrupting device that interrupt is complete
 	return 0;
 }
 
 uint8_t Z80::RETN()
 {
+	RET();
 	IFF1 = IFF2;
-
-	popPC();
-	MEMPTR = PC;
-	resetQ();
 
 	return 0;
 }
 
 uint8_t Z80::RSTP()
 {
-	absoluteAddress = currentOpCode & 0b00111000;
-
 	pushPC();
-	PC = absoluteAddress;
-
+	MEMPTR = PC = currentOpCode & 0b00111000;
 	resetQ();
-	MEMPTR = absoluteAddress;
 
 	return 0;
 }

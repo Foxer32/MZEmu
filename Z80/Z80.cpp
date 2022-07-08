@@ -7,7 +7,7 @@ Z80::Z80()
 	A = F = B = C = D = E = H = L = 0x00;
 	A1 = F1 = B1 = C1 = D1 = E1 = H1 = L1 = 0x00;
 	I = R = 0x00;
-	IX = IY = 0x0000;
+	IX = IY = IR = 0x0000;
 
 	initInstructions();
 
@@ -208,30 +208,21 @@ void Z80::tick()
 		switch (currentOpCode)
 		{
 		case 0xDD:
-			currentOpCode = readMemoryNext();
-
-			if (currentOpCode == 0xCB)
-			{
-				PC++;
-				currentOpCode = readMemoryNext();
-				currentInstruction = &ddcbInstructions[currentOpCode];
-				break;
-			}
-
-			currentInstruction = &ddInstructions[currentOpCode];
-			break;
 		case 0xFD:
+			irIsIX = (currentOpCode == 0xDD);
+			IR = irIsIX ? IX : IY;
+
 			currentOpCode = readMemoryNext();
 
 			if (currentOpCode == 0xCB)
 			{
 				PC++;
 				currentOpCode = readMemoryNext();
-				currentInstruction = &fdcbInstructions[currentOpCode];
+				currentInstruction = &ircbInstructions[currentOpCode];
 				break;
 			}
 
-			currentInstruction = &fdInstructions[currentOpCode];
+			currentInstruction = &irInstructions[currentOpCode];
 			break;
 		case 0xED:
 			currentOpCode = readMemoryNext();

@@ -42,34 +42,10 @@ uint8_t Z80::BITBHL()
 	return 0;
 }
 
-uint8_t Z80::BITBIXD()
+uint8_t Z80::BITBIRD()
 {
 	int8_t d = readMemory(PC - 2);
-	absoluteAddress = IX + d;
-	uint8_t n = readMemory(absoluteAddress);
-	uint8_t bit = (currentOpCode & 0b00111000) >> 3;
-
-	uint8_t res = n & (1 << bit);
-
-	setFlag(Flags::Z, !res);
-	setFlag(Flags::H, true);
-	setFlag(Flags::N, false);
-
-	MEMPTR = absoluteAddress;
-	setFlag(Flags::S, bit == 7 && res);
-	setFlag(Flags::P, !res);
-	setFlag(Flags::X, MEMPTR & 0x0800);
-	setFlag(Flags::U, MEMPTR & 0x2000);
-
-	setQ();
-
-	return 0;
-}
-
-uint8_t Z80::BITBIYD()
-{
-	int8_t d = readMemory(PC - 2);
-	absoluteAddress = IY + d;
+	absoluteAddress = IR + d;
 	uint8_t n = readMemory(absoluteAddress);
 	uint8_t bit = (currentOpCode & 0b00111000) >> 3;
 
@@ -119,33 +95,10 @@ uint8_t Z80::SETBHL()
 	return 0;
 }
 
-uint8_t Z80::SETBIXD()
+uint8_t Z80::SETBIRD()
 {
 	int8_t d = readMemory(PC - 2);
-	absoluteAddress = IX + d;
-	uint8_t n = readMemory(absoluteAddress);
-	uint8_t bit = (currentOpCode & 0b00111000) >> 3;
-
-	n |= (1 << bit);
-
-	writeMemory(absoluteAddress, n);
-
-	uint8_t src = currentOpCode & 0b00000111;
-	if (src != 6)
-	{
-		writeToRgister(src, n);
-	}
-	MEMPTR = absoluteAddress;
-
-	resetQ();
-
-	return 0;
-}
-
-uint8_t Z80::SETBIYD()
-{
-	int8_t d = readMemory(PC - 2);
-	absoluteAddress = IY + d;
+	absoluteAddress = IR + d;
 	uint8_t n = readMemory(absoluteAddress);
 	uint8_t bit = (currentOpCode & 0b00111000) >> 3;
 
@@ -194,33 +147,10 @@ uint8_t Z80::RESBHL()
 	return 0;
 }
 
-uint8_t Z80::RESBIXD()
+uint8_t Z80::RESBIRD()
 {
 	int8_t d = readMemory(PC - 2);
-	absoluteAddress = IX + d;
-	uint8_t n = readMemory(absoluteAddress);
-	uint8_t bit = (currentOpCode & 0b00111000) >> 3;
-
-	n &= ~(1 << bit);
-
-	writeMemory(absoluteAddress, n);
-
-	uint8_t src = currentOpCode & 0b00000111;
-	if (src != 6)
-	{
-		writeToRgister(src, n);
-	}
-	MEMPTR = absoluteAddress;
-
-	resetQ();
-
-	return 0;
-}
-
-uint8_t Z80::RESBIYD()
-{
-	int8_t d = readMemory(PC - 2);
-	absoluteAddress = IY + d;
+	absoluteAddress = IR + d;
 	uint8_t n = readMemory(absoluteAddress);
 	uint8_t bit = (currentOpCode & 0b00111000) >> 3;
 

@@ -14,13 +14,14 @@ public:
     uint8_t A1, F1, B1, C1, D1, E1, H1, L1;
 
     uint8_t I, R;
-    uint16_t IX, IY;
+    uint16_t IX, IY, IR;
     uint16_t SP = 0x0000;
     uint16_t PC = 0x0000;
 
     bool IFF1;
     bool IFF2;
     bool isHalted;
+    bool irIsIX;
 
     enum class AddressingModes
     {
@@ -91,12 +92,10 @@ private:
     };
 
     std::vector <Instruction> rootInstructions;
-    std::vector <Instruction> ddInstructions;
-    std::vector <Instruction> fdInstructions;
     std::vector <Instruction> edInstructions;
     std::vector <Instruction> cbInstructions;
-    std::vector <Instruction> ddcbInstructions;
-    std::vector <Instruction> fdcbInstructions;
+    std::vector <Instruction> irInstructions;
+    std::vector <Instruction> ircbInstructions;
 
     uint16_t absoluteAddress = 0x0000;
     uint8_t currentOpCode = 0x00;
@@ -144,8 +143,11 @@ private:
     void pushPC();
     void popPC();
     void setUndocIOFlags(uint16_t k, uint8_t n);
+    void saveIR();
+    uint16_t readMemoryNext2Bytes();
 
     //
+    uint8_t LDCPr(bool c);
     uint8_t JRif(bool c);
     uint8_t IOr();
 
@@ -156,14 +158,11 @@ private:
     uint8_t LDRR();
     uint8_t LDRN();
     uint8_t LDRHL();
-    uint8_t LDRIXD();
-    uint8_t LDRIYD();
+    uint8_t LDRIRD();
     uint8_t LDHLR();
-    uint8_t LDIXDR();
-    uint8_t LDIYDR();
+    uint8_t LDIRDR();
     uint8_t LDHLN();
-    uint8_t LDIXDN();
-    uint8_t LDIYDN();
+    uint8_t LDIRDN();
     uint8_t LDABC();
     uint8_t LDADE();
     uint8_t LDANN();
@@ -177,54 +176,37 @@ private:
 
     //Load16
     uint8_t LDDDNN();
-    uint8_t LDIXNN();
-    uint8_t LDIYNN();
+    uint8_t LDIRNN();
     uint8_t LDHLNN();
     uint8_t LDDDFNN();
-    uint8_t LDIXFNN();
-    uint8_t LDIYFNN();
+    uint8_t LDIRFNN();
     uint8_t LDNNHL();
     uint8_t LDNNDD();
-    uint8_t LDNNIX();
-    uint8_t LDNNIY();
+    uint8_t LDNNIR();
     uint8_t LDSPHL();
-    uint8_t LDSPIX();
-    uint8_t LDSPIY();
+    uint8_t LDSPIR();
     uint8_t PUSHQQ();
-    uint8_t PUSHIX();
-    uint8_t PUSHIY();
+    uint8_t PUSHIR();
     uint8_t POPQQ();
-    uint8_t POPIX();
-    uint8_t POPIY();
+    uint8_t POPIR();
     //Undocumented
-    uint8_t LDIXHN();
-    uint8_t LDIYHN();
-    uint8_t LDIXLN();
-    uint8_t LDIYLN();
-    uint8_t LDRIXH();
-    uint8_t LDRIYH();
-    uint8_t LDRIXL();
-    uint8_t LDRIYL();
-    uint8_t LDIXHR();
-    uint8_t LDIYHR();
-    uint8_t LDIXLR();
-    uint8_t LDIYLR();
-    uint8_t LDIXHIXH();
-    uint8_t LDIXLIXL();
-    uint8_t LDIXHIXL();
-    uint8_t LDIXLIXH();
-    uint8_t LDIYHIYH();
-    uint8_t LDIYLIYL();
-    uint8_t LDIYHIYL();
-    uint8_t LDIYLIYH();
+    uint8_t LDIRHN();
+    uint8_t LDIRLN();
+    uint8_t LDRIRH();
+    uint8_t LDRIRL();
+    uint8_t LDIRHR();
+    uint8_t LDIRLR();
+    uint8_t LDIRHIRH();
+    uint8_t LDIRLIRL();
+    uint8_t LDIRHIRL();
+    uint8_t LDIRLIRH();
 
     //Exchange
     uint8_t EXDEHL();
     uint8_t EXAFAF();
     uint8_t EXX();
     uint8_t EXSPHL();
-    uint8_t EXSPIX();
-    uint8_t EXSPIY();
+    uint8_t EXSPIR();
     uint8_t LDI();
     uint8_t LDIR();
     uint8_t LDD();
@@ -238,51 +220,41 @@ private:
     uint8_t ADDAR();
     uint8_t ADDAN();
     uint8_t ADDAHL();
-    uint8_t ADDAIXD();
-    uint8_t ADDAIYD();
+    uint8_t ADDAIRD();
     uint8_t ADCAR();
     uint8_t ADCAN();
     uint8_t ADCAHL();
-    uint8_t ADCAIXD();
-    uint8_t ADCAIYD();
+    uint8_t ADCAIRD();
     uint8_t SUBR();
     uint8_t SUBN();
     uint8_t SUBHL();
-    uint8_t SUBIXD();
-    uint8_t SUBIYD();
+    uint8_t SUBIRD();
     uint8_t SBCAR();
     uint8_t SBCAN();
     uint8_t SBCAHL();
-    uint8_t SBCAIXD();
-    uint8_t SBCAIYD();
+    uint8_t SBCAIRD();
     uint8_t ANDR();
     uint8_t ANDN();
     uint8_t ANDHL();
-    uint8_t ANDIXD();
-    uint8_t ANDIYD();
+    uint8_t ANDIRD();
     uint8_t ORR();
     uint8_t ORN();
     uint8_t ORHL();
-    uint8_t ORIXD();
-    uint8_t ORIYD();
+    uint8_t ORIRD();
     uint8_t XORR();
     uint8_t XORN();
     uint8_t XORHL();
-    uint8_t XORIXD();
-    uint8_t XORIYD();
+    uint8_t XORIRD();
     uint8_t CPR();
     uint8_t CPN();
     uint8_t CPHL();
-    uint8_t CPIXD();
-    uint8_t CPIYD();
+    uint8_t CPIRD();
     uint8_t INCR();
     uint8_t INCHL();
-    uint8_t INCIXD();
-    uint8_t INCIYD();
+    uint8_t INCIRD();
     uint8_t DECR();
     uint8_t DECHL();
-    uint8_t DECIXD();
-    uint8_t DECIYD();
+    uint8_t DECIRD();
 
     //General
     uint8_t DAA();
@@ -302,55 +274,32 @@ private:
     uint8_t ADDHLSS();
     uint8_t ADCHLSS();
     uint8_t SBCHLSS();
-    uint8_t ADDIXPP();
-    uint8_t ADDIYRR();
+    uint8_t ADDIRPP();
     uint8_t INCSS();
-    uint8_t INCIX();
-    uint8_t INCIY();
+    uint8_t INCIR();
     uint8_t DECSS();
-    uint8_t DECIX();
-    uint8_t DECIY();
+    uint8_t DECIR();
     //Undocumented
-    uint8_t INCIXH();
-    uint8_t INCIXL();
-    uint8_t INCIYH();
-    uint8_t INCIYL();
-    uint8_t DECIXH();
-    uint8_t DECIYH();
-    uint8_t DECIXL();
-    uint8_t DECIYL();
-    uint8_t ADDAIXH();
-    uint8_t ADDAIXL();
-    uint8_t ADDAIYH();
-    uint8_t ADDAIYL();
-    uint8_t ADCAIXH();
-    uint8_t ADCAIXL();
-    uint8_t ADCAIYH();
-    uint8_t ADCAIYL();
-    uint8_t SUBAIXH();
-    uint8_t SUBAIXL();
-    uint8_t SUBAIYH();
-    uint8_t SUBAIYL();
-    uint8_t SBCAIXH();
-    uint8_t SBCAIXL();
-    uint8_t SBCAIYH();
-    uint8_t SBCAIYL();
-    uint8_t ANDIXH();
-    uint8_t ANDIXL();
-    uint8_t ANDIYH();
-    uint8_t ANDIYL();
-    uint8_t XORIXH();
-    uint8_t XORIXL();
-    uint8_t XORIYH();
-    uint8_t XORIYL();
-    uint8_t ORIXH();
-    uint8_t ORIXL();
-    uint8_t ORIYH();
-    uint8_t ORIYL();
-    uint8_t CPIXH();
-    uint8_t CPIXL();
-    uint8_t CPIYH();
-    uint8_t CPIYL();
+    uint8_t INCIRH();
+    uint8_t INCIRL();
+    uint8_t DECIRH();
+    uint8_t DECIRL();
+    uint8_t ADDAIRH();
+    uint8_t ADDAIRL();
+    uint8_t ADCAIRH();
+    uint8_t ADCAIRL();
+    uint8_t SUBAIRH();
+    uint8_t SUBAIRL();
+    uint8_t SBCAIRH();
+    uint8_t SBCAIRL();
+    uint8_t ANDIRH();
+    uint8_t ANDIRL();
+    uint8_t XORIRH();
+    uint8_t XORIRL();
+    uint8_t ORIRH();
+    uint8_t ORIRL();
+    uint8_t CPIRH();
+    uint8_t CPIRL();
 
     //RotateShift
     uint8_t RLCA();
@@ -359,53 +308,42 @@ private:
     uint8_t RRA();
     uint8_t RLCR();
     uint8_t RLCHL();
-    uint8_t RLCIXD();
-    uint8_t RLCIYD();
+    uint8_t RLCIRD();
     uint8_t RLR();
     uint8_t RLHL();
-    uint8_t RLIXD();
-    uint8_t RLIYD();
+    uint8_t RLIRD();
     uint8_t RRCR();
     uint8_t RRCHL();
-    uint8_t RRCIXD();
-    uint8_t RRCIYD();
+    uint8_t RRCIRD();
     uint8_t RRR();
     uint8_t RRHL();
-    uint8_t RRIXD();
-    uint8_t RRIYD();
+    uint8_t RRIRD();
     uint8_t SLAR();
     uint8_t SLAHL();
-    uint8_t SLAIXD();
-    uint8_t SLAIYD();
+    uint8_t SLAIRD();
     uint8_t SRAR();
     uint8_t SRAHL();
-    uint8_t SRAIXD();
-    uint8_t SRAIYD();
+    uint8_t SRAIRD();
     uint8_t SRLR();
     uint8_t SRLHL();
-    uint8_t SRLIXD();
-    uint8_t SRLIYD();
+    uint8_t SRLIRD();
     uint8_t RLD();
     uint8_t RRD();
     //Undocumented
     uint8_t SLSR();
     uint8_t SLSHL();
-    uint8_t SLSIXD();
-    uint8_t SLSIYD();
+    uint8_t SLSIRD();
 
     //Bit
     uint8_t BITBR();
     uint8_t BITBHL();
-    uint8_t BITBIXD();
-    uint8_t BITBIYD();
+    uint8_t BITBIRD();
     uint8_t SETBR();
     uint8_t SETBHL();
-    uint8_t SETBIXD();
-    uint8_t SETBIYD();
+    uint8_t SETBIRD();
     uint8_t RESBR();
     uint8_t RESBHL();
-    uint8_t RESBIXD();
-    uint8_t RESBIYD();
+    uint8_t RESBIRD();
 
     //Jump
     uint8_t JPNN();
@@ -416,8 +354,7 @@ private:
     uint8_t JRZE();
     uint8_t JRNZE();
     uint8_t JPHL();
-    uint8_t JPIX();
-    uint8_t JPIY();
+    uint8_t JPIR();
     uint8_t DJNZE();
 
     //CallReturn

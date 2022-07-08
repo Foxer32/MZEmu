@@ -27,18 +27,11 @@ uint8_t Z80::SBCHLSS()
 	return 0;
 }
 
-uint8_t Z80::ADDIXPP()
+uint8_t Z80::ADDIRPP()
 {
-	uint16_t n = readRegisterPair2((currentOpCode & 0b00110000) >> 4, IX, true);
-	IX = add16(IX, n);
-
-	return 0;
-}
-
-uint8_t Z80::ADDIYRR()
-{
-	uint16_t n = readRegisterPair2((currentOpCode & 0b00110000) >> 4, IY, true);
-	IY = add16(IY, n);
+	uint16_t n = readRegisterPair2((currentOpCode & 0b00110000) >> 4, IR, true);
+	IR = add16(IR, n);
+	saveIR();
 
 	return 0;
 }
@@ -52,16 +45,10 @@ uint8_t Z80::INCSS()
 	return 0;
 }
 
-uint8_t Z80::INCIX()
+uint8_t Z80::INCIR()
 {
-	IX++;
-
-	return 0;
-}
-
-uint8_t Z80::INCIY()
-{
-	IY++;
+	IR++;
+	saveIR();
 
 	return 0;
 }
@@ -75,332 +62,173 @@ uint8_t Z80::DECSS()
 	return 0;
 }
 
-uint8_t Z80::DECIX()
+uint8_t Z80::DECIR()
 {
-	IX--;
-
-	return 0;
-}
-
-uint8_t Z80::DECIY()
-{
-	IY--;
+	IR--;
+	saveIR();
 
 	return 0;
 }
 
 //Undocumented
 
-uint8_t Z80::INCIXH()
+uint8_t Z80::INCIRH()
 {
-	uint8_t hibyte = IX >> 8;
+	uint8_t hibyte = IR >> 8;
 	uint8_t incVal = hibyte + 1;
-	IX = (incVal << 8) | (IX & 0xFF);
+	IR = (incVal << 8) | (IR & 0xFF);
+	saveIR();
 
 	setIncFlags(hibyte, incVal);
 
 	return 0;
 }
 
-uint8_t Z80::INCIXL()
+uint8_t Z80::INCIRL()
 {
-	uint8_t lobyte = IX & 0xFF;
+	uint8_t lobyte = IR & 0xFF;
 	uint8_t incVal = lobyte + 1;
-	IX = (IX & 0xFF00) | incVal;
+	IR = (IR & 0xFF00) | incVal;
+	saveIR();
 
 	setIncFlags(lobyte, incVal);
 
 	return 0;
 }
 
-uint8_t Z80::INCIYH()
+uint8_t Z80::DECIRH()
 {
-	uint8_t hibyte = IY >> 8;
-	uint8_t incVal = hibyte + 1;
-	IY = (incVal << 8) | (IY & 0xFF);
-
-	setIncFlags(hibyte, incVal);
-
-	return 0;
-}
-
-uint8_t Z80::INCIYL()
-{
-	uint8_t lobyte = IY & 0xFF;
-	uint8_t incVal = lobyte + 1;
-	IY = (IY & 0xFF00) | incVal;
-
-	setIncFlags(lobyte, incVal);
-
-	return 0;
-}
-
-uint8_t Z80::DECIXH()
-{
-	uint8_t hibyte = IX >> 8;
+	uint8_t hibyte = IR >> 8;
 	uint8_t decVal = hibyte - 1;
-	IX = (decVal << 8) | (IX & 0xFF);
+	IR = (decVal << 8) | (IR & 0xFF);
+	saveIR();
 
 	setDecFlags(hibyte, decVal);
 
 	return 0;
 }
 
-uint8_t Z80::DECIYH()
+uint8_t Z80::DECIRL()
 {
-	uint8_t hibyte = IY >> 8;
-	uint8_t decVal = hibyte - 1;
-	IY = (decVal << 8) | (IY & 0xFF);
-
-	setDecFlags(hibyte, decVal);
-
-	return 0;
-}
-
-uint8_t Z80::DECIXL()
-{
-	uint8_t lobyte = IX & 0xFF;
+	uint8_t lobyte = IR & 0xFF;
 	uint8_t decVal = lobyte - 1;
-	IX = (IX & 0xFF00) | decVal;
+	IR = (IR & 0xFF00) | decVal;
+	saveIR();
 
 	setDecFlags(lobyte, decVal);
 
 	return 0;
 }
 
-uint8_t Z80::DECIYL()
+uint8_t Z80::ADDAIRH()
 {
-	uint8_t lobyte = IY & 0xFF;
-	uint8_t decVal = lobyte - 1;
-	IY = (IY & 0xFF00) | decVal;
-
-	setDecFlags(lobyte, decVal);
+	A = add8(A, IR >> 8);
 
 	return 0;
 }
 
-uint8_t Z80::ADDAIXH()
+uint8_t Z80::ADDAIRL()
 {
-	A = add8(A, IX >> 8);
+	A = add8(A, IR & 0xFF);
 
 	return 0;
 }
 
-uint8_t Z80::ADDAIXL()
+uint8_t Z80::ADCAIRH()
 {
-	A = add8(A, IX & 0xFF);
+	A = add8(A, IR >> 8, getFlag(Flags::C));
 
 	return 0;
 }
 
-uint8_t Z80::ADDAIYH()
+uint8_t Z80::ADCAIRL()
 {
-	A = add8(A, IY >> 8);
+	A = add8(A, IR & 0xFF, getFlag(Flags::C));
 
 	return 0;
 }
 
-uint8_t Z80::ADDAIYL()
+uint8_t Z80::SUBAIRH()
 {
-	A = add8(A, IY & 0xFF);
+	A = sub8(A, IR >> 8);
 
 	return 0;
 }
 
-uint8_t Z80::ADCAIXH()
+uint8_t Z80::SUBAIRL()
 {
-	A = add8(A, IX >> 8, getFlag(Flags::C));
+	A = sub8(A, IR & 0xFF);
 
 	return 0;
 }
 
-uint8_t Z80::ADCAIXL()
+uint8_t Z80::SBCAIRH()
 {
-	A = add8(A, IX & 0xFF, getFlag(Flags::C));
+	A = sub8(A, IR >> 8, getFlag(Flags::C));
 
 	return 0;
 }
 
-uint8_t Z80::ADCAIYH()
+uint8_t Z80::SBCAIRL()
 {
-	A = add8(A, IX >> 8, getFlag(Flags::C));
+	A = sub8(A, IR & 0xFF, getFlag(Flags::C));
 
 	return 0;
 }
 
-uint8_t Z80::ADCAIYL()
+uint8_t Z80::ANDIRH()
 {
-	A = add8(A, IX & 0xFF, getFlag(Flags::C));
+	A = andAB(A, IR >> 8);
 
 	return 0;
 }
 
-uint8_t Z80::SUBAIXH()
+uint8_t Z80::ANDIRL()
 {
-	A = sub8(A, IX >> 8);
+	A = andAB(A, IR & 0xFF);
 
 	return 0;
 }
 
-uint8_t Z80::SUBAIXL()
+uint8_t Z80::XORIRH()
 {
-	A = sub8(A, IX & 0xFF);
+	A = xorAB(A, IR >> 8);
 
 	return 0;
 }
 
-uint8_t Z80::SUBAIYH()
+uint8_t Z80::XORIRL()
 {
-	A = sub8(A, IY >> 8);
+	A = xorAB(A, IR & 0xFF);
 
 	return 0;
 }
 
-uint8_t Z80::SUBAIYL()
+uint8_t Z80::ORIRH()
 {
-	A = sub8(A, IY & 0xFF);
+	A = orAB(A, IR >> 8);
 
 	return 0;
 }
 
-uint8_t Z80::SBCAIXH()
+uint8_t Z80::ORIRL()
 {
-	A = sub8(A, IX >> 8, getFlag(Flags::C));
+	A = orAB(A, IR & 0xFF);
 
 	return 0;
 }
 
-uint8_t Z80::SBCAIXL()
+uint8_t Z80::CPIRH()
 {
-	A = sub8(A, IX & 0xFF, getFlag(Flags::C));
-
-	return 0;
-}
-
-uint8_t Z80::SBCAIYH()
-{
-	A = sub8(A, IX >> 8, getFlag(Flags::C));
-
-	return 0;
-}
-
-uint8_t Z80::SBCAIYL()
-{
-	A = sub8(A, IX & 0xFF, getFlag(Flags::C));
-	return 0;
-}
-
-uint8_t Z80::ANDIXH()
-{
-	A = andAB(A, IX >> 8);
-
-	return 0;
-}
-
-uint8_t Z80::ANDIXL()
-{
-	A = andAB(A, IX & 0xFF);
-
-	return 0;
-}
-
-uint8_t Z80::ANDIYH()
-{
-	A = andAB(A, IY >> 8);
-
-	return 0;
-}
-
-uint8_t Z80::ANDIYL()
-{
-	A = andAB(A, IY & 0xFF);
-
-	return 0;
-}
-
-uint8_t Z80::XORIXH()
-{
-	A = xorAB(A, IX >> 8);
-
-	return 0;
-}
-
-uint8_t Z80::XORIXL()
-{
-	A = xorAB(A, IX & 0xFF);
-
-	return 0;
-}
-
-uint8_t Z80::XORIYH()
-{
-	A = xorAB(A, IY >> 8);
-
-	return 0;
-}
-
-uint8_t Z80::XORIYL()
-{
-	A = xorAB(A, IY & 0xFF);
-
-	return 0;
-}
-
-uint8_t Z80::ORIXH()
-{
-	A = orAB(A, IX >> 8);
-
-	return 0;
-}
-
-uint8_t Z80::ORIXL()
-{
-	A = orAB(A, IX & 0xFF);
-
-	return 0;
-}
-
-uint8_t Z80::ORIYH()
-{
-	A = orAB(A, IY >> 8);
-
-	return 0;
-}
-
-uint8_t Z80::ORIYL()
-{
-	A = orAB(A, IY & 0xFF);
-
-	return 0;
-}
-
-uint8_t Z80::CPIXH()
-{
-	uint8_t n = IX >> 8;
+	uint8_t n = IR >> 8;
 	setComparsionFlags(n, A - n);
 
 	return 0;
 }
 
-uint8_t Z80::CPIXL()
+uint8_t Z80::CPIRL()
 {
-	uint8_t n = IX & 0xFF;
-	setComparsionFlags(n, A - n);
-
-	return 0;
-}
-
-uint8_t Z80::CPIYH()
-{
-	uint8_t n = IY >> 8;
-	setComparsionFlags(n, A - n);
-
-	return 0;
-}
-
-uint8_t Z80::CPIYL()
-{
-	uint8_t n = IY & 0xFF;
+	uint8_t n = IR & 0xFF;
 	setComparsionFlags(n, A - n);
 
 	return 0;

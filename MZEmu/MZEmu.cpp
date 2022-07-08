@@ -13,10 +13,10 @@ int main()
     bus.writeMemory(0x7FFD, 0x00);
     bus.writeMemory(0x7FFE, 0x00);
     bus.writeMemory(0x7FFF, 0x00);
-    bus.writeMemory(0x8000, 0xED); //----------
-    bus.writeMemory(0x8001, 0xBB);
-    bus.writeMemory(0x8002, 0xFF);
-    bus.writeMemory(0x8003, 0xC7);
+    bus.writeMemory(0x8000, 0xFD); //----------
+    bus.writeMemory(0x8001, 0x21);
+    bus.writeMemory(0x8002, 0x6C);
+    bus.writeMemory(0x8003, 0xEA);
     bus.writeMemory(0x8004, 0x07);
     bus.writeMemory(0x8005, 0x00);
 
@@ -35,7 +35,7 @@ int main()
 
     std::cout << bus.cpu.getCpuInfo();
 
-    while(true) {
+    while (true) {
         system("pause");
 
         //bus.cpu.tick();
@@ -45,4 +45,3 @@ int main()
 
     return 0;
 }
-

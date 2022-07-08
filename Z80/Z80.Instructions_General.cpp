@@ -125,7 +125,6 @@ uint8_t Z80::SCF()
 
 uint8_t Z80::NOP()
 {
-
 	return 0;
 }
 

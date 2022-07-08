@@ -3,34 +3,19 @@
 uint8_t Z80::LDDDNN()
 {
 	uint8_t dest = (currentOpCode & 0b00110000) >> 4;
+	uint16_t val = readMemoryNext2Bytes();
 
-	uint8_t lobyte = readMemoryNext();
-	uint8_t hibyte = readMemoryNext();
-
-	writeDD((hibyte << 8) | lobyte, dest);
+	writeDD(val, dest);
 
 	resetQ();
 
 	return 0;
 }
 
-uint8_t Z80::LDIXNN()
+uint8_t Z80::LDIRNN()
 {
-	uint8_t lobyte = readMemoryNext();
-	uint8_t hibyte = readMemoryNext();
-
-	IX = (hibyte << 8) | lobyte;
-	resetQ();
-
-	return 0;
-}
-
-uint8_t Z80::LDIYNN()
-{
-	uint8_t lobyte = readMemoryNext();
-	uint8_t hibyte = readMemoryNext();
-
-	IY = (hibyte << 8) | lobyte;
+	IR = readMemoryNext2Bytes();
+	saveIR();
 	resetQ();
 
 	return 0;
@@ -38,9 +23,7 @@ uint8_t Z80::LDIYNN()
 
 uint8_t Z80::LDHLNN()
 {
-	uint8_t lobyte = readMemoryNext();
-	uint8_t hibyte = readMemoryNext();
-	absoluteAddress = (hibyte << 8) | lobyte;
+	absoluteAddress = readMemoryNext2Bytes();
 
 	L = readMemory(absoluteAddress++);
 	H = readMemory(absoluteAddress);
@@ -54,15 +37,12 @@ uint8_t Z80::LDHLNN()
 uint8_t Z80::LDDDFNN()
 {
 	uint8_t dest = (currentOpCode & 0b00110000) >> 4;
+	absoluteAddress = readMemoryNext2Bytes();
 
-	uint8_t lobyte = readMemoryNext();
-	uint8_t hibyte = readMemoryNext();
-	absoluteAddress = (hibyte << 8) | lobyte;
+	uint8_t loByte = readMemory(absoluteAddress++);
+	uint8_t hiByte = readMemory(absoluteAddress);
 
-	uint8_t lobyte2 = readMemory(absoluteAddress++);
-	uint8_t hibyte2 = readMemory(absoluteAddress);
-
-	writeDD((hibyte2 << 8) | lobyte2, dest);
+	writeDD((hiByte << 8) | loByte, dest);
 
 	resetQ();
 	MEMPTR = absoluteAddress;
@@ -70,33 +50,15 @@ uint8_t Z80::LDDDFNN()
 	return 0;
 }
 
-uint8_t Z80::LDIXFNN()
+uint8_t Z80::LDIRFNN()
 {
-	uint8_t lobyte = readMemoryNext();
-	uint8_t hibyte = readMemoryNext();
-	absoluteAddress = (hibyte << 8) | lobyte;
+	absoluteAddress = readMemoryNext2Bytes();
 
-	uint8_t lobyte2 = readMemory(absoluteAddress++);
-	uint8_t hibyte2 = readMemory(absoluteAddress);
+	uint8_t loByte = readMemory(absoluteAddress++);
+	uint8_t hiByte = readMemory(absoluteAddress);
 
-	IX = (hibyte2 << 8) | lobyte2;
-
-	resetQ();
-	MEMPTR = absoluteAddress;
-
-	return 0;
-}
-
-uint8_t Z80::LDIYFNN()
-{
-	uint8_t lobyte = readMemoryNext();
-	uint8_t hibyte = readMemoryNext();
-	absoluteAddress = (hibyte << 8) | lobyte;
-
-	uint8_t lobyte2 = readMemory(absoluteAddress++);
-	uint8_t hibyte2 = readMemory(absoluteAddress);
-
-	IY = (hibyte2 << 8) | lobyte2;
+	IR = (hiByte << 8) | loByte;
+	saveIR();
 
 	resetQ();
 	MEMPTR = absoluteAddress;
@@ -106,9 +68,7 @@ uint8_t Z80::LDIYFNN()
 
 uint8_t Z80::LDNNHL()
 {
-	uint8_t lobyte = readMemoryNext();
-	uint8_t hibyte = readMemoryNext();
-	absoluteAddress = (hibyte << 8) | lobyte;
+	absoluteAddress = readMemoryNext2Bytes();
 
 	writeMemory(absoluteAddress++,L);
 	writeMemory(absoluteAddress, H);
@@ -122,10 +82,7 @@ uint8_t Z80::LDNNHL()
 uint8_t Z80::LDNNDD()
 {
 	uint8_t src = (currentOpCode & 0b00110000) >> 4;
-
-	uint8_t lobyte = readMemoryNext();
-	uint8_t hibyte = readMemoryNext();
-	absoluteAddress = (hibyte << 8) | lobyte;
+	absoluteAddress = readMemoryNext2Bytes();
 
 	uint16_t buff = 0x00;
 
@@ -150,29 +107,12 @@ uint8_t Z80::LDNNDD()
 	return 0;
 }
 
-uint8_t Z80::LDNNIX()
+uint8_t Z80::LDNNIR()
 {
-	uint8_t lobyte = readMemoryNext();
-	uint8_t hibyte = readMemoryNext();
-	absoluteAddress = (hibyte << 8) | lobyte;
+	absoluteAddress = readMemoryNext2Bytes();
 
-	writeMemory(absoluteAddress++, IX & 0xFF);
-	writeMemory(absoluteAddress, IX >> 8);
-
-	resetQ();
-	MEMPTR = absoluteAddress;
-
-	return 0;
-}
-
-uint8_t Z80::LDNNIY()
-{
-	uint8_t lobyte = readMemoryNext();
-	uint8_t hibyte = readMemoryNext();
-	absoluteAddress = (hibyte << 8) | lobyte;
-
-	writeMemory(absoluteAddress++, IY & 0xFF);
-	writeMemory(absoluteAddress, IY >> 8);
+	writeMemory(absoluteAddress++, IR & 0xFF);
+	writeMemory(absoluteAddress, IR >> 8);
 
 	resetQ();
 	MEMPTR = absoluteAddress;
@@ -188,17 +128,9 @@ uint8_t Z80::LDSPHL()
 	return 0;
 }
 
-uint8_t Z80::LDSPIX()
+uint8_t Z80::LDSPIR()
 {
-	SP = IX;
-	resetQ();
-
-	return 0;
-}
-
-uint8_t Z80::LDSPIY()
-{
-	SP = IY;
+	SP = IR;
 	resetQ();
 
 	return 0;
@@ -224,34 +156,18 @@ uint8_t Z80::PUSHQQ()
 		break;
 	}
 
-	SP--;
-	writeMemory(SP, qq >> 8);
-	SP--;
-	writeMemory(SP, qq & 0xFF);
+	writeMemory(--SP, qq >> 8);
+	writeMemory(--SP, qq & 0xFF);
 	
 	resetQ();
 
 	return 0;
 }
 
-uint8_t Z80::PUSHIX()
+uint8_t Z80::PUSHIR()
 {
-	SP--;
-	writeMemory(SP, IX >> 8);
-	SP--;
-	writeMemory(SP, IX & 0xFF);
-
-	resetQ();
-
-	return 0;
-}
-
-uint8_t Z80::PUSHIY()
-{
-	SP--;
-	writeMemory(SP, IY >> 8);
-	SP--;
-	writeMemory(SP, IY & 0xFF);
+	writeMemory(--SP, IR >> 8);
+	writeMemory(--SP, IR & 0xFF);
 
 	resetQ();
 
@@ -290,25 +206,13 @@ uint8_t Z80::POPQQ()
 	return 0;
 }
 
-uint8_t Z80::POPIX()
+uint8_t Z80::POPIR()
 {
 	uint8_t hi = readMemory(SP++);
 	uint8_t lo = readMemory(SP++);
 
-	IX = (hi << 8) | lo;
-
-	resetQ();
-
-	return 0;
-}
-
-uint8_t Z80::POPIY()
-{
-	uint8_t hi = readMemory(SP++);
-	uint8_t lo = readMemory(SP++);
-
-	IX = (hi << 8) | lo;
-
+	IR = (hi << 8) | lo;
+	saveIR();
 	resetQ();
 
 	return 0;
@@ -316,157 +220,85 @@ uint8_t Z80::POPIY()
 
 //Undocumented
 
-uint8_t Z80::LDIXHN()
+uint8_t Z80::LDIRHN()
 {
-	IX = (readMemoryNext() << 8) | (IX & 0xFF);
+	IR = (readMemoryNext() << 8) | (IR & 0xFF);
+	saveIR();
 	resetQ();
 
 	return 0;
 }
 
-uint8_t Z80::LDIYHN()
+uint8_t Z80::LDIRLN()
 {
-	IY = (readMemoryNext() << 8) | (IY & 0xFF);
+	IR = (IR & 0xFF00) | readMemoryNext();
+	saveIR();
 	resetQ();
 
 	return 0;
 }
 
-uint8_t Z80::LDIXLN()
+uint8_t Z80::LDRIRH()
 {
-	IX = (IX & 0xFF00) | readMemoryNext();
+	writeToRgister((currentOpCode & 0b00111000) >> 3, IR >> 8);
 	resetQ();
 
 	return 0;
 }
 
-uint8_t Z80::LDIYLN()
+uint8_t Z80::LDRIRL()
 {
-	IY = (IY & 0xFF00) | readMemoryNext();
+	writeToRgister((currentOpCode & 0b00111000) >> 3, IR & 0xFF);
 	resetQ();
 
 	return 0;
 }
 
-uint8_t Z80::LDRIXH()
+uint8_t Z80::LDIRHR()
 {
-	writeToRgister((currentOpCode & 0b00111000) >> 3, IX >> 8);
+	IR = (readFromRegister(currentOpCode & 0b00000111) << 8) | (IR & 0xFF);
+	saveIR();
 	resetQ();
 
 	return 0;
 }
 
-uint8_t Z80::LDRIYH()
+uint8_t Z80::LDIRLR()
 {
-	writeToRgister((currentOpCode & 0b00111000) >> 3, IY >> 8);
+	IR = (IR & 0xFF00) | readFromRegister(currentOpCode & 0b00000111);
+	saveIR();
 	resetQ();
 
 	return 0;
 }
 
-uint8_t Z80::LDRIXL()
-{
-	writeToRgister((currentOpCode & 0b00111000) >> 3, IX & 0xFF);
-	resetQ();
-
-	return 0;
-}
-
-uint8_t Z80::LDRIYL()
-{
-	writeToRgister((currentOpCode & 0b00111000) >> 3, IY & 0xFF);
-	resetQ();
-
-	return 0;
-}
-
-uint8_t Z80::LDIXHR()
-{
-	IX = (readFromRegister(currentOpCode & 0b00000111) << 8) | (IX & 0xFF);
-	resetQ();
-
-	return 0;
-}
-
-uint8_t Z80::LDIYHR()
-{
-	IY = (readFromRegister(currentOpCode & 0b00000111) << 8) | (IY & 0xFF);
-	resetQ();
-
-	return 0;
-}
-
-uint8_t Z80::LDIXLR()
-{
-	IX = (IX & 0xFF00) | readFromRegister(currentOpCode & 0b00000111);
-	resetQ();
-
-	return 0;
-}
-
-uint8_t Z80::LDIYLR()
-{
-	IY = (IY & 0xFF00) | readFromRegister(currentOpCode & 0b00000111);
-	resetQ();
-
-	return 0;
-}
-
-uint8_t Z80::LDIXHIXH()
+uint8_t Z80::LDIRHIRH()
 {
 	resetQ();
 
 	return 0;
 }
 
-uint8_t Z80::LDIXLIXL()
+uint8_t Z80::LDIRLIRL()
 {
 	resetQ();
 
 	return 0;
 }
 
-uint8_t Z80::LDIXHIXL()
+uint8_t Z80::LDIRHIRL()
 {
-	IX = (IX << 8) | (IX & 0xFF);
+	IR = (IR << 8) | (IR & 0xFF);
+	saveIR();
 	resetQ();
 
 	return 0;
 }
 
-uint8_t Z80::LDIXLIXH()
+uint8_t Z80::LDIRLIRH()
 {
-	IX = (IX & 0xFF00) | (IX >> 8);
-	resetQ();
-
-	return 0;
-}
-
-uint8_t Z80::LDIYHIYH()
-{
-	resetQ();
-
-	return 0;
-}
-
-uint8_t Z80::LDIYLIYL()
-{
-	resetQ();
-
-	return 0;
-}
-
-uint8_t Z80::LDIYHIYL()
-{
-	IY = (IY << 8) | (IY & 0xFF);
-	resetQ();
-
-	return 0;
-}
-
-uint8_t Z80::LDIYLIYH()
-{
-	IY = (IY & 0xFF00) | (IY >> 8);
+	IR = (IR & 0xFF00) | (IR >> 8);
+	saveIR();
 	resetQ();
 
 	return 0;

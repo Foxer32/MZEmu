@@ -24,22 +24,10 @@ uint8_t Z80::ADDAHL()
 	return 0;
 }
 
-uint8_t Z80::ADDAIXD()
+uint8_t Z80::ADDAIRD()
 {
 	int8_t d = readMemoryNext();
-	absoluteAddress = IX + d;
-	uint8_t n = readMemory(absoluteAddress);
-	A = add8(A, n);
-
-	MEMPTR = absoluteAddress;
-
-	return 0;
-}
-
-uint8_t Z80::ADDAIYD()
-{
-	int8_t d = readMemoryNext();
-	absoluteAddress = IY + d;
+	absoluteAddress = IR + d;
 	uint8_t n = readMemory(absoluteAddress);
 	A = add8(A, n);
 
@@ -72,22 +60,10 @@ uint8_t Z80::ADCAHL()
 	return 0;
 }
 
-uint8_t Z80::ADCAIXD()
+uint8_t Z80::ADCAIRD()
 {
 	int8_t d = readMemoryNext();
-	absoluteAddress = IX + d;
-	uint8_t n = readMemory(absoluteAddress);
-	A = add8(A, n, getFlag(Flags::C));
-
-	MEMPTR = absoluteAddress;
-
-	return 0;
-}
-
-uint8_t Z80::ADCAIYD()
-{
-	int8_t d = readMemoryNext();
-	absoluteAddress = IY + d;
+	absoluteAddress = IR + d;
 	uint8_t n = readMemory(absoluteAddress);
 	A = add8(A, n, getFlag(Flags::C));
 
@@ -120,22 +96,10 @@ uint8_t Z80::SUBHL()
 	return 0;
 }
 
-uint8_t Z80::SUBIXD()
+uint8_t Z80::SUBIRD()
 {
 	int8_t d = readMemoryNext();
-	absoluteAddress = IX + d;
-	uint8_t n = readMemory(absoluteAddress);
-	A = sub8(A, n);
-
-	MEMPTR = absoluteAddress;
-
-	return 0;
-}
-
-uint8_t Z80::SUBIYD()
-{
-	int8_t d = readMemoryNext();
-	absoluteAddress = IY + d;
+	absoluteAddress = IR + d;
 	uint8_t n = readMemory(absoluteAddress);
 	A = sub8(A, n);
 
@@ -168,22 +132,10 @@ uint8_t Z80::SBCAHL()
 	return 0;
 }
 
-uint8_t Z80::SBCAIXD()
+uint8_t Z80::SBCAIRD()
 {
 	int8_t d = readMemoryNext();
-	absoluteAddress = IX + d;
-	uint8_t n = readMemory(absoluteAddress);
-	A = sub8(A, n, getFlag(Flags::C));
-
-	MEMPTR = absoluteAddress;
-
-	return 0;
-}
-
-uint8_t Z80::SBCAIYD()
-{
-	int8_t d = readMemoryNext();
-	absoluteAddress = IY + d;
+	absoluteAddress = IR + d;
 	uint8_t n = readMemory(absoluteAddress);
 	A = sub8(A, n, getFlag(Flags::C));
 
@@ -216,22 +168,10 @@ uint8_t Z80::ANDHL()
 	return 0;
 }
 
-uint8_t Z80::ANDIXD()
+uint8_t Z80::ANDIRD()
 {
 	int8_t d = readMemoryNext();
-	absoluteAddress = IX + d;
-	uint8_t n = readMemory(absoluteAddress);
-	A = andAB(A, n);
-
-	MEMPTR = absoluteAddress;
-
-	return 0;
-}
-
-uint8_t Z80::ANDIYD()
-{
-	int8_t d = readMemoryNext();
-	absoluteAddress = IY + d;
+	absoluteAddress = IR + d;
 	uint8_t n = readMemory(absoluteAddress);
 	A = andAB(A, n);
 
@@ -264,22 +204,10 @@ uint8_t Z80::ORHL()
 	return 0;
 }
 
-uint8_t Z80::ORIXD()
+uint8_t Z80::ORIRD()
 {
 	int8_t d = readMemoryNext();
-	absoluteAddress = IX + d;
-	uint8_t n = readMemory(absoluteAddress);
-	A = orAB(A, n);
-
-	MEMPTR = absoluteAddress;
-
-	return 0;
-}
-
-uint8_t Z80::ORIYD()
-{
-	int8_t d = readMemoryNext();
-	absoluteAddress = IY + d;
+	absoluteAddress = IR + d;
 	uint8_t n = readMemory(absoluteAddress);
 	A = orAB(A, n);
 
@@ -312,22 +240,10 @@ uint8_t Z80::XORHL()
 	return 0;
 }
 
-uint8_t Z80::XORIXD()
+uint8_t Z80::XORIRD()
 {
 	int8_t d = readMemoryNext();
-	absoluteAddress = IX + d;
-	uint8_t n = readMemory(absoluteAddress);
-	A = xorAB(A, n);
-
-	MEMPTR = absoluteAddress;
-
-	return 0;
-}
-
-uint8_t Z80::XORIYD()
-{
-	int8_t d = readMemoryNext();
-	absoluteAddress = IY + d;
+	absoluteAddress = IR + d;
 	uint8_t n = readMemory(absoluteAddress);
 	A = xorAB(A, n);
 
@@ -360,22 +276,10 @@ uint8_t Z80::CPHL()
 	return 0;
 }
 
-uint8_t Z80::CPIXD()
+uint8_t Z80::CPIRD()
 {
 	int8_t d = readMemoryNext();
-	absoluteAddress = IX + d;
-	uint8_t n = readMemory(absoluteAddress);
-	setComparsionFlags(n, A - n);
-
-	MEMPTR = absoluteAddress;
-
-	return 0;
-}
-
-uint8_t Z80::CPIYD()
-{
-	int8_t d = readMemoryNext();
-	absoluteAddress = IY + d;
+	absoluteAddress = IR + d;
 	uint8_t n = readMemory(absoluteAddress);
 	setComparsionFlags(n, A - n);
 
@@ -409,26 +313,10 @@ uint8_t Z80::INCHL()
 	return 0;
 }
 
-uint8_t Z80::INCIXD()
+uint8_t Z80::INCIRD()
 {
 	int8_t d = readMemoryNext();
-	absoluteAddress = IX + d;
-
-	uint8_t val = readMemory(absoluteAddress);
-
-	uint8_t incVal = val + 1;
-	writeMemory(absoluteAddress, incVal);
-
-	setIncFlags(val, incVal);
-	MEMPTR = absoluteAddress;
-
-	return 0;
-}
-
-uint8_t Z80::INCIYD()
-{
-	int8_t d = readMemoryNext();
-	absoluteAddress = IY + d;
+	absoluteAddress = IR + d;
 
 	uint8_t val = readMemory(absoluteAddress);
 
@@ -466,26 +354,10 @@ uint8_t Z80::DECHL()
 	return 0;
 }
 
-uint8_t Z80::DECIXD()
+uint8_t Z80::DECIRD()
 {
 	int8_t d = readMemoryNext();
-	absoluteAddress = IX + d;
-
-	uint8_t val = readMemory(absoluteAddress);
-
-	uint8_t decVal = val - 1;
-	writeMemory(absoluteAddress, decVal);
-
-	setDecFlags(val, decVal);
-	MEMPTR = absoluteAddress;
-
-	return 0;
-}
-
-uint8_t Z80::DECIYD()
-{
-	int8_t d = readMemoryNext();
-	absoluteAddress = IY + d;
+	absoluteAddress = IR + d;
 
 	uint8_t val = readMemory(absoluteAddress);
 

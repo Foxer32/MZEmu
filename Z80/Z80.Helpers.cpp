@@ -63,9 +63,7 @@ bool Z80::parity(uint16_t v)
 	while (v > 0)
 	{
 		if (v & 0x01)
-		{
 			retVal = !retVal;
-		}
 
 		v >>= 1;
 	}
@@ -321,7 +319,34 @@ void Z80::setUndocIOFlags(uint16_t k, uint8_t n)
 	setQ();
 }
 
+void Z80::saveIR()
+{
+	if (irIsIX)
+		IX = IR;
+	else
+		IY = IR;
+}
 
+uint16_t Z80::readMemoryNext2Bytes()
+{
+	uint8_t loByte = readMemoryNext();
+	uint8_t hiByte = readMemoryNext();
+
+	return (hiByte << 8) | loByte;
+}
+
+
+uint8_t Z80::LDCPr(bool c)
+{
+	if (c)
+	{
+		PC -= 2;
+		MEMPTR = PC + 1;
+		return 5;
+	}
+
+	return 0;
+}
 
 uint8_t Z80::JRif(bool c)
 {

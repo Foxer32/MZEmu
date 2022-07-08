@@ -91,10 +91,10 @@ uint8_t Z80::RLCHL()
 	return 0;
 }
 
-uint8_t Z80::RLCIXD()
+uint8_t Z80::RLCIRD()
 {
 	int8_t d = readMemory(PC - 2);
-	absoluteAddress = IX + d;
+	absoluteAddress = IR + d;
 
 	uint8_t n = readMemory(absoluteAddress);
 
@@ -109,30 +109,6 @@ uint8_t Z80::RLCIXD()
 	if (dest != 6)
 	{
 		writeToRgister(dest,n);
-	}
-	MEMPTR = absoluteAddress;
-
-	return 0;
-}
-
-uint8_t Z80::RLCIYD()
-{
-	int8_t d = readMemory(PC - 2);
-	absoluteAddress = IY + d;
-
-	uint8_t n = readMemory(absoluteAddress);
-
-	n = (n << 1) | (n >> 7);
-
-	writeMemory(absoluteAddress, n);
-
-	setFlag(Flags::C, n & 1);
-	setRotateFlags(n);
-
-	uint8_t dest = currentOpCode & 0b00000111;
-	if (dest != 6)
-	{
-		writeToRgister(dest, n);
 	}
 	MEMPTR = absoluteAddress;
 
@@ -170,35 +146,10 @@ uint8_t Z80::RLHL()
 	return 0;
 }
 
-uint8_t Z80::RLIXD()
+uint8_t Z80::RLIRD()
 {
 	int8_t d = readMemory(PC - 2);
-	absoluteAddress = IX + d;
-
-	uint8_t n = readMemory(absoluteAddress);
-
-	bool newC = n & 0x80;
-	n = (n << 1) | getFlag(Flags::C);
-
-	writeMemory(absoluteAddress, n);
-
-	setFlag(Flags::C, newC);
-	setRotateFlags(n);
-
-	uint8_t dest = currentOpCode & 0b00000111;
-	if (dest != 6)
-	{
-		writeToRgister(dest, n);
-	}
-	MEMPTR = absoluteAddress;
-
-	return 0;
-}
-
-uint8_t Z80::RLIYD()
-{
-	int8_t d = readMemory(PC - 2);
-	absoluteAddress = IY + d;
+	absoluteAddress = IR + d;
 
 	uint8_t n = readMemory(absoluteAddress);
 
@@ -249,34 +200,10 @@ uint8_t Z80::RRCHL()
 	return 0;
 }
 
-uint8_t Z80::RRCIXD()
+uint8_t Z80::RRCIRD()
 {
 	int8_t d = readMemory(PC - 2);
-	absoluteAddress = IX + d;
-
-	uint8_t n = readMemory(absoluteAddress);
-
-	n = (n >> 1) | (n << 7);
-
-	writeMemory(absoluteAddress, n);
-
-	setFlag(Flags::C, n & 0x80);
-	setRotateFlags(n);
-
-	uint8_t dest = currentOpCode & 0b00000111;
-	if (dest != 6)
-	{
-		writeToRgister(dest, n);
-	}
-	MEMPTR = absoluteAddress;
-
-	return 0;
-}
-
-uint8_t Z80::RRCIYD()
-{
-	int8_t d = readMemory(PC - 2);
-	absoluteAddress = IY + d;
+	absoluteAddress = IR + d;
 
 	uint8_t n = readMemory(absoluteAddress);
 
@@ -328,35 +255,10 @@ uint8_t Z80::RRHL()
 	return 0;
 }
 
-uint8_t Z80::RRIXD()
+uint8_t Z80::RRIRD()
 {
 	int8_t d = readMemory(PC - 2);
-	absoluteAddress = IY + d;
-
-	uint8_t n = readMemory(absoluteAddress);
-
-	bool newC = n & 1;
-	n = (n >> 1) | (getFlag(Flags::C) << 7);
-
-	writeMemory(absoluteAddress, n);
-
-	setFlag(Flags::C, newC);
-	setRotateFlags(n);
-
-	uint8_t dest = currentOpCode & 0b00000111;
-	if (dest != 6)
-	{
-		writeToRgister(dest, n);
-	}
-	MEMPTR = absoluteAddress;
-
-	return 0;
-}
-
-uint8_t Z80::RRIYD()
-{
-	int8_t d = readMemory(PC - 2);
-	absoluteAddress = IY + d;
+	absoluteAddress = IR + d;
 
 	uint8_t n = readMemory(absoluteAddress);
 
@@ -409,35 +311,10 @@ uint8_t Z80::SLAHL()
 	return 0;
 }
 
-uint8_t Z80::SLAIXD()
+uint8_t Z80::SLAIRD()
 {
 	int8_t d = readMemory(PC - 2);
-	absoluteAddress = IX + d;
-
-	uint8_t n = readMemory(absoluteAddress);
-
-	bool newC = n & 0x80;
-	n <<= 1;
-
-	writeMemory(absoluteAddress, n);
-
-	setFlag(Flags::C, newC);
-	setRotateFlags(n);
-
-	uint8_t dest = currentOpCode & 0b00000111;
-	if (dest != 6)
-	{
-		writeToRgister(dest, n);
-	}
-	MEMPTR = absoluteAddress;
-
-	return 0;
-}
-
-uint8_t Z80::SLAIYD()
-{
-	int8_t d = readMemory(PC - 2);
-	absoluteAddress = IY + d;
+	absoluteAddress = IR + d;
 
 	uint8_t n = readMemory(absoluteAddress);
 
@@ -490,35 +367,10 @@ uint8_t Z80::SRAHL()
 	return 0;
 }
 
-uint8_t Z80::SRAIXD()
+uint8_t Z80::SRAIRD()
 {
 	int8_t d = readMemory(PC - 2);
-	absoluteAddress = IY + d;
-
-	uint8_t n = readMemory(absoluteAddress);
-
-	bool newC = n & 1;
-	n = (n >> 1) | (n & 0x80);
-
-	writeMemory(absoluteAddress, n);
-
-	setFlag(Flags::C, newC);
-	setRotateFlags(n);
-
-	uint8_t dest = currentOpCode & 0b00000111;
-	if (dest != 6)
-	{
-		writeToRgister(dest, n);
-	}
-	MEMPTR = absoluteAddress;
-
-	return 0;
-}
-
-uint8_t Z80::SRAIYD()
-{
-	int8_t d = readMemory(PC - 2);
-	absoluteAddress = IY + d;
+	absoluteAddress = IR + d;
 
 	uint8_t n = readMemory(absoluteAddress);
 
@@ -571,35 +423,10 @@ uint8_t Z80::SRLHL()
 	return 0;
 }
 
-uint8_t Z80::SRLIXD()
+uint8_t Z80::SRLIRD()
 {
 	int8_t d = readMemory(PC - 2);
-	absoluteAddress = IX + d;
-
-	uint8_t n = readMemory(absoluteAddress);
-
-	bool newC = n & 1;
-	n >>= 1;
-
-	writeMemory(absoluteAddress, n);
-
-	setFlag(Flags::C, newC);
-	setRotateFlags(n, true);
-
-	uint8_t dest = currentOpCode & 0b00000111;
-	if (dest != 6)
-	{
-		writeToRgister(dest, n);
-	}
-	MEMPTR = absoluteAddress;
-
-	return 0;
-}
-
-uint8_t Z80::SRLIYD()
-{
-	int8_t d = readMemory(PC - 2);
-	absoluteAddress = IY + d;
+	absoluteAddress = IR + d;
 
 	uint8_t n = readMemory(absoluteAddress);
 
@@ -714,35 +541,10 @@ uint8_t Z80::SLSHL()
 	return 0;
 }
 
-uint8_t Z80::SLSIXD()
+uint8_t Z80::SLSIRD()
 {
 	int8_t d = readMemory(PC - 2);
-	absoluteAddress = IX + d;
-
-	uint8_t n = readMemory(absoluteAddress);
-
-	bool newC = n & 0x80;
-	n = (n << 1) | 1;
-
-	writeMemory(absoluteAddress, n);
-
-	setFlag(Flags::C, newC);
-	setRotateFlags(n);
-
-	uint8_t dest = currentOpCode & 0b00000111;
-	if (dest != 6)
-	{
-		writeToRgister(dest, n);
-	}
-	MEMPTR = absoluteAddress;
-
-	return 0;
-}
-
-uint8_t Z80::SLSIYD()
-{
-	int8_t d = readMemory(PC - 2);
-	absoluteAddress = IY + d;
+	absoluteAddress = IR + d;
 
 	uint8_t n = readMemory(absoluteAddress);
 

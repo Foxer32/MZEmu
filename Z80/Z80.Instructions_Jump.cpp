@@ -2,23 +2,15 @@
 
 uint8_t Z80::JPNN()
 {
-	uint8_t loByte = readMemoryNext();
-	uint8_t hiByte = readMemoryNext();
-	absoluteAddress = (hiByte << 8) | loByte;
-
-	PC = absoluteAddress;
-
+	MEMPTR = PC = readMemoryNext2Bytes();
 	resetQ();
-	MEMPTR = absoluteAddress;
 
 	return 0;
 }
 
 uint8_t Z80::JPCCNN()
 {
-	uint8_t loByte = readMemoryNext();
-	uint8_t hiByte = readMemoryNext();
-	absoluteAddress = (hiByte << 8) | loByte;
+	absoluteAddress = readMemoryNext2Bytes();
 
 	if (evaluateCC((currentOpCode & 0b00111000) >> 3))
 	{
@@ -65,24 +57,16 @@ uint8_t Z80::JRNZE()
 uint8_t Z80::JPHL()
 {
 	PC = readRegisterPair(RegisterPairs::HL);
-
 	resetQ();
+
 	return 0;
 }
 
-uint8_t Z80::JPIX()
+uint8_t Z80::JPIR()
 {
-	PC = IX;
-
+	PC = IR;
 	resetQ();
-	return 0;
-}
 
-uint8_t Z80::JPIY()
-{
-	PC = IY;
-
-	resetQ();
 	return 0;
 }
 

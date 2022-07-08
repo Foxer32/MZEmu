@@ -34,33 +34,16 @@ uint8_t Z80::LDRHL()
 	return 0;
 }
 
-uint8_t Z80::LDRIXD()
+uint8_t Z80::LDRIRD()
 {
 	uint8_t dest = (currentOpCode & 0b00111000) >> 3;
 	int8_t d = readMemoryNext();
 
-	absoluteAddress = IX + d;
+	absoluteAddress = IR + d;
 	uint8_t n = readMemory(absoluteAddress);
 
 	writeToRgister(dest, n);
 
-	resetQ();
-	MEMPTR = absoluteAddress;
-
-	return 0;
-}
-
-uint8_t Z80::LDRIYD()
-{
-	uint8_t dest = (currentOpCode & 0b00111000) >> 3;
-	int8_t d = readMemoryNext();
-
-	absoluteAddress = IY + d;
-	uint8_t n = readMemory(absoluteAddress);
-
-	writeToRgister(dest, n);
-
-	
 	resetQ();
 	MEMPTR = absoluteAddress;
 
@@ -78,29 +61,14 @@ uint8_t Z80::LDHLR()
 	return 0;
 }
 
-uint8_t Z80::LDIXDR()
+uint8_t Z80::LDIRDR()
 {
 	uint8_t src = currentOpCode & 0b00000111;
 	uint8_t n = readFromRegister(src);
 	int8_t d = readMemoryNext();
-	absoluteAddress = IX + d;
+	absoluteAddress = IR + d;
 
 	writeMemory(absoluteAddress,n);
-
-	resetQ();
-	MEMPTR = absoluteAddress;
-
-	return 0;
-}
-
-uint8_t Z80::LDIYDR()
-{
-	uint8_t src = currentOpCode & 0b00000111;
-	uint8_t n = readFromRegister(src);
-	int8_t d = readMemoryNext();
-	absoluteAddress = IY + d;
-
-	writeMemory(absoluteAddress, n);
 
 	resetQ();
 	MEMPTR = absoluteAddress;
@@ -118,30 +86,16 @@ uint8_t Z80::LDHLN()
 	return 0;
 }
 
-uint8_t Z80::LDIXDN()
+uint8_t Z80::LDIRDN()
 {
 	int8_t d = readMemoryNext();
 	uint8_t n = readMemoryNext();
-	absoluteAddress = IX + d;
+	absoluteAddress = IR + d;
 
 	writeMemory(absoluteAddress,n);
 
 	resetQ();
 	MEMPTR = absoluteAddress;
-
-	return 0;
-}
-
-uint8_t Z80::LDIYDN()
-{
-	int8_t d = readMemoryNext();
-	uint8_t n = readMemoryNext();
-	uint16_t addr = IY + d;
-
-	writeMemory(addr, n);
-
-	resetQ();
-	MEMPTR = addr;
 
 	return 0;
 }
@@ -170,9 +124,7 @@ uint8_t Z80::LDADE()
 
 uint8_t Z80::LDANN()
 {
-	uint8_t lobyte = readMemoryNext();
-	uint8_t hibyte = readMemoryNext();
-	absoluteAddress = (hibyte << 8) | lobyte;
+	absoluteAddress = readMemoryNext2Bytes();
 
 	A = readMemory(absoluteAddress);
 
@@ -208,9 +160,7 @@ uint8_t Z80::LDDEA()
 
 uint8_t Z80::LDNNA()
 {
-	uint8_t lobyte = readMemoryNext();
-	uint8_t hibyte = readMemoryNext();
-	absoluteAddress = (hibyte << 8) | lobyte;
+	absoluteAddress = readMemoryNext2Bytes();
 
 	writeMemory(absoluteAddress,A);
 
