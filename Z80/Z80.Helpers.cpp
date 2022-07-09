@@ -327,13 +327,6 @@ void Z80::saveIR()
 		IY = IR;
 }
 
-uint16_t Z80::readMemoryNext2Bytes()
-{
-	uint8_t loByte = readMemoryNext();
-	uint8_t hiByte = readMemoryNext();
-
-	return (hiByte << 8) | loByte;
-}
 
 
 uint8_t Z80::LDCPr(bool c)

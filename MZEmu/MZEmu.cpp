@@ -13,7 +13,7 @@ int main()
     bus.writeMemory(0x7FFD, 0x00);
     bus.writeMemory(0x7FFE, 0x00);
     bus.writeMemory(0x7FFF, 0x00);
-    bus.writeMemory(0x8000, 0xFD); //----------
+    bus.writeMemory(0x8000, 0xFB); //----------
     bus.writeMemory(0x8001, 0x21);
     bus.writeMemory(0x8002, 0x6C);
     bus.writeMemory(0x8003, 0xEA);
@@ -40,7 +40,8 @@ int main()
 
         //bus.cpu.tick();
         bus.cpu.step();
-        std::cout << bus.cpu.getCpuInfo();       
+        std::cout << bus.cpu.getCpuInfo();    
+        bus.cpu.maskableInterrupt();
     }
 
     return 0;

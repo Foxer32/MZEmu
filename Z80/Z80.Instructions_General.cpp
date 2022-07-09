@@ -158,7 +158,7 @@ uint8_t Z80::EI()
 
 uint8_t Z80::IM0()
 {
-    interruptMode = InterruptModes::Mode0;
+    interruptMode = 0;
     resetQ();
 
 	return 0;
@@ -166,7 +166,7 @@ uint8_t Z80::IM0()
 
 uint8_t Z80::IM1()
 {
-    interruptMode = InterruptModes::Mode1;
+    interruptMode = 1;
     resetQ();
 
 	return 0;
@@ -174,7 +174,7 @@ uint8_t Z80::IM1()
 
 uint8_t Z80::IM2()
 {
-    interruptMode = InterruptModes::Mode2;
+    interruptMode = 2;
     resetQ();
 
 	return 0;

@@ -18,6 +18,11 @@ public:
     uint16_t SP = 0x0000;
     uint16_t PC = 0x0000;
 
+    uint16_t MEMPTR = 0x0000;
+    uint8_t Q = 0x00;
+
+    uint8_t interruptMode = 0;
+
     bool IFF1;
     bool IFF2;
     bool isHalted;
@@ -59,21 +64,12 @@ public:
         S = 1 << 7,
     };
 
-    enum class InterruptModes
-    {
-        Mode0 = 0,
-        Mode1 = 1,
-        Mode2 = 2,
-    };
-
-    InterruptModes interruptMode = InterruptModes::Mode0;
-
-    uint16_t MEMPTR = 0x0000;
-    uint8_t Q = 0x00;
-
-    void tick();
-    void step();
+    uint8_t step();
     void reset(bool hardReset = false);
+
+    void maskableInterrupt();
+    void nonMaskableInterrupt();
+    std::vector <uint8_t> interruptData;
 
     template<class T>
     std::string tostringX(T v);
@@ -97,10 +93,13 @@ private:
     std::vector <Instruction> irInstructions;
     std::vector <Instruction> ircbInstructions;
 
-    uint16_t absoluteAddress = 0x0000;
+    bool genINT, genNMI;
+
     uint8_t currentOpCode = 0x00;
+    uint16_t absoluteAddress = 0x0000;
     Instruction* currentInstruction;
     uint8_t clockCycles = 0;
+    uint8_t refresh = 0;
 
     void setQ();
     void resetQ();
@@ -108,20 +107,26 @@ private:
     bool getFlag(Flags flag);
     void setFlag(Flags flag, bool v);
 
+    uint8_t readMemoryNext();
+    uint16_t readMemoryNext2Bytes();
+
 	uint8_t readMemory(uint16_t addr);
 	void writeMemory(uint16_t addr, uint8_t data);
 	uint8_t readPeripheral(uint16_t addr);
 	void writePeripheral(uint16_t addr, uint8_t data);
-   
+
+    void incRegisterPair(RegisterPairs rp, int16_t v = 1);
+
     uint16_t readRegisterPair(RegisterPairs src);
     void writeRegisterPair(RegisterPairs dest, uint16_t v);
     uint8_t readFromRegister(uint8_t src);
     void writeToRgister(uint8_t dest, uint8_t v);
 
-    void incRegisterPair(RegisterPairs rp, int16_t v = 1);
-
-    uint8_t readMemoryNext();
     void initInstructions();
+
+    void incrementRefreshRegister(uint8_t steps);
+    void unhaltIfHalted();
+    void handleInterrupts();
 
     //Helpers
     void writeDD(uint16_t v, uint8_t dd);
@@ -144,8 +149,6 @@ private:
     void popPC();
     void setUndocIOFlags(uint16_t k, uint8_t n);
     void saveIR();
-    uint16_t readMemoryNext2Bytes();
-
     //
     uint8_t LDCPr(bool c);
     uint8_t JRif(bool c);

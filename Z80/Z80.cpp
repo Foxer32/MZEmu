@@ -3,14 +3,10 @@
 
 Z80::Z80()
 {
-
-	A = F = B = C = D = E = H = L = 0x00;
-	A1 = F1 = B1 = C1 = D1 = E1 = H1 = L1 = 0x00;
-	I = R = 0x00;
-	IX = IY = IR = 0x0000;
-
+	genINT = genNMI = false;
+	interruptData = { 0xFF, 0xFF, 0xFF, 0xFF };
+	reset(true);
 	initInstructions();
-
 }
 
 Z80::~Z80()
@@ -46,6 +42,14 @@ uint8_t Z80::readMemoryNext()
 	return bus->readMemory(PC++);
 }
 
+uint16_t Z80::readMemoryNext2Bytes()
+{
+	uint8_t loByte = readMemoryNext();
+	uint8_t hiByte = readMemoryNext();
+
+	return (hiByte << 8) | loByte;
+}
+
 uint8_t Z80::readMemory(uint16_t addr)
 {
 	return bus->readMemory(addr);
@@ -64,6 +68,11 @@ uint8_t Z80::readPeripheral(uint16_t addr)
 void Z80::writePeripheral(uint16_t addr, uint8_t data)
 {
 	bus->writePeripheral(addr, data);
+}
+
+void Z80::incRegisterPair(RegisterPairs rp, int16_t v)
+{
+	writeRegisterPair(rp, readRegisterPair(rp) + v);
 }
 
 void Z80::writeRegisterPair(RegisterPairs dest, uint16_t v)
@@ -186,25 +195,15 @@ void Z80::writeToRgister(uint8_t dest, uint8_t v)
 	}
 }
 
-void Z80::incRegisterPair(RegisterPairs rp, int16_t v)
+uint8_t Z80::step()
 {
-	writeRegisterPair(rp, readRegisterPair(rp) + v);
-}
+	clockCycles = 0;
+	refresh = 2;
 
-void Z80::step()
-{
-	do
+	if (!isHalted)
 	{
-		tick();
-	} while (clockCycles != 0);
-}
-
-void Z80::tick()
-{
-	if (clockCycles == 0 && !isHalted)
-	{	
 		currentOpCode = readMemoryNext();
-		
+
 		switch (currentOpCode)
 		{
 		case 0xDD:
@@ -226,15 +225,14 @@ void Z80::tick()
 			break;
 		case 0xED:
 			currentOpCode = readMemoryNext();
-
 			currentInstruction = &edInstructions[currentOpCode];
 			break;
 		case 0xCB:
 			currentOpCode = readMemoryNext();
-
 			currentInstruction = &cbInstructions[currentOpCode];
 			break;
 		default:
+			refresh = 1;
 			currentInstruction = &rootInstructions[currentOpCode];
 			break;
 		}
@@ -242,8 +240,91 @@ void Z80::tick()
 		clockCycles = (*currentInstruction).tCycles;
 		clockCycles += (this->*((*currentInstruction).op))();
 	}
+	else
+	{
+		clockCycles += 4;
+	}
 
-	clockCycles--;
+	incrementRefreshRegister(refresh);
+	handleInterrupts();
+
+	return clockCycles;
+}
+
+void Z80::incrementRefreshRegister(uint8_t steps)
+{
+	bool msbSet = R & 0x80;
+	R = (R & 0x7F) + steps;
+
+	if (msbSet)
+		R |= 0x80;
+	else
+		R &= 0x7F;
+}
+
+void Z80::unhaltIfHalted()
+{
+	if (isHalted)
+	{
+		isHalted = false;
+		PC++;
+	}
+}
+
+void Z80::handleInterrupts()
+{
+	if (genINT)
+	{
+		genINT = false;
+		unhaltIfHalted();
+		pushPC();
+		if (IFF1)
+		{
+			IFF1 = IFF2 = false;
+
+			switch (interruptMode)
+			{
+			case 0:			
+				currentOpCode = interruptData[0];
+				refresh = 1;
+				currentInstruction = &rootInstructions[currentOpCode];
+				clockCycles += (*currentInstruction).tCycles;
+				clockCycles += (this->*((*currentInstruction).op))();
+				break;
+			case 1:
+				PC = 0x0038;		
+				break;
+			case 2:
+				PC = (I << 8) | interruptData[0];
+				PC = readMemoryNext2Bytes();
+				clockCycles += 6;
+				break;
+			}
+			clockCycles += 13;
+		}
+	}
+
+	if (genNMI)
+	{
+		genNMI = false;
+		unhaltIfHalted();
+		pushPC();
+
+		IFF2 = IFF1;
+		IFF1 = false;
+		PC = 0x0066;
+		clockCycles += 17;
+	}
+}
+
+void Z80::maskableInterrupt()
+{
+	genINT = true;
+}
+
+void Z80::nonMaskableInterrupt()
+{
+	genNMI = true;
 }
 
 void Z80::reset(bool hardReset)
@@ -255,7 +336,7 @@ void Z80::reset(bool hardReset)
 	PC = 0x0000;
 	SP = 0xFFFF;
 	IFF1 = IFF2 = false;
-	interruptMode = InterruptModes::Mode0;
+	interruptMode = 0;
 	isHalted = false;
 	Q = 0x00;
 
