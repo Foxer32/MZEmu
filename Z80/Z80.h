@@ -23,6 +23,8 @@ public:
 
     uint8_t interruptMode = 0;
 
+    uint32_t cpuFrequency = 0;
+
     bool IFF1;
     bool IFF2;
     bool isHalted;
@@ -70,12 +72,6 @@ public:
     void maskableInterrupt();
     void nonMaskableInterrupt();
     std::vector <uint8_t> interruptData;
-
-    template<class T>
-    std::string tostringX(T v);
-    template<class T>
-    std::string tostringB(T v);
-    std::string getCpuInfo();
 
 private:
 

@@ -237,6 +237,8 @@ uint8_t Z80::step()
 			break;
 		}
 
+		incrementRefreshRegister(refresh);
+
 		clockCycles = (*currentInstruction).tCycles;
 		clockCycles += (this->*((*currentInstruction).op))();
 	}
@@ -245,7 +247,6 @@ uint8_t Z80::step()
 		clockCycles += 4;
 	}
 
-	incrementRefreshRegister(refresh);
 	handleInterrupts();
 
 	return clockCycles;
@@ -277,9 +278,9 @@ void Z80::handleInterrupts()
 	{
 		genINT = false;
 		unhaltIfHalted();
-		pushPC();
 		if (IFF1)
 		{
+			pushPC();
 			IFF1 = IFF2 = false;
 
 			switch (interruptMode)
@@ -292,7 +293,7 @@ void Z80::handleInterrupts()
 				clockCycles += (this->*((*currentInstruction).op))();
 				break;
 			case 1:
-				PC = 0x0038;		
+				PC = 0x0038;
 				break;
 			case 2:
 				PC = (I << 8) | interruptData[0];

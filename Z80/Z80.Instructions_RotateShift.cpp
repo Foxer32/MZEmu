@@ -453,10 +453,10 @@ uint8_t Z80::RLD()
 	absoluteAddress = readRegisterPair(RegisterPairs::HL);
 	uint8_t n = readMemory(absoluteAddress);
 
-	uint8_t lowNibbleA = A & 0xFF;
-	uint8_t hiNibbleA = A & 0xFF00;
-	uint8_t lowNibbleN = n & 0xFF;
-	uint8_t hiNibbleN = n & 0xFF00;
+	uint8_t lowNibbleA = A & 0x0F;
+	uint8_t hiNibbleA = A & 0xF0;
+	uint8_t lowNibbleN = n & 0x0F;
+	uint8_t hiNibbleN = n & 0xF0;
 
 	A = hiNibbleA | (hiNibbleN >> 4);
 	n = (lowNibbleN << 4) | lowNibbleA;
@@ -483,10 +483,10 @@ uint8_t Z80::RRD()
 	absoluteAddress = readRegisterPair(RegisterPairs::HL);
 	uint8_t n = readMemory(absoluteAddress);
 
-	uint8_t lowNibbleA = A & 0xFF;
-	uint8_t hiNibbleA = A & 0xFF00;
-	uint8_t lowNibbleN = n & 0xFF;
-	uint8_t hiNibbleN = n & 0xFF00;
+	uint8_t lowNibbleA = A & 0x0F;
+	uint8_t hiNibbleA = A & 0xF0;
+	uint8_t lowNibbleN = n & 0x0F;
+	uint8_t hiNibbleN = n & 0xF0;
 
 	A = hiNibbleA | lowNibbleN;
 	n = (lowNibbleA << 4) | (hiNibbleN >> 4);

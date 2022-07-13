@@ -21,8 +21,8 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{32147077-f52e-49b5-92b7-25db10005e6c}</ProjectGuid>
-    <RootNamespace>MZEmu</RootNamespace>
+    <ProjectGuid>{1bf5940b-249c-4b84-bb0e-1a4844b8ba86}</ProjectGuid>
+    <RootNamespace>Z80FuseTests</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -89,7 +89,6 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -105,7 +104,6 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -143,15 +141,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="BusSpecrtum48k.cpp" />
-    <ClCompile Include="MZEmu.cpp" />
-    <ClCompile Include="SpectrumVideo.cpp" />
+    <ClCompile Include="TestBus.cpp" />
+    <ClCompile Include="FuseTester.cpp" />
+    <ClCompile Include="Z80.FuseTests.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Specrtum48kBus.h" />
-    <ClInclude Include="olcPGEX_Sound.h" />
-    <ClInclude Include="olcPixelGameEngine.h" />
-    <ClInclude Include="SpectrumVideo.h" />
+    <ClInclude Include="TestBus.h" />
+    <ClInclude Include="FuseTester.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="tests\FUSE_Expected.txt" />
+    <Text Include="tests\FUSE_Tests.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

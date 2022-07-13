@@ -45,7 +45,7 @@ uint8_t Z80::sub8(uint8_t a, uint8_t b, uint8_t c)
 	setFlag(Flags::S, diff & 0x80);
 	setFlag(Flags::Z, !(diff & 0xFF));
 	setFlag(Flags::H, (a & 0x0F) < (b & 0x0F));
-	setFlag(Flags::P, (~(a ^ b) & (b ^ diff)) & 0x80);
+	setFlag(Flags::P, ((a ^ b) & ~(b ^ diff)) & 0x80);
 	setFlag(Flags::N, true);
 	setFlag(Flags::C, diff & 0xFF00);
 
@@ -95,7 +95,7 @@ uint8_t Z80::orAB(uint8_t a, uint8_t b)
 
 	setFlag(Flags::S, res & 0x80);
 	setFlag(Flags::Z, !res);
-	setFlag(Flags::H, true);
+	setFlag(Flags::H, false);
 	setFlag(Flags::P, parity(res));
 	setFlag(Flags::N, false);
 	setFlag(Flags::C, false);
@@ -113,7 +113,7 @@ uint8_t Z80::xorAB(uint8_t a, uint8_t b)
 
 	setFlag(Flags::S, res & 0x80);
 	setFlag(Flags::Z, !res);
-	setFlag(Flags::H, true);
+	setFlag(Flags::H, false);
 	setFlag(Flags::P, parity(res));
 	setFlag(Flags::N, false);
 	setFlag(Flags::C, false);
@@ -130,12 +130,12 @@ void Z80::setComparsionFlags(uint8_t n, uint8_t diff)
 	setFlag(Flags::S, diff & 0x80);
 	setFlag(Flags::Z, !diff);
 	setFlag(Flags::H, (A & 0x0F) < (n & 0x0F));
-	setFlag(Flags::P, (~(A ^ n) & (n ^ diff)) & 0x80);
+	setFlag(Flags::P, ((A ^ n) & ~(n ^ diff)) & 0x80);
 	setFlag(Flags::N, true);
 	setFlag(Flags::C, n > A);
 
-	setFlag(Flags::X, diff & 0x08);
-	setFlag(Flags::U, diff & 0x20);
+	setFlag(Flags::X, n & 0x08);
+	setFlag(Flags::U, n & 0x20);
 	setQ();
 }
 
@@ -143,7 +143,7 @@ void Z80::setIncFlags(uint8_t val, uint8_t incVal)
 {
 	setFlag(Flags::S, incVal & 0x80);
 	setFlag(Flags::Z, !incVal);
-	setFlag(Flags::H, ((val & 0x0F) + (val & 0x0F)) & 0xF0);
+	setFlag(Flags::H, ((val & 0x0F) + 1) & 0xF0);
 	setFlag(Flags::P, val == 0x7F);
 	setFlag(Flags::N, false);
 
@@ -156,7 +156,7 @@ void Z80::setDecFlags(uint8_t val, uint8_t decVal)
 {
 	setFlag(Flags::S, decVal & 0x80);
 	setFlag(Flags::Z, !decVal);
-	setFlag(Flags::H, ((val & 0x0F) + (val & 0x0F)) & 0xF0);
+	setFlag(Flags::H, !(val & 0x0F));
 	setFlag(Flags::P, val == 0x80);
 	setFlag(Flags::N, true);
 
@@ -238,7 +238,7 @@ uint16_t Z80::sub16(uint16_t a, uint16_t b, uint8_t c)
 	setFlag(Flags::S, diff & 0x8000);
 	setFlag(Flags::Z, !(diff & 0xFFFF));
 	setFlag(Flags::H, (a & 0x0FFF) < (b & 0x0FFF));
-	setFlag(Flags::P, (~(a ^ b) & (b ^ diff)) & 0x8000);
+	setFlag(Flags::P, ((a ^ b) & ~(b ^ diff)) & 0x8000);
 	setFlag(Flags::N, true);
 	setFlag(Flags::C, diff & 0xFFFF0000);
 

@@ -90,12 +90,16 @@ uint8_t Z80::LDNNDD()
 	{
 	case 0:
 		buff = readRegisterPair(RegisterPairs::BC);
+		break;
 	case 1:
 		buff = readRegisterPair(RegisterPairs::DE);
+		break;
 	case 2:
 		buff = readRegisterPair(RegisterPairs::HL);
+		break;
 	case 3:
 		buff = SP;
+		break;
 	}
 
 	writeMemory(absoluteAddress++, buff & 0xFF);
@@ -208,8 +212,8 @@ uint8_t Z80::POPQQ()
 
 uint8_t Z80::POPIR()
 {
-	uint8_t hi = readMemory(SP++);
 	uint8_t lo = readMemory(SP++);
+	uint8_t hi = readMemory(SP++);
 
 	IR = (hi << 8) | lo;
 	saveIR();

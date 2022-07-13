@@ -117,7 +117,7 @@ uint8_t Z80::OUTI()
 	B -= 1;
 	setDecFlags(val, B);
 
-	MEMPTR = ++absoluteAddress;
+	MEMPTR = readRegisterPair(RegisterPairs::BC) + 1;
 	setUndocIOFlags(n + L, n);
 
 	return 0;
@@ -141,7 +141,7 @@ uint8_t Z80::OUTD()
 	B -= 1;
 	setDecFlags(val, B);
 
-	MEMPTR = --absoluteAddress;
+	MEMPTR = readRegisterPair(RegisterPairs::BC) - 1;
 	setUndocIOFlags(n + L, n);
 
 	return 0;

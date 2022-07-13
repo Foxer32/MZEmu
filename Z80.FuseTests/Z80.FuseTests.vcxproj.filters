@@ -15,28 +15,30 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="MZEmu.cpp">
+    <ClCompile Include="Z80.FuseTests.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="BusSpecrtum48k.cpp">
+    <ClCompile Include="FuseTester.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="SpectrumVideo.cpp">
+    <ClCompile Include="TestBus.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Specrtum48kBus.h">
+    <ClInclude Include="FuseTester.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="olcPGEX_Sound.h">
+    <ClInclude Include="TestBus.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="olcPixelGameEngine.h">
-      <Filter>Файлы заголовков</Filter>
-    </ClInclude>
-    <ClInclude Include="SpectrumVideo.h">
-      <Filter>Файлы заголовков</Filter>
-    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="tests\FUSE_Expected.txt">
+      <Filter>Файлы ресурсов</Filter>
+    </Text>
+    <Text Include="tests\FUSE_Tests.txt">
+      <Filter>Файлы ресурсов</Filter>
+    </Text>
   </ItemGroup>
 </Project>

@@ -19,7 +19,6 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Z80.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="$(MSBuildThisFileDirectory)Z80.Debug.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Z80.Instructions_Arithmetic16.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Z80.Instructions_Arithmetic8.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Z80.cpp" />
