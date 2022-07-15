@@ -180,7 +180,6 @@ uint8_t Z80::LDAI()
 	setFlag(Flags::P, IFF2);
 	setFlag(Flags::N, false);	
 
-	//TODO: if an interrupt occurs during this instruction, reset P/V
 	setFlag(Flags::P, IFF2);
 	setFlag(Flags::X, A & 0x08);
 	setFlag(Flags::U, A & 0x20);
@@ -199,7 +198,6 @@ uint8_t Z80::LDAR()
 	setFlag(Flags::P, IFF2);
 	setFlag(Flags::N, false);
 
-	//TODO: if an interrupt occurs during this instruction, reset P/V
 	setFlag(Flags::P, IFF2);
 	setFlag(Flags::X, A & 0x08);
 	setFlag(Flags::U, A & 0x20);

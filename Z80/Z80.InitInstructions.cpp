@@ -787,7 +787,7 @@ void Z80::initInstructions()
 
 	irInstructions =
 	{
-		{"???", a::IMP, &c::XXX, 4},
+		{"NOP", a::IMP, &c::NOP, 8},//
 		{"???", a::IMP, &c::XXX, 4},
 		{"???", a::IMP, &c::XXX, 4},
 		{"???", a::IMP, &c::XXX, 4},
@@ -851,38 +851,38 @@ void Z80::initInstructions()
 		{"???", a::IMP, &c::XXX, 4},
 		{"???", a::IMP, &c::XXX, 4},
 		{"???", a::IMP, &c::XXX, 4},
-		{"???", a::IMP, &c::XXX, 4},
-		{"???", a::IMP, &c::XXX, 4},
-		{"???", a::IMP, &c::XXX, 4},
-		{"???", a::IMP, &c::XXX, 4},
+		{"LD B,B", a::REG, &c::LDRR, 4},//
+		{"LD B,C", a::REG, &c::LDRR, 4},//
+		{"LD B,D", a::REG, &c::LDRR, 4},//
+		{"LD B,E", a::REG, &c::LDRR, 4},//
 		{"LD B,IRh", a::IMP, &c::LDRIRH, 8},
 		{"LD B,IRl", a::IMP, &c::LDRIRL, 8},
 		{"LD B,(IR+d)", a::REL, &c::LDRIRD, 19},
-		{"???", a::IMP, &c::XXX, 4},
-		{"???", a::IMP, &c::XXX, 4},
-		{"???", a::IMP, &c::XXX, 4},
-		{"???", a::IMP, &c::XXX, 4},
-		{"???", a::IMP, &c::XXX, 4},
+		{"LD B,A", a::REG, &c::LDRR, 4},//
+		{"LD C,B", a::REG, &c::LDRR, 4},//
+		{"LD C,C", a::REG, &c::LDRR, 4},//
+		{"LD C,D", a::REG, &c::LDRR, 4},//
+		{"LD C,E", a::REG, &c::LDRR, 4},//
 		{"LD C,IRh", a::IMP, &c::LDRIRH, 8},
 		{"LD C,IRl", a::IMP, &c::LDRIRL, 8},
 		{"LD C,(IR+d)", a::REL, &c::LDRIRD, 19},
-		{"???", a::IMP, &c::XXX, 4},
-		{"???", a::IMP, &c::XXX, 4},
-		{"???", a::IMP, &c::XXX, 4},
-		{"???", a::IMP, &c::XXX, 4},
-		{"???", a::IMP, &c::XXX, 4},
+		{"LD C,A", a::REG, &c::LDRR, 4},//
+		{"LD D,B", a::REG, &c::LDRR, 4},//
+		{"LD D,C", a::REG, &c::LDRR, 4},//
+		{"LD D,D", a::REG, &c::LDRR, 4},//
+		{"LD D,E", a::REG, &c::LDRR, 4},//
 		{"LD D,IRh", a::IMP, &c::LDRIRH, 8},
 		{"LD D,IRl", a::IMP, &c::LDRIRL, 8},
 		{"LD D,(IR+d)", a::REL, &c::LDRIRD, 19},
-		{"???", a::IMP, &c::XXX, 4},
-		{"???", a::IMP, &c::XXX, 4},
-		{"???", a::IMP, &c::XXX, 4},
-		{"???", a::IMP, &c::XXX, 4},
-		{"???", a::IMP, &c::XXX, 4},
+		{"LD D,A", a::REG, &c::LDRR, 4},//
+		{"LD E,B", a::REG, &c::LDRR, 4},//
+		{"LD E,C", a::REG, &c::LDRR, 4},//
+		{"LD E,D", a::REG, &c::LDRR, 4},//
+		{"LD E,E", a::REG, &c::LDRR, 4},//
 		{"LD E,IRh", a::IMP, &c::LDRIRH, 8},
 		{"LD E,IRl", a::IMP, &c::LDRIRL, 8},
 		{"LD E,(IR+d)", a::REL, &c::LDRIRD, 19},
-		{"???", a::IMP, &c::XXX, 4},
+		{"LD E,A", a::REG, &c::LDRR, 4},//
 		{"LD IRh,B", a::IMP, &c::LDIRHR, 8},
 		{"LD IRh,C", a::IMP, &c::LDIRHR, 8},
 		{"LD IRh,D", a::IMP, &c::LDIRHR, 8},
@@ -907,14 +907,14 @@ void Z80::initInstructions()
 		{"LD (IR+d),L", a::REL, &c::LDIRDR, 19},
 		{"???", a::IMP, &c::XXX, 4},
 		{"LD (IR+d),A", a::REL, &c::LDIRDR, 19},
-		{"???", a::IMP, &c::XXX, 4},
-		{"???", a::IMP, &c::XXX, 4},
-		{"???", a::IMP, &c::XXX, 4},
-		{"???", a::IMP, &c::XXX, 4},
+		{ "LD A,B", a::REG, &c::LDRR, 4 },//
+		{ "LD A,C", a::REG, &c::LDRR, 4 },//
+		{ "LD A,D", a::REG, &c::LDRR, 4 },//
+		{ "LD A,E", a::REG, &c::LDRR, 4 },//
 		{"LD A,IRh", a::IMP, &c::LDRIRH, 8},
 		{"LD A,IRl", a::IMP, &c::LDRIRL, 8},
 		{"LD A,(IR+d)", a::REL, &c::LDRIRD, 19},
-		{"???", a::IMP, &c::XXX, 4},
+		{ "LD A,A", a::REG, &c::LDRR, 4 },//
 		{"???", a::IMP, &c::XXX, 4},
 		{"???", a::IMP, &c::XXX, 4},
 		{"???", a::IMP, &c::XXX, 4},
@@ -1040,7 +1040,7 @@ void Z80::initInstructions()
 		{"???", a::IMP, &c::XXX, 4},
 		{"???", a::IMP, &c::XXX, 4},
 		{"???", a::IMP, &c::XXX, 4},
-		{"???", a::IMP, &c::XXX, 4},
+		{"NOP", a::IMP, &c::NOP, 8 },//
 		{"???", a::IMP, &c::XXX, 4},
 		{"???", a::IMP, &c::XXX, 4},
 	};

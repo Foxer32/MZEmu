@@ -56,7 +56,7 @@ private:
 	void readFuseTestsFile();
 	void readFuseExpectedFile();
 
-	bool compareActualWithExpected(uint32_t& totalTStates,const FuseExpected& expected, list<string>& failDetails);
+	bool compareActualWithExpected(uint8_t totalTStates,const FuseExpected& expected, list<string>& failDetails);
 
 	list<string> readFile(const string& filename);
 	list<string> splitString(const string& str, char separator = ' ');

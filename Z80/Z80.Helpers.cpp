@@ -22,6 +22,7 @@ void Z80::writeDD(uint16_t v, uint8_t dd)
 uint8_t Z80::add8(uint8_t a, uint8_t b, uint8_t c)
 {
 	uint16_t sum = a + b + c;
+	b += c;
 
 	setFlag(Flags::S, sum & 0x80);
 	setFlag(Flags::Z, !(sum & 0xFF));

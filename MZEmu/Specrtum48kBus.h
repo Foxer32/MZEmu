@@ -28,7 +28,9 @@ public:
 
 	uint8_t keyMatrix[8];
 
-	bool audioOut = false;
+	float audioOut = 0;
+	float audioIn = 0;
+
 	uint8_t mem[64 * 1024];
 private:
 

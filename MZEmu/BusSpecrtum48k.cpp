@@ -36,7 +36,7 @@ uint8_t Specrtum48kBus::readPeripheral(uint16_t addr)
 {
 	uint8_t result = 0xFF;
 
-	if (addr && 0xFE)
+	if ((addr & 0xFF) == 0xFE)
 	{
 		uint8_t keyRow = addr >> 8;
 
@@ -68,6 +68,7 @@ uint8_t Specrtum48kBus::readPeripheral(uint16_t addr)
 			break;
 		}
 
+		result = (audioIn > 0.3f) ? result | 0x40 : result & ~(0x40);
 	}
 
 	return result;
@@ -75,9 +76,9 @@ uint8_t Specrtum48kBus::readPeripheral(uint16_t addr)
 
 void Specrtum48kBus::writePeripheral(uint16_t addr, uint8_t data)
 {
-	if (addr && 0xFE)
+	if ((addr & 0xFF) == 0xFE)
 	{
-		audioOut = data & 0x10;
+		audioOut = (data & 0x18) ? 1.0f : 0.0f;
 		video.borderColor = data & 0x07;
 	}
 }
@@ -99,6 +100,6 @@ void Specrtum48kBus::clock()
 	while (tCount < cpuUpdFreq)
 		tCount += cpu.step();
 	lastTCount = tCount - cpuUpdFreq;
-	
+
 	video.videoScan();
 }

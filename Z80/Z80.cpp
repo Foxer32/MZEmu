@@ -155,8 +155,8 @@ uint8_t Z80::readFromRegister(uint8_t src)
 		return H;
 	case 5:
 		return L;
-	case 6:
-		return F;
+	//case 6:
+	//	return F;
 	case 7:
 		return A;
 	default:
@@ -186,9 +186,9 @@ void Z80::writeToRgister(uint8_t dest, uint8_t v)
 	case 5:
 		L = v;
 		break;
-	case 6:
-		F = v;
-		break;
+	//case 6:
+	//	F = v;
+	//	break;
 	case 7:
 		A = v;
 		break;
@@ -200,10 +200,13 @@ uint8_t Z80::step()
 	clockCycles = 0;
 	refresh = 2;
 
+	uint8_t op1 = 0;
+	uint8_t op2 = 0;
+
 	if (!isHalted)
 	{
 		currentOpCode = readMemoryNext();
-
+		op1 = currentOpCode;
 		switch (currentOpCode)
 		{
 		case 0xDD:
@@ -217,6 +220,7 @@ uint8_t Z80::step()
 			{
 				PC++;
 				currentOpCode = readMemoryNext();
+				op2 = currentOpCode;
 				currentInstruction = &ircbInstructions[currentOpCode];
 				break;
 			}
@@ -238,6 +242,12 @@ uint8_t Z80::step()
 		}
 
 		incrementRefreshRegister(refresh);
+
+		if (currentInstruction->op == &Z80::XXX)
+		{
+			uint8_t op3 = currentOpCode;
+			uint8_t a = 1;
+		}
 
 		clockCycles = (*currentInstruction).tCycles;
 		clockCycles += (this->*((*currentInstruction).op))();
@@ -276,26 +286,29 @@ void Z80::handleInterrupts()
 {
 	if (genINT)
 	{
+		modInstructionIfInterrupt();
 		genINT = false;
 		unhaltIfHalted();
 		if (IFF1)
 		{
-			pushPC();
 			IFF1 = IFF2 = false;
 
 			switch (interruptMode)
 			{
-			case 0:			
+			case 0:
 				currentOpCode = interruptData[0];
-				refresh = 1;
+				incrementRefreshRegister(1);
 				currentInstruction = &rootInstructions[currentOpCode];
 				clockCycles += (*currentInstruction).tCycles;
 				clockCycles += (this->*((*currentInstruction).op))();
+				resetQ();
 				break;
 			case 1:
+				pushPC();
 				PC = 0x0038;
 				break;
 			case 2:
+				pushPC();
 				PC = (I << 8) | interruptData[0];
 				PC = readMemoryNext2Bytes();
 				clockCycles += 6;
@@ -307,6 +320,7 @@ void Z80::handleInterrupts()
 
 	if (genNMI)
 	{
+		modInstructionIfInterrupt();
 		genNMI = false;
 		unhaltIfHalted();
 		pushPC();
@@ -316,6 +330,14 @@ void Z80::handleInterrupts()
 		PC = 0x0066;
 		clockCycles += 17;
 	}
+}
+
+void Z80::modInstructionIfInterrupt()
+{
+	uint8_t(Z80::*instruction)(void) = currentInstruction->op;
+
+	if (instruction == &Z80::LDAI || instruction == &Z80::LDAR)
+		setFlag(Flags::P, false);
 }
 
 void Z80::maskableInterrupt()

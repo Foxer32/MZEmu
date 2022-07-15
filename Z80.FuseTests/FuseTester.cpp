@@ -28,7 +28,7 @@ void FuseTester::runTests()
         initStates(testToRun.states);
 
         uint16_t runToAddress = getListItem<uint16_t>(expected[testName].registers, 11);
-        uint32_t totalTStates = 0;
+        uint8_t totalTStates = 0;
 
         do
         {
@@ -248,7 +248,7 @@ void FuseTester::readFuseExpectedFile()
     }
 }
 
-bool FuseTester::compareActualWithExpected(uint32_t& totalTStates, const FuseExpected& expected, list<string>& failDetails)
+bool FuseTester::compareActualWithExpected(uint8_t totalTStates, const FuseExpected& expected, list<string>& failDetails)
 {
     bool pass = true;
     failDetails.clear();
@@ -303,7 +303,6 @@ bool FuseTester::compareActualWithExpected(uint32_t& totalTStates, const FuseExp
     }
 
 
-
     if (bus.cpu.A1 != (getListItem<uint16_t>(expected.registers, 4) >> 8))
     {
         failDetails.push_back("A' expected " + toStringX((uint8_t)(getListItem<uint16_t>(expected.registers, 4) >> 8)) + " got " + toStringX(bus.cpu.A1));
@@ -354,7 +353,6 @@ bool FuseTester::compareActualWithExpected(uint32_t& totalTStates, const FuseExp
     }
 
 
-
     if (bus.cpu.IX != getListItem<uint16_t>(expected.registers, 8))
     {
         failDetails.push_back("IX expected " + toStringX(getListItem<uint16_t>(expected.registers, 8)) + " got " + toStringX(bus.cpu.IX));
@@ -386,7 +384,6 @@ bool FuseTester::compareActualWithExpected(uint32_t& totalTStates, const FuseExp
     }
 
 
-
     if (bus.cpu.I != (getListItem<uint8_t>(expected.states, 0)))
     {
         failDetails.push_back("I expected " + toStringX(getListItem<uint8_t>(expected.states, 0)) + " got " + toStringX(bus.cpu.I));
@@ -411,6 +408,11 @@ bool FuseTester::compareActualWithExpected(uint32_t& totalTStates, const FuseExp
         pass = false;
     }
 
+    if (totalTStates != (getListItem<uint8_t>(expected.states, 6)))
+    {
+        failDetails.push_back("Timing expected " + to_string(getListItem<uint8_t>(expected.states, 6)) + " got " + to_string(totalTStates));
+        pass = false;
+    }
 
 
     for (auto& memBlock : expected.memory)

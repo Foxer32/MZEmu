@@ -123,6 +123,7 @@ private:
     void incrementRefreshRegister(uint8_t steps);
     void unhaltIfHalted();
     void handleInterrupts();
+    void modInstructionIfInterrupt();
 
     //Helpers
     void writeDD(uint16_t v, uint8_t dd);

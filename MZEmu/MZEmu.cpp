@@ -19,17 +19,18 @@ public:
         sAppName = "Test";
     }
 
-public:
+private:
 
-    static float soundOut(int nChannel, float fGlobalTime, float fTimeStep)
+	int soundFile;
+	bool hiSpeed = false;
+
+private:
+
+    static float soundOut(int nChannel, float fGlobalTime, float fSample)
     {
-        if (nChannel == 0)
-        {
-            bus.clock();
-            return bus.audioOut * 64;
-        }
-        else
-            return 0.0f;
+		bus.audioIn = fSample;
+		bus.clock();
+		return ((bus.audioOut * 0.5) + fSample) / 2;
     }
 
     bool OnUserCreate() override
@@ -39,8 +40,10 @@ public:
         bus.cpu.cpuFrequency = 3500000;
         bus.setSampleFrequency(44100);
         olc::SOUND::InitialiseAudio(44100, 1, 8, 512);
-        olc::SOUND::SetUserSynthFunction(soundOut);
+        olc::SOUND::SetUserFilterFunction(soundOut);
 		
+		soundFile = olc::SOUND::LoadAudioSample("tests/z80doc.wav");
+
         return true;
     }
 
@@ -56,13 +59,15 @@ public:
         {
             bus.video.screenReady = false;
             DrawSprite(0, 0, &bus.video.screenBuffer);
-            updateInput();
         }
+
+		updateMachineInput();
+		updateAppInput();
 
         return true;
     }
 
-    void updateInput()
+    void updateMachineInput()
     {
 		if (GetKey(olc::Key::SHIFT).bHeld)
 			bus.keyMatrix[0] = bus.keyMatrix[0] & ~(0x1);
@@ -245,7 +250,6 @@ public:
 			bus.keyMatrix[7] = bus.keyMatrix[7] | (0x1);
 
 
-
 		if (GetKey(olc::Key::CTRL).bHeld)
 			bus.keyMatrix[7] = bus.keyMatrix[7] & ~(0x02);
 		else
@@ -265,7 +269,6 @@ public:
 			bus.keyMatrix[7] = bus.keyMatrix[7] & ~(0x10);
 		else
 			bus.keyMatrix[7] = bus.keyMatrix[7] | (0x010);
-
 
 
 		if (GetKey(olc::Key::BACK).bPressed || GetKey(olc::Key::DEL).bPressed ||
@@ -300,12 +303,28 @@ public:
 		}
     }
 
+	void updateAppInput()
+	{
+		if (GetKey(olc::Key::F1).bPressed)
+			bus.reset();
+
+		if (GetKey(olc::Key::F2).bPressed)
+			olc::SOUND::PlaySample(soundFile);
+
+		if (GetKey(olc::Key::F3).bPressed)
+		{
+			hiSpeed = !hiSpeed;
+			sAppName = hiSpeed ? "Test Hi Speed" : "Test";
+			bus.setSampleFrequency(hiSpeed ? 4410 : 44100);
+		}
+	}
+
 };
 
 int main()
 {
     TestEmulationPGE demo;
-    if (demo.Construct(320, 256, 3, 3))
+	if (demo.Construct(320, 256, 3, 3, false, true))
         demo.Start();
 
     return 0;
