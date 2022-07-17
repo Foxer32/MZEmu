@@ -6,12 +6,12 @@
 #include "SpectrumVideo.h"
 #include "SpectrumKeyboard.h"
 
-class Specrtum48kBus : public IBus
+class Specrtum128kBus : public IBus
 {
 public:
 
-	Specrtum48kBus();
-	~Specrtum48kBus();
+	Specrtum128kBus();
+	~Specrtum128kBus();
 
 	virtual uint8_t readMemory(uint16_t addr) override;
 	virtual void writeMemory(uint16_t addr, uint8_t data) override;
@@ -29,11 +29,12 @@ public:
 	float audioOut = 0;
 	float audioIn = 0;
 
-	uint8_t mem[64 * 1024];
+	uint8_t port7FFD = 0;
+	uint8_t rom[32 * 1024];
+	uint8_t ram[128 * 1024];
 private:
 
 	float speakerOut = 0;
 
 	void mixAudioInputs();
 };
-

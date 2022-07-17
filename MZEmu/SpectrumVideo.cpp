@@ -31,7 +31,7 @@ void SpectrumVideo::setSampleFrequency(uint32_t sampleRate)
 	scanlineUpdFreq = (float)(312 * 50) / (float)sampleRate;
 }
 
-void SpectrumVideo::videoScan()
+void SpectrumVideo::updateVideo()
 {
 	lastLine += scanlineUpdFreq;
 	if (lastLine >= 312)

@@ -144,14 +144,18 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="BusSpecrtum48k.cpp" />
+    <ClCompile Include="Specrtum128kBus.cpp" />
+    <ClCompile Include="Specrtum48kBus.cpp" />
     <ClCompile Include="MZEmu.cpp" />
+    <ClCompile Include="SpectrumKeyboard.cpp" />
     <ClCompile Include="SpectrumVideo.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Specrtum128kBus.h" />
     <ClInclude Include="Specrtum48kBus.h" />
     <ClInclude Include="olcPGEX_Sound.h" />
     <ClInclude Include="olcPixelGameEngine.h" />
+    <ClInclude Include="SpectrumKeyboard.h" />
     <ClInclude Include="SpectrumVideo.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
