@@ -21,7 +21,6 @@ public:
 
 private:
 
-	int soundFile;
 	bool hiSpeed = false;
 
 private:
@@ -43,8 +42,6 @@ private:
         olc::SOUND::InitialiseAudio(44100, 1, 8, 512);
         olc::SOUND::SetUserFilterFunction(soundOut);
 		
-		soundFile = olc::SOUND::LoadAudioSample("tests/z80doc.wav");
-
         return true;
     }
 
@@ -74,7 +71,7 @@ private:
 			bus.reset();
 
 		if (GetKey(olc::Key::F2).bPressed)
-			olc::SOUND::PlaySample(soundFile);
+			olc::SOUND::PlaySample(olc::SOUND::LoadAudioSample("tests/z80full.wav"));
 
 		if (GetKey(olc::Key::F3).bPressed)
 		{

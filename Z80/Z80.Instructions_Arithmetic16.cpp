@@ -74,48 +74,32 @@ uint8_t Z80::DECIR()
 
 uint8_t Z80::INCIRH()
 {
-	uint8_t hibyte = IR >> 8;
-	uint8_t incVal = hibyte + 1;
-	IR = (incVal << 8) | (IR & 0xFF);
+	IR = (incN(IR >> 8) << 8) | (IR & 0xFF);
 	saveIR();
-
-	setIncFlags(hibyte, incVal);
 
 	return 0;
 }
 
 uint8_t Z80::INCIRL()
 {
-	uint8_t lobyte = IR & 0xFF;
-	uint8_t incVal = lobyte + 1;
-	IR = (IR & 0xFF00) | incVal;
+	IR = (IR & 0xFF00) | incN(IR & 0xFF);
 	saveIR();
-
-	setIncFlags(lobyte, incVal);
 
 	return 0;
 }
 
 uint8_t Z80::DECIRH()
 {
-	uint8_t hibyte = IR >> 8;
-	uint8_t decVal = hibyte - 1;
-	IR = (decVal << 8) | (IR & 0xFF);
+	IR = (decN(IR >> 8) << 8) | (IR & 0xFF);
 	saveIR();
-
-	setDecFlags(hibyte, decVal);
 
 	return 0;
 }
 
 uint8_t Z80::DECIRL()
 {
-	uint8_t lobyte = IR & 0xFF;
-	uint8_t decVal = lobyte - 1;
-	IR = (IR & 0xFF00) | decVal;
+	IR = (IR & 0xFF00) | decN(IR & 0xFF);
 	saveIR();
-
-	setDecFlags(lobyte, decVal);
 
 	return 0;
 }
@@ -178,58 +162,56 @@ uint8_t Z80::SBCAIRL()
 
 uint8_t Z80::ANDIRH()
 {
-	A = andAB(A, IR >> 8);
+	andAN(IR >> 8);
 
 	return 0;
 }
 
 uint8_t Z80::ANDIRL()
 {
-	A = andAB(A, IR & 0xFF);
+	andAN(IR & 0xFF);
 
 	return 0;
 }
 
 uint8_t Z80::XORIRH()
 {
-	A = xorAB(A, IR >> 8);
+	xorAN(IR >> 8);
 
 	return 0;
 }
 
 uint8_t Z80::XORIRL()
 {
-	A = xorAB(A, IR & 0xFF);
+	xorAN(IR & 0xFF);
 
 	return 0;
 }
 
 uint8_t Z80::ORIRH()
 {
-	A = orAB(A, IR >> 8);
+	orAN(IR >> 8);
 
 	return 0;
 }
 
 uint8_t Z80::ORIRL()
 {
-	A = orAB(A, IR & 0xFF);
+	orAN(IR & 0xFF);
 
 	return 0;
 }
 
 uint8_t Z80::CPIRH()
 {
-	uint8_t n = IR >> 8;
-	setComparsionFlags(n, A - n);
+	compareAN(IR >> 8);
 
 	return 0;
 }
 
 uint8_t Z80::CPIRL()
 {
-	uint8_t n = IR & 0xFF;
-	setComparsionFlags(n, A - n);
+	compareAN(IR & 0xFF);
 
 	return 0;
 }

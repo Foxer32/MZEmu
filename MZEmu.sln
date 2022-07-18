@@ -9,12 +9,9 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Z80", "Z80\Z80.vcxitems", "
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Z80.FuseTests", "Z80.FuseTests\Z80.FuseTests.vcxproj", "{1BF5940B-249C-4B84-BB0E-1A4844B8BA86}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Z80.CPMBasedTests", "Z80.CPMBasedTests\Z80.CPMBasedTests.vcxproj", "{D225AE4A-501A-4E04-B7DC-1E00B58AC28C}"
+EndProject
 Global
-	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		Z80\Z80.vcxitems*{0943dc83-8ea8-4f07-93b4-3ef5edf75fb9}*SharedItemsImports = 9
-		Z80\Z80.vcxitems*{1bf5940b-249c-4b84-bb0e-1a4844b8ba86}*SharedItemsImports = 4
-		Z80\Z80.vcxitems*{32147077-f52e-49b5-92b7-25db10005e6c}*SharedItemsImports = 4
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
 		Debug|x86 = Debug|x86
@@ -38,11 +35,25 @@ Global
 		{1BF5940B-249C-4B84-BB0E-1A4844B8BA86}.Release|x64.Build.0 = Release|x64
 		{1BF5940B-249C-4B84-BB0E-1A4844B8BA86}.Release|x86.ActiveCfg = Release|Win32
 		{1BF5940B-249C-4B84-BB0E-1A4844B8BA86}.Release|x86.Build.0 = Release|Win32
+		{D225AE4A-501A-4E04-B7DC-1E00B58AC28C}.Debug|x64.ActiveCfg = Debug|x64
+		{D225AE4A-501A-4E04-B7DC-1E00B58AC28C}.Debug|x64.Build.0 = Debug|x64
+		{D225AE4A-501A-4E04-B7DC-1E00B58AC28C}.Debug|x86.ActiveCfg = Debug|Win32
+		{D225AE4A-501A-4E04-B7DC-1E00B58AC28C}.Debug|x86.Build.0 = Debug|Win32
+		{D225AE4A-501A-4E04-B7DC-1E00B58AC28C}.Release|x64.ActiveCfg = Release|x64
+		{D225AE4A-501A-4E04-B7DC-1E00B58AC28C}.Release|x64.Build.0 = Release|x64
+		{D225AE4A-501A-4E04-B7DC-1E00B58AC28C}.Release|x86.ActiveCfg = Release|Win32
+		{D225AE4A-501A-4E04-B7DC-1E00B58AC28C}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B4A37467-4549-4649-A9A7-5379C0983DC0}
+	EndGlobalSection
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		Z80\Z80.vcxitems*{0943dc83-8ea8-4f07-93b4-3ef5edf75fb9}*SharedItemsImports = 9
+		Z80\Z80.vcxitems*{1bf5940b-249c-4b84-bb0e-1a4844b8ba86}*SharedItemsImports = 4
+		Z80\Z80.vcxitems*{32147077-f52e-49b5-92b7-25db10005e6c}*SharedItemsImports = 4
+		Z80\Z80.vcxitems*{d225ae4a-501a-4e04-b7dc-1e00b58ac28c}*SharedItemsImports = 4
 	EndGlobalSection
 EndGlobal

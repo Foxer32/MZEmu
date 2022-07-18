@@ -31,8 +31,8 @@ uint8_t Z80::readMemoryNext()
 
 uint16_t Z80::readMemoryNext2Bytes()
 {
-	uint8_t loByte = readMemoryNext();
-	uint8_t hiByte = readMemoryNext();
+	uint8_t loByte = bus->readMemory(PC++);
+	uint8_t hiByte = bus->readMemory(PC++);
 
 	return (hiByte << 8) | loByte;
 }
@@ -203,14 +203,13 @@ void Z80::writeDD(uint16_t v, uint8_t dd)
 	}
 }
 
-uint8_t Z80::add8(uint8_t a, uint8_t b, uint8_t c)
+uint8_t Z80::add8(uint8_t a, uint8_t b, bool c)
 {
 	uint16_t sum = a + b + c;
-	b += c;
 
 	setFlag(Flags::S, sum & 0x80);
 	setFlag(Flags::Z, !(sum & 0xFF));
-	setFlag(Flags::H, ((a & 0x0F) + (b & 0x0F)) & 0xF0);
+	setFlag(Flags::H, ((a & 0x0F) + (b & 0x0F) + c) & 0xF0);
 	setFlag(Flags::P, (~(a ^ b) & (a ^ sum)) & 0x80);
 	setFlag(Flags::N, false);
 	setFlag(Flags::C, sum & 0xFF00);
@@ -222,14 +221,13 @@ uint8_t Z80::add8(uint8_t a, uint8_t b, uint8_t c)
 	return sum;
 }
 
-uint8_t Z80::sub8(uint8_t a, uint8_t b, uint8_t c)
+uint8_t Z80::sub8(uint8_t a, uint8_t b, bool c)
 {
 	uint16_t diff = a - b - c;
-	b += c;
 
 	setFlag(Flags::S, diff & 0x80);
 	setFlag(Flags::Z, !(diff & 0xFF));
-	setFlag(Flags::H, (a & 0x0F) < (b & 0x0F));
+	setFlag(Flags::H, ((a & 0x0F) - (b & 0x0F) - c) & 0xF0);
 	setFlag(Flags::P, ((a ^ b) & ~(b ^ diff)) & 0x80);
 	setFlag(Flags::N, true);
 	setFlag(Flags::C, diff & 0xFF00);
@@ -256,98 +254,78 @@ bool Z80::parity(uint16_t v)
 	return retVal;
 }
 
-uint8_t Z80::andAB(uint8_t a, uint8_t b)
+void Z80::andAN(uint8_t n)
 {
-	uint8_t res = a & b;
+	A &= n;
 
-	setFlag(Flags::S, res & 0x80);
-	setFlag(Flags::Z, !res);
+	setFlag(Flags::S, A & 0x80);
+	setFlag(Flags::Z, !A);
 	setFlag(Flags::H, true);
-	setFlag(Flags::P, parity(res));
+	setFlag(Flags::P, parity(A));
 	setFlag(Flags::N, false);
 	setFlag(Flags::C, false);
 
-	setFlag(Flags::X, res & 0x08);
-	setFlag(Flags::U, res & 0x20);
+	setFlag(Flags::X, A & 0x08);
+	setFlag(Flags::U, A & 0x20);
 	setQ();
-
-	return res;
 }
 
-uint8_t Z80::orAB(uint8_t a, uint8_t b)
+void Z80::orAN(uint8_t n)
 {
-	uint8_t res = a | b;
+	A |= n;
 
-	setFlag(Flags::S, res & 0x80);
-	setFlag(Flags::Z, !res);
+	setFlag(Flags::S, A & 0x80);
+	setFlag(Flags::Z, !A);
 	setFlag(Flags::H, false);
-	setFlag(Flags::P, parity(res));
+	setFlag(Flags::P, parity(A));
 	setFlag(Flags::N, false);
 	setFlag(Flags::C, false);
 
-	setFlag(Flags::X, res & 0x08);
-	setFlag(Flags::U, res & 0x20);
+	setFlag(Flags::X, A & 0x08);
+	setFlag(Flags::U, A & 0x20);
 	setQ();
-
-	return res;
 }
 
-uint8_t Z80::xorAB(uint8_t a, uint8_t b)
+void Z80::xorAN(uint8_t n)
 {
-	uint8_t res = a ^ b;
+	A ^= n;
 
-	setFlag(Flags::S, res & 0x80);
-	setFlag(Flags::Z, !res);
+	setFlag(Flags::S, A & 0x80);
+	setFlag(Flags::Z, !A);
 	setFlag(Flags::H, false);
-	setFlag(Flags::P, parity(res));
+	setFlag(Flags::P, parity(A));
 	setFlag(Flags::N, false);
 	setFlag(Flags::C, false);
 
-	setFlag(Flags::X, res & 0x08);
-	setFlag(Flags::U, res & 0x20);
+	setFlag(Flags::X, A & 0x08);
+	setFlag(Flags::U, A & 0x20);
 	setQ();
-
-	return res;
 }
 
-void Z80::setComparsionFlags(uint8_t n, uint8_t diff)
+void Z80::compareAN(uint8_t n)
 {
-	setFlag(Flags::S, diff & 0x80);
-	setFlag(Flags::Z, !diff);
-	setFlag(Flags::H, (A & 0x0F) < (n & 0x0F));
-	setFlag(Flags::P, ((A ^ n) & ~(n ^ diff)) & 0x80);
-	setFlag(Flags::N, true);
-	setFlag(Flags::C, n > A);
+	sub8(A, n);
 
 	setFlag(Flags::X, n & 0x08);
 	setFlag(Flags::U, n & 0x20);
-	setQ();
 }
 
-void Z80::setIncFlags(uint8_t val, uint8_t incVal)
+uint8_t Z80::incN(uint8_t n)
 {
-	setFlag(Flags::S, incVal & 0x80);
-	setFlag(Flags::Z, !incVal);
-	setFlag(Flags::H, ((val & 0x0F) + 1) & 0xF0);
-	setFlag(Flags::P, val == 0x7F);
-	setFlag(Flags::N, false);
+	bool c = getFlag(Flags::C);
+	uint8_t res = add8(n, 1);
+	setFlag(Flags::C, c);
 
-	setFlag(Flags::X, incVal & 0x08);
-	setFlag(Flags::U, incVal & 0x20);
-	setQ();
+	return res;
 }
 
-void Z80::setDecFlags(uint8_t val, uint8_t decVal)
+uint8_t Z80::decN(uint8_t n)
 {
-	setFlag(Flags::S, decVal & 0x80);
-	setFlag(Flags::Z, !decVal);
-	setFlag(Flags::H, !(val & 0x0F));
-	setFlag(Flags::P, val == 0x80);
-	setFlag(Flags::N, true);
+	bool c = getFlag(Flags::C);
+	uint8_t res = sub8(n, 1);
+	setFlag(Flags::C, c);
 
-	setFlag(Flags::X, decVal & 0x08);
-	setFlag(Flags::U, decVal & 0x20);
-	setQ();
+	return res;
 }
 
 uint16_t Z80::readRegisterPair2(uint8_t src, uint16_t self, bool haveSelf)
@@ -389,12 +367,11 @@ void Z80::writeRegisterPair2(uint8_t dest, uint16_t v)
 	}
 }
 
-uint16_t Z80::add16(uint16_t a, uint16_t b, uint8_t c, bool withCarry)
+uint16_t Z80::add16(uint16_t a, uint16_t b, bool c, bool withCarry)
 {
 	uint32_t sum = a + b + c;
-	b += c;
 
-	setFlag(Flags::H, ((a & 0x0FFF) + (b & 0x0FFF)) & 0xF000);
+	setFlag(Flags::H, ((a & 0x0FFF) + (b & 0x0FFF) + c) & 0xF000);
 	setFlag(Flags::N, false);
 	setFlag(Flags::C, sum & 0xFFFF0000);
 
@@ -415,14 +392,13 @@ uint16_t Z80::add16(uint16_t a, uint16_t b, uint8_t c, bool withCarry)
 	return sum;
 }
 
-uint16_t Z80::sub16(uint16_t a, uint16_t b, uint8_t c)
+uint16_t Z80::sub16(uint16_t a, uint16_t b, bool c)
 {
 	uint32_t diff = a - b - c;
-	b += c;
 
 	setFlag(Flags::S, diff & 0x8000);
 	setFlag(Flags::Z, !(diff & 0xFFFF));
-	setFlag(Flags::H, (a & 0x0FFF) < (b & 0x0FFF));
+	setFlag(Flags::H, ((a & 0x0FFF) - (b & 0x0FFF) - c) & 0xF000);
 	setFlag(Flags::P, ((a ^ b) & ~(b ^ diff)) & 0x8000);
 	setFlag(Flags::N, true);
 	setFlag(Flags::C, diff & 0xFFFF0000);

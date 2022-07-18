@@ -41,9 +41,7 @@ uint8_t Z80::INI()
 	writeMemory(readRegisterPair(RegisterPairs::HL), n);
 
 	incRegisterPair(RegisterPairs::HL);
-	uint8_t val = B;
-	B -= 1;
-	setDecFlags(val,B);
+	B = decN(B);
 
 	MEMPTR = ++absoluteAddress;
 	setUndocIOFlags(n + ((C + 1) & 0xFF), n);
@@ -65,9 +63,7 @@ uint8_t Z80::IND()
 	writeMemory(readRegisterPair(RegisterPairs::HL), n);
 
 	incRegisterPair(RegisterPairs::HL, -1);
-	uint8_t val = B;
-	B -= 1;
-	setDecFlags(val, B);
+	B = decN(B);
 
 	MEMPTR = --absoluteAddress;
 	setUndocIOFlags(n + ((C - 1) & 0xFF), n);
@@ -113,9 +109,7 @@ uint8_t Z80::OUTI()
 	writePeripheral(absoluteAddress, n);
 
 	incRegisterPair(RegisterPairs::HL);
-	uint8_t val = B;
-	B -= 1;
-	setDecFlags(val, B);
+	B = decN(B);
 
 	MEMPTR = readRegisterPair(RegisterPairs::BC) + 1;
 	setUndocIOFlags(n + L, n);
@@ -137,9 +131,7 @@ uint8_t Z80::OUTD()
 	writePeripheral(absoluteAddress, n);
 
 	incRegisterPair(RegisterPairs::HL, -1);
-	uint8_t val = B;
-	B -= 1;
-	setDecFlags(val, B);
+	B = decN(B);
 
 	MEMPTR = readRegisterPair(RegisterPairs::BC) - 1;
 	setUndocIOFlags(n + L, n);
