@@ -3,27 +3,32 @@
 
 SpectrumVideo::SpectrumVideo()
 {
-	pal[0] = olc::Pixel(0x00, 0x00, 0x00);
-	pal[1] = olc::Pixel(0x00, 0x00, 0xD7);
-	pal[2] = olc::Pixel(0xD7, 0x00, 0x00);
-	pal[3] = olc::Pixel(0xD7, 0x00, 0xD7);
-	pal[4] = olc::Pixel(0x00, 0xD7, 0x00);
-	pal[5] = olc::Pixel(0x00, 0xD7, 0xD7);
-	pal[6] = olc::Pixel(0xD7, 0xD7, 0x00);
-	pal[7] = olc::Pixel(0xD7, 0xD7, 0xD7);
-	pal[8] = olc::Pixel(0x00, 0x00, 0x00);
-	pal[9] = olc::Pixel(0x00, 0x00, 0xFF);
-	pal[10] = olc::Pixel(0xFF, 0x00, 0x00);
-	pal[11] = olc::Pixel(0xFF, 0x00, 0xFF);
-	pal[12] = olc::Pixel(0x00, 0xFF, 0x00);
-	pal[13] = olc::Pixel(0x00, 0xFF, 0xFF);
-	pal[14] = olc::Pixel(0xFF, 0xFF, 0x00);
-	pal[15] = olc::Pixel(0xFF, 0xFF, 0xFF);
+	pal[0] = qRgb(0x00, 0x00, 0x00);
+	pal[1] = qRgb(0x00, 0x00, 0xD7);
+	pal[2] = qRgb(0xD7, 0x00, 0x00);
+	pal[3] = qRgb(0xD7, 0x00, 0xD7);
+	pal[4] = qRgb(0x00, 0xD7, 0x00);
+	pal[5] = qRgb(0x00, 0xD7, 0xD7);
+	pal[6] = qRgb(0xD7, 0xD7, 0x00);
+	pal[7] = qRgb(0xD7, 0xD7, 0xD7);
+	pal[8] = qRgb(0x00, 0x00, 0x00);
+	pal[9] = qRgb(0x00, 0x00, 0xFF);
+	pal[10] = qRgb(0xFF, 0x00, 0x00);
+	pal[11] = qRgb(0xFF, 0x00, 0xFF);
+	pal[12] = qRgb(0x00, 0xFF, 0x00);
+	pal[13] = qRgb(0x00, 0xFF, 0xFF);
+	pal[14] = qRgb(0xFF, 0xFF, 0x00);
+	pal[15] = qRgb(0xFF, 0xFF, 0xFF);
 }
 
 SpectrumVideo::~SpectrumVideo()
 {
 
+}
+
+void SpectrumVideo::setScreen(Screen* screen)
+{
+	this->screen = screen;
 }
 
 void SpectrumVideo::setSampleFrequency(uint32_t sampleRate)
@@ -45,7 +50,8 @@ void SpectrumVideo::updateVideo()
 				frameCount = 0;
 			}
 
-			screenReady = true;
+			//screen->canUpdate = true;
+			screen->update();
 			lineCount = 0;
 			bus->cpu.maskableInterrupt();
 		}
@@ -86,7 +92,7 @@ void SpectrumVideo::drawLine(uint16_t lineNum)
 				uint8_t val = bus->readMemory(addr);
 
 				for (uint8_t i = 0; i < 8; i++)
-					screenBuffer.SetPixel(32 + (charX << 3) + i, lineNum + 32, pal[(doFlash != (bool)(val & (0x80 >> i))) ? ink : paper]);
+					screen->screenBuffer->setPixel(32 + (charX << 3) + i, lineNum + 32, pal[(doFlash != (bool)(val & (0x80 >> i))) ? ink : paper]);
 			}
 		}
 	}
@@ -94,6 +100,6 @@ void SpectrumVideo::drawLine(uint16_t lineNum)
 
 void SpectrumVideo::fillBorder(uint16_t y, uint16_t start, uint16_t end)
 {
-	while (start < end)	
-		screenBuffer.SetPixel(start++ ,y ,pal[borderColor]);
+	while (start < end)
+		screen->screenBuffer->setPixel(start++, y, pal[borderColor]);
 }

@@ -1,4 +1,5 @@
 #include "Specrtum48kBus.h"
+#include <fstream>
 
 Specrtum48kBus::Specrtum48kBus()
 {

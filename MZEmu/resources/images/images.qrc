@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/images">
+        <file>spectrum_keyboard.png</file>
+    </qresource>
+</RCC>

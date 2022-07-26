@@ -1,6 +1,6 @@
 #pragma once
 #include "Device.h"
-#include "olcPixelGameEngine.h"
+#include "Screen.h"
 
 class SpectrumVideo : public Device
 {
@@ -9,16 +9,17 @@ public:
 	SpectrumVideo();
 	~SpectrumVideo();
 
+	void setScreen(Screen* screen);
 	void setSampleFrequency(uint32_t sampleRate);
 	void updateVideo();
 
-	bool screenReady = false;
-	olc::Sprite screenBuffer = olc::Sprite(320, 256);
 	uint8_t borderColor = 0;
 
 private:
 
-	olc::Pixel pal[16];
+	Screen* screen;
+
+	unsigned int pal[16];
 
 	float scanlineUpdFreq = 0;
 

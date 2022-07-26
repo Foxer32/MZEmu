@@ -18,10 +18,19 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="CPMBasedTester.cpp" />
+    <ClCompile Include="TestBus.cpp" />
+    <ClCompile Include="Z80.CPMBasedTests.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="CPMBasedTester.h" />
+    <ClInclude Include="TestBus.h" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{d225ae4a-501a-4e04-b7dc-1e00b58ac28c}</ProjectGuid>
+    <ProjectGuid>{12a12c57-82e8-4a67-b046-8ebba5889f2c}</ProjectGuid>
     <RootNamespace>Z80CPMBasedTests</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
@@ -129,20 +138,6 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="CPMBasedTester.cpp" />
-    <ClCompile Include="TestBus.cpp" />
-    <ClCompile Include="Z80.CPMBasedTests.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="CPMBasedTester.h" />
-    <ClInclude Include="TestBus.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="tests\prelim.com" />
-    <None Include="tests\zexall.com" />
-    <None Include="tests\zexdoc.com" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

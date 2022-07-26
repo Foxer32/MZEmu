@@ -1,15 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.0.32014.148
+VisualStudioVersion = 17.2.32630.192
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MZEmu", "MZEmu\MZEmu.vcxproj", "{32147077-F52E-49B5-92B7-25DB10005E6C}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MZEmu", "MZEmu\MZEmu.vcxproj", "{8106AA4B-EC56-4298-A914-8C26EC15CE68}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Z80", "Z80\Z80.vcxitems", "{0943DC83-8EA8-4F07-93B4-3EF5EDF75FB9}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Z80", "Z80\Z80.vcxitems", "{82296EE8-1C5D-4715-BED4-995F5C92871B}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Z80.FuseTests", "Z80.FuseTests\Z80.FuseTests.vcxproj", "{1BF5940B-249C-4B84-BB0E-1A4844B8BA86}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Z80.CPMBasedTests", "Z80.CPMBasedTests\Z80.CPMBasedTests.vcxproj", "{12A12C57-82E8-4A67-B046-8EBBA5889F2C}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Z80.CPMBasedTests", "Z80.CPMBasedTests\Z80.CPMBasedTests.vcxproj", "{D225AE4A-501A-4E04-B7DC-1E00B58AC28C}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Z80.FuseTests", "Z80.FuseTests\Z80.FuseTests.vcxproj", "{2FF48116-9AF2-4342-B79C-D486D1597A6E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,41 +19,41 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{32147077-F52E-49B5-92B7-25DB10005E6C}.Debug|x64.ActiveCfg = Debug|x64
-		{32147077-F52E-49B5-92B7-25DB10005E6C}.Debug|x64.Build.0 = Debug|x64
-		{32147077-F52E-49B5-92B7-25DB10005E6C}.Debug|x86.ActiveCfg = Debug|Win32
-		{32147077-F52E-49B5-92B7-25DB10005E6C}.Debug|x86.Build.0 = Debug|Win32
-		{32147077-F52E-49B5-92B7-25DB10005E6C}.Release|x64.ActiveCfg = Release|x64
-		{32147077-F52E-49B5-92B7-25DB10005E6C}.Release|x64.Build.0 = Release|x64
-		{32147077-F52E-49B5-92B7-25DB10005E6C}.Release|x86.ActiveCfg = Release|Win32
-		{32147077-F52E-49B5-92B7-25DB10005E6C}.Release|x86.Build.0 = Release|Win32
-		{1BF5940B-249C-4B84-BB0E-1A4844B8BA86}.Debug|x64.ActiveCfg = Debug|x64
-		{1BF5940B-249C-4B84-BB0E-1A4844B8BA86}.Debug|x64.Build.0 = Debug|x64
-		{1BF5940B-249C-4B84-BB0E-1A4844B8BA86}.Debug|x86.ActiveCfg = Debug|Win32
-		{1BF5940B-249C-4B84-BB0E-1A4844B8BA86}.Debug|x86.Build.0 = Debug|Win32
-		{1BF5940B-249C-4B84-BB0E-1A4844B8BA86}.Release|x64.ActiveCfg = Release|x64
-		{1BF5940B-249C-4B84-BB0E-1A4844B8BA86}.Release|x64.Build.0 = Release|x64
-		{1BF5940B-249C-4B84-BB0E-1A4844B8BA86}.Release|x86.ActiveCfg = Release|Win32
-		{1BF5940B-249C-4B84-BB0E-1A4844B8BA86}.Release|x86.Build.0 = Release|Win32
-		{D225AE4A-501A-4E04-B7DC-1E00B58AC28C}.Debug|x64.ActiveCfg = Debug|x64
-		{D225AE4A-501A-4E04-B7DC-1E00B58AC28C}.Debug|x64.Build.0 = Debug|x64
-		{D225AE4A-501A-4E04-B7DC-1E00B58AC28C}.Debug|x86.ActiveCfg = Debug|Win32
-		{D225AE4A-501A-4E04-B7DC-1E00B58AC28C}.Debug|x86.Build.0 = Debug|Win32
-		{D225AE4A-501A-4E04-B7DC-1E00B58AC28C}.Release|x64.ActiveCfg = Release|x64
-		{D225AE4A-501A-4E04-B7DC-1E00B58AC28C}.Release|x64.Build.0 = Release|x64
-		{D225AE4A-501A-4E04-B7DC-1E00B58AC28C}.Release|x86.ActiveCfg = Release|Win32
-		{D225AE4A-501A-4E04-B7DC-1E00B58AC28C}.Release|x86.Build.0 = Release|Win32
+		{8106AA4B-EC56-4298-A914-8C26EC15CE68}.Debug|x64.ActiveCfg = Debug|Win32
+		{8106AA4B-EC56-4298-A914-8C26EC15CE68}.Debug|x64.Build.0 = Debug|Win32
+		{8106AA4B-EC56-4298-A914-8C26EC15CE68}.Debug|x86.ActiveCfg = Debug|Win32
+		{8106AA4B-EC56-4298-A914-8C26EC15CE68}.Debug|x86.Build.0 = Debug|Win32
+		{8106AA4B-EC56-4298-A914-8C26EC15CE68}.Release|x64.ActiveCfg = Release|Win32
+		{8106AA4B-EC56-4298-A914-8C26EC15CE68}.Release|x64.Build.0 = Release|Win32
+		{8106AA4B-EC56-4298-A914-8C26EC15CE68}.Release|x86.ActiveCfg = Release|Win32
+		{8106AA4B-EC56-4298-A914-8C26EC15CE68}.Release|x86.Build.0 = Release|Win32
+		{12A12C57-82E8-4A67-B046-8EBBA5889F2C}.Debug|x64.ActiveCfg = Debug|x64
+		{12A12C57-82E8-4A67-B046-8EBBA5889F2C}.Debug|x64.Build.0 = Debug|x64
+		{12A12C57-82E8-4A67-B046-8EBBA5889F2C}.Debug|x86.ActiveCfg = Debug|Win32
+		{12A12C57-82E8-4A67-B046-8EBBA5889F2C}.Debug|x86.Build.0 = Debug|Win32
+		{12A12C57-82E8-4A67-B046-8EBBA5889F2C}.Release|x64.ActiveCfg = Release|x64
+		{12A12C57-82E8-4A67-B046-8EBBA5889F2C}.Release|x64.Build.0 = Release|x64
+		{12A12C57-82E8-4A67-B046-8EBBA5889F2C}.Release|x86.ActiveCfg = Release|Win32
+		{12A12C57-82E8-4A67-B046-8EBBA5889F2C}.Release|x86.Build.0 = Release|Win32
+		{2FF48116-9AF2-4342-B79C-D486D1597A6E}.Debug|x64.ActiveCfg = Debug|x64
+		{2FF48116-9AF2-4342-B79C-D486D1597A6E}.Debug|x64.Build.0 = Debug|x64
+		{2FF48116-9AF2-4342-B79C-D486D1597A6E}.Debug|x86.ActiveCfg = Debug|Win32
+		{2FF48116-9AF2-4342-B79C-D486D1597A6E}.Debug|x86.Build.0 = Debug|Win32
+		{2FF48116-9AF2-4342-B79C-D486D1597A6E}.Release|x64.ActiveCfg = Release|x64
+		{2FF48116-9AF2-4342-B79C-D486D1597A6E}.Release|x64.Build.0 = Release|x64
+		{2FF48116-9AF2-4342-B79C-D486D1597A6E}.Release|x86.ActiveCfg = Release|Win32
+		{2FF48116-9AF2-4342-B79C-D486D1597A6E}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {B4A37467-4549-4649-A9A7-5379C0983DC0}
+		SolutionGuid = {CC51E7AE-717E-4733-85D9-3DED74964392}
 	EndGlobalSection
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		Z80\Z80.vcxitems*{0943dc83-8ea8-4f07-93b4-3ef5edf75fb9}*SharedItemsImports = 9
-		Z80\Z80.vcxitems*{1bf5940b-249c-4b84-bb0e-1a4844b8ba86}*SharedItemsImports = 4
-		Z80\Z80.vcxitems*{32147077-f52e-49b5-92b7-25db10005e6c}*SharedItemsImports = 4
-		Z80\Z80.vcxitems*{d225ae4a-501a-4e04-b7dc-1e00b58ac28c}*SharedItemsImports = 4
+		Z80\Z80.vcxitems*{12a12c57-82e8-4a67-b046-8ebba5889f2c}*SharedItemsImports = 4
+		Z80\Z80.vcxitems*{2ff48116-9af2-4342-b79c-d486d1597a6e}*SharedItemsImports = 4
+		Z80\Z80.vcxitems*{8106aa4b-ec56-4298-a914-8c26ec15ce68}*SharedItemsImports = 4
+		Z80\Z80.vcxitems*{82296ee8-1c5d-4715-bed4-995f5c92871b}*SharedItemsImports = 9
 	EndGlobalSection
 EndGlobal

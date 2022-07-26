@@ -1,93 +1,79 @@
-﻿#include <iostream>
-#include <string> 
-#include <cstdint>
-#include "Specrtum128kBus.h"
+#include "MZEmu.h"
 
-#define OLC_PGE_APPLICATION
-#include "olcPixelGameEngine.h"
-#define OLC_PGEX_SOUND
-#include "olcPGEX_Sound.h"
+Specrtum128kBus MZEmu::bus = Specrtum128kBus();
 
-Specrtum128kBus bus;
-
-class TestEmulationPGE : public olc::PixelGameEngine
+MZEmu::MZEmu(QWidget* parent)
+	: QMainWindow(parent)
 {
-public:
+	bus.reset();
+	bus.cpu.cpuFrequency = 3500000;
+	bus.setSampleFrequency(44100);
 
-    TestEmulationPGE()
-    {
-        sAppName = "Test";
-    }
+	Screen* screen = new Screen(320, 256);
+	setCentralWidget(screen);
+	bus.video.setScreen(screen);
 
-private:
+	configWindow();
+	configAudio();
+}
 
-	bool hiSpeed = false;
-
-private:
-
-    static float soundOut(int nChannel, float fGlobalTime, float fSample)
-    {
-		bus.audioIn = fSample;
-		bus.clock();
-        return bus.audioOut;
-    }
-
-    bool OnUserCreate() override
-    {
-        bus.reset();
-        bus.keyboard.connectApp(this);
-
-        bus.cpu.cpuFrequency = 3500000;
-        bus.setSampleFrequency(44100);
-        olc::SOUND::InitialiseAudio(44100, 1, 8, 512);
-        olc::SOUND::SetUserFilterFunction(soundOut);
-		
-        return true;
-    }
-
-    bool OnUserDestroy() override
-    {
-        olc::SOUND::DestroyAudio();
-        return true;
-    }
-
-    bool OnUserUpdate(float elapsedTime) override
-    {
-        if (bus.video.screenReady)
-        {
-            bus.video.screenReady = false;
-            DrawSprite(0, 0, &bus.video.screenBuffer);
-        }
-
-		bus.keyboard.updateMachineInput();
-		updateAppInput();
-
-        return true;
-    }
-
-	void updateAppInput()
-	{
-		if (GetKey(olc::Key::F1).bPressed)
-			bus.reset();
-
-		if (GetKey(olc::Key::F2).bPressed)
-			olc::SOUND::PlaySample(olc::SOUND::LoadAudioSample("tests/z80full.wav"));
-
-		if (GetKey(olc::Key::F3).bPressed)
-		{
-			hiSpeed = !hiSpeed;
-			sAppName = hiSpeed ? "Test Hi Speed" : "Test";
-			bus.setSampleFrequency(hiSpeed ? 4410 : 44100);
-		}
-	}
-
-};
-
-int main()
+MZEmu::~MZEmu()
 {
-    TestEmulationPGE demo;
-	if (demo.Construct(320, 256, 3, 3, false, true))
-        demo.Start();
+	noiseMaker->Stop();
+	//delete noiseMaker;
+}
 
-    return 0;
+void MZEmu::configWindow()
+{
+	setFixedSize(960, 786 + 75);
+	setWindowTitle("MZEmu");
+	setWindowIcon(QIcon(":/icons/app.png"));
+
+	QToolBar* toolbar = addToolBar("main toolbar");
+	QAction* open = toolbar->addAction(QIcon(":/icons/open.png"), "Open");
+	QAction* save = toolbar->addAction(QIcon(":/icons/save.png"), "Save");
+	toolbar->addSeparator();
+	QAction* pauseResume = toolbar->addAction(QIcon(":/icons/pause.png"), "Pause");
+	QAction* reset = toolbar->addAction(QIcon(":/icons/reset.png"), "Reset");
+	QAction* exit = toolbar->addAction(QIcon(":/icons/exit.png"), "Exit");
+	connect(exit, &QAction::triggered, qApp, &QApplication::quit);
+
+	QMenu* file;
+	file = menuBar()->addMenu("File");
+	file->addAction(open);
+	file->addAction(save);
+	file->addSeparator();
+	file->addAction(exit);
+
+	QMenu* viev;
+	viev = menuBar()->addMenu("View");
+	viev->addAction("Size");
+
+	statusBar()->showMessage("Test");
+}
+
+void MZEmu::configAudio()
+{
+	std::vector<std::wstring> devices = olcNoiseMaker<short>::Enumerate();
+
+	noiseMaker = new olcNoiseMaker<short>(devices[0], 44100, 1, 8, 256);
+	noiseMaker->SetUserFunction(makeNoise);
+}
+
+void MZEmu::keyPressEvent(QKeyEvent* event)
+{
+	bus.keyboard.keyPressed(event->key());
+}
+
+void MZEmu::keyReleaseEvent(QKeyEvent* event)
+{
+	bus.keyboard.keyReleased(event->key());
+}
+
+float MZEmu::makeNoise(int nChanel, float dTime)
+{
+	//bus.audioIn = fSample;
+	bus.clock();
+	return bus.audioOut;
+	return 0;
 }

@@ -1,4 +1,5 @@
 #include "Specrtum128kBus.h"
+#include <fstream>
 
 Specrtum128kBus::Specrtum128kBus()
 {
@@ -16,13 +17,13 @@ Specrtum128kBus::Specrtum128kBus()
 		ifs.close();
 	}
 
-	/*std::ifstream ifs2;
+	std::ifstream ifs2;
 	ifs2.open("roms/DiagROMv56.rom", std::ifstream::binary);
 	if (ifs2.is_open())
 	{
 		ifs2.read((char*)rom, 16 * 1024);
 		ifs2.close();
-	}*/
+	}
 }
 
 Specrtum128kBus::~Specrtum128kBus()

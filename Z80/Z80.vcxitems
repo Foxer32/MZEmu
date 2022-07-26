@@ -3,7 +3,7 @@
   <PropertyGroup Label="Globals">
     <MSBuildAllProjects Condition="'$(MSBuildVersion)' == '' Or '$(MSBuildVersion)' &lt; '16.0'">$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
     <HasSharedItems>true</HasSharedItems>
-    <ItemsProjectGuid>{0943dc83-8ea8-4f07-93b4-3ef5edf75fb9}</ItemsProjectGuid>
+    <ItemsProjectGuid>{82296ee8-1c5d-4715-bed4-995f5c92871b}</ItemsProjectGuid>
   </PropertyGroup>
   <ItemDefinitionGroup>
     <ClCompile>
@@ -19,11 +19,11 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Z80.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="$(MSBuildThisFileDirectory)Z80.Instructions_Arithmetic16.cpp" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)Z80.Instructions_Arithmetic8.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Z80.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Z80.Helpers.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Z80.InitInstructions.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Z80.Instructions_Arithmetic16.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Z80.Instructions_Arithmetic8.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Z80.Instructions_Bit.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Z80.Instructions_CallReturn.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Z80.Instructions_Exchange.cpp" />
