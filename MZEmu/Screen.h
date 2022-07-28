@@ -1,17 +1,22 @@
 #pragma once
 
 #include <QWidget>
-#include <QPainter>
 
 class Screen : public QWidget
 {
 public:
     Screen(int width, int height, QWidget* parent = nullptr);
-    ~Screen();
 
-    QImage* screenBuffer;
+    QImage screenBuffer;
 
 protected:
-    void paintEvent(QPaintEvent*);
+    void resizeEvent(QResizeEvent* event);
+    void paintEvent(QPaintEvent* event);
+
+private:
+    int w = 0;
+    int h = 0;
+    int x = 0;
+    int y = 0;
 };
 

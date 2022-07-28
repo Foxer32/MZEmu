@@ -50,7 +50,6 @@ void SpectrumVideo::updateVideo()
 				frameCount = 0;
 			}
 
-			//screen->canUpdate = true;
 			screen->update();
 			lineCount = 0;
 			bus->cpu.maskableInterrupt();
@@ -92,7 +91,7 @@ void SpectrumVideo::drawLine(uint16_t lineNum)
 				uint8_t val = bus->readMemory(addr);
 
 				for (uint8_t i = 0; i < 8; i++)
-					screen->screenBuffer->setPixel(32 + (charX << 3) + i, lineNum + 32, pal[(doFlash != (bool)(val & (0x80 >> i))) ? ink : paper]);
+					screen->screenBuffer.setPixel(32 + (charX << 3) + i, lineNum + 32, pal[(doFlash != (bool)(val & (0x80 >> i))) ? ink : paper]);
 			}
 		}
 	}
@@ -101,5 +100,5 @@ void SpectrumVideo::drawLine(uint16_t lineNum)
 void SpectrumVideo::fillBorder(uint16_t y, uint16_t start, uint16_t end)
 {
 	while (start < end)
-		screen->screenBuffer->setPixel(start++, y, pal[borderColor]);
+		screen->screenBuffer.setPixel(start++, y, pal[borderColor]);
 }

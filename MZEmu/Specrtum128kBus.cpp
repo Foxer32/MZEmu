@@ -102,17 +102,33 @@ void Specrtum128kBus::setSampleFrequency(uint32_t sampleRate)
 	video.setSampleFrequency(sampleRate);
 }
 
-void Specrtum128kBus::reset()
+void Specrtum128kBus::reset(bool hardReset)
 {
-	cpu.reset();
+	cpu.reset(hardReset);
 	port7FFD = 0;
 }
 
 void Specrtum128kBus::clock()
 {
-	cpu.updateCpu();
-	video.updateVideo();
-	mixAudioInputs();
+	if (!pausedStatus)
+	{
+		do
+		{
+			cpu.updateCpu();
+			video.updateVideo();
+			mixAudioInputs();
+		} while (maxSpeedStatus && !pausedStatus);
+	}
+}
+
+void Specrtum128kBus::setPausedStatus(bool status)
+{
+	pausedStatus = status;
+}
+
+void Specrtum128kBus::setMaxSpeedStatus(bool status)
+{
+	maxSpeedStatus = status;
 }
 
 void Specrtum128kBus::mixAudioInputs()

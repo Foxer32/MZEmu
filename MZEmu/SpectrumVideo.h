@@ -17,7 +17,7 @@ public:
 
 private:
 
-	Screen* screen;
+	Screen* screen = nullptr;
 
 	unsigned int pal[16];
 

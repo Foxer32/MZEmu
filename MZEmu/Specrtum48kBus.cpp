@@ -61,9 +61,9 @@ void Specrtum48kBus::setSampleFrequency(uint32_t sampleRate)
 	video.setSampleFrequency(sampleRate);
 }
 
-void Specrtum48kBus::reset()
+void Specrtum48kBus::reset(bool hardReset)
 {
-	cpu.reset();
+	cpu.reset(hardReset);
 }
 
 void Specrtum48kBus::clock()

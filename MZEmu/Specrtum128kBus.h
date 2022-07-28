@@ -9,7 +9,6 @@
 class Specrtum128kBus : public IBus
 {
 public:
-
 	Specrtum128kBus();
 	~Specrtum128kBus();
 
@@ -20,8 +19,11 @@ public:
 
 	void setSampleFrequency(uint32_t sampleRate);
 
-	void reset();
+	void reset(bool hardReset = false);
 	void clock();
+
+	void setPausedStatus(bool status);
+	void setMaxSpeedStatus(bool status);
 
 	SpectrumVideo video;
 	SpectrumKeyboard keyboard;
@@ -32,9 +34,12 @@ public:
 	uint8_t port7FFD = 0;
 	uint8_t rom[32 * 1024];
 	uint8_t ram[128 * 1024];
+
 private:
+	void mixAudioInputs();
+
+	bool pausedStatus = false;
+	bool maxSpeedStatus = false;
 
 	float speakerOut = 0;
-
-	void mixAudioInputs();
 };

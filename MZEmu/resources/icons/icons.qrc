@@ -5,8 +5,9 @@
         <file>max_speed.png</file>
         <file>open.png</file>
         <file>pause.png</file>
-        <file>reset.png</file>
-        <file>resume.png</file>
         <file>save.png</file>
+        <file>hard_reset.png</file>
+        <file>soft_reset.png</file>
+        <file>full_screen.png</file>
     </qresource>
 </RCC>

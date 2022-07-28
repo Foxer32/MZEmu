@@ -36,7 +36,7 @@ SpectrumKeyboard::SpectrumKeyboard()
 		{Qt::Key_I, new uint8_t[2]{5, 4}},
 		{Qt::Key_U, new uint8_t[2]{5, 8}},
 		{Qt::Key_Y, new uint8_t[2]{5, 16}},
-		{Qt::Key_Enter, new uint8_t[2]{6, 1}},
+		{Qt::Key_Return, new uint8_t[2]{6, 1}},
 		{Qt::Key_L, new uint8_t[2]{6, 2}},
 		{Qt::Key_K, new uint8_t[2]{6, 4}},
 		{Qt::Key_J, new uint8_t[2]{6, 8}},

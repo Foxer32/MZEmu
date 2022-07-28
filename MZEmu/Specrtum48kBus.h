@@ -20,7 +20,7 @@ public:
 
 	void setSampleFrequency(uint32_t sampleRate);
 
-	void reset();
+	void reset(bool hardReset = false);
 	void clock();
 
 	SpectrumVideo video;
