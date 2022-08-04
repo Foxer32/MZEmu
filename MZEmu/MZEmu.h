@@ -10,10 +10,12 @@
 #include <QMenuBar>
 #include <QStatusBar>
 #include <QMessageBox>
+#include <QFileDialog>
 
 #include "olcNoiseMaker.h"
 #include "Specrtum128kBus.h"
 #include "Screen.h"
+#include "WavPlayer.h"
 
 class MZEmu : public QMainWindow
 {
@@ -68,6 +70,7 @@ private:
     QAction* showToolBarAct;
     QAction* showStatusBarAct;
 
+    static WavPlayer wavPlayer;
     static Specrtum128kBus bus;
     olcNoiseMaker<short>* noiseMaker;
 };

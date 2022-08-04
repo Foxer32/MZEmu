@@ -35,5 +35,3 @@ void Screen::paintEvent(QPaintEvent* event)
 	QPainter painter(this);
 	painter.drawPixmap(x, y, w, h, QPixmap::fromImage(screenBuffer));
 }
-
-

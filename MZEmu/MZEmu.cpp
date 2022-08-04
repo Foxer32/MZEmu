@@ -1,6 +1,7 @@
 #include "MZEmu.h"
 
 Specrtum128kBus MZEmu::bus = Specrtum128kBus();
+WavPlayer MZEmu::wavPlayer = WavPlayer();
 
 MZEmu::MZEmu(QWidget* parent)
 	: QMainWindow(parent)
@@ -180,8 +181,8 @@ void MZEmu::configWindow()
 	//	============= Tools =============
 	//	============= Help =============
 
-	QAction* aboutAct = helpMenu->addAction(tr("&About MZEmu"), this, &MZEmu::about);
-	aboutAct->setStatusTip(tr("Show info about application"));
+	QAction* aboutAct = helpMenu->addAction("&About MZEmu", this, &MZEmu::about);
+	aboutAct->setStatusTip("Show info about application");
 
 	QAction* aboutQtAct = helpMenu->addAction("About &Qt", this, &QApplication::aboutQt);
 	aboutQtAct->setStatusTip("Show info about Qt library");
@@ -195,6 +196,8 @@ void MZEmu::configSystem()
 	bus.cpu.cpuFrequency = 3500000;
 	bus.setSampleFrequency(44100);
 
+	wavPlayer.setSampleFrequency(44100);
+
 	std::vector<std::wstring> devices = olcNoiseMaker<short>::Enumerate();
 
 	noiseMaker = new olcNoiseMaker<short>(devices[0], 44100, 1, 8, 256);
@@ -203,6 +206,20 @@ void MZEmu::configSystem()
 
 void MZEmu::open()
 {
+	std::string fileName = QFileDialog::getOpenFileName(this,"","","WAV files (*.wav)").toStdString();
+
+	try
+	{
+		if (!fileName.empty())
+		{
+			wavPlayer.readFile(fileName);
+			wavPlayer.play();
+		}
+	}
+	catch (const std::exception &e)
+	{
+		QMessageBox::critical(this,"Error",e.what());
+	}
 
 }
 
@@ -352,7 +369,7 @@ void MZEmu::scaleWindow(int scale)
 
 float MZEmu::makeNoise(int nChanel, float dTime)
 {
-	//bus.audioIn = fSample;
+	bus.audioIn = wavPlayer.updateAudio();
 	bus.clock();
 	return bus.audioOut;
 	return 0;

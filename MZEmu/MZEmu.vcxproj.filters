@@ -49,6 +49,9 @@
     <ClCompile Include="SpectrumVideo.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="WavPlayer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Screen.h">
@@ -67,6 +70,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="olcNoiseMaker.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="WavPlayer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

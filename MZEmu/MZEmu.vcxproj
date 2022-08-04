@@ -102,6 +102,7 @@
     <ClCompile Include="Specrtum48kBus.cpp" />
     <ClCompile Include="SpectrumKeyboard.cpp" />
     <ClCompile Include="SpectrumVideo.cpp" />
+    <ClCompile Include="WavPlayer.cpp" />
     <QtMoc Include="MZEmu.h" />
     <ClCompile Include="MZEmu.cpp" />
     <ClCompile Include="main.cpp" />
@@ -113,6 +114,7 @@
     <ClInclude Include="Specrtum48kBus.h" />
     <ClInclude Include="SpectrumKeyboard.h" />
     <ClInclude Include="SpectrumVideo.h" />
+    <ClInclude Include="WavPlayer.h" />
   </ItemGroup>
   <ItemGroup>
     <QtRcc Include="resources\icons\icons.qrc" />

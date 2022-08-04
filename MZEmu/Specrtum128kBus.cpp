@@ -16,14 +16,14 @@ Specrtum128kBus::Specrtum128kBus()
 		ifs.read((char*)rom, 32 * 1024);
 		ifs.close();
 	}
-
+	/*
 	std::ifstream ifs2;
 	ifs2.open("roms/DiagROMv56.rom", std::ifstream::binary);
 	if (ifs2.is_open())
 	{
 		ifs2.read((char*)rom, 16 * 1024);
 		ifs2.close();
-	}
+	}*/
 }
 
 Specrtum128kBus::~Specrtum128kBus()
@@ -86,7 +86,12 @@ void Specrtum128kBus::writePeripheral(uint16_t addr, uint8_t data)
 {
 	if ((addr & 0xFF) == 0xFE)
 	{
-		speakerOut = (data & 0x18) ? 1.0f : 0.0f;
+		//speakerOut = 0;
+		//speakerOut += (data & 0x10) ? 0.25f : 0.0f;
+		//speakerOut += (data & 0x08) ? 0.f : 0.0f;
+
+		speakerOut = ((data & 0x18) >> 3) * 0.5f - 1.0f;
+
 		video.borderColor = data & 0x07;
 	}
 
