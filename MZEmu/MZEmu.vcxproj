@@ -97,24 +97,30 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="GeneralThings.cpp" />
     <ClCompile Include="Screen.cpp" />
     <ClCompile Include="Specrtum128kBus.cpp" />
     <ClCompile Include="Specrtum48kBus.cpp" />
+    <ClCompile Include="SpectrumBus.cpp" />
     <ClCompile Include="SpectrumKeyboard.cpp" />
     <ClCompile Include="SpectrumVideo.cpp" />
+    <ClCompile Include="TapeBrowserWindow.cpp" />
     <ClCompile Include="WavPlayer.cpp" />
-    <QtMoc Include="MZEmu.h" />
-    <ClCompile Include="MZEmu.cpp" />
+    <QtMoc Include="MainWindow.h" />
+    <ClCompile Include="MainWindow.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="GeneralThings.h" />
     <ClInclude Include="olcNoiseMaker.h" />
     <ClInclude Include="Screen.h" />
     <ClInclude Include="Specrtum128kBus.h" />
     <ClInclude Include="Specrtum48kBus.h" />
+    <ClInclude Include="SpectrumBus.h" />
     <ClInclude Include="SpectrumKeyboard.h" />
     <ClInclude Include="SpectrumVideo.h" />
-    <ClInclude Include="WavPlayer.h" />
+    <QtMoc Include="TapeBrowserWindow.h" />
+    <QtMoc Include="WavPlayer.h" />
   </ItemGroup>
   <ItemGroup>
     <QtRcc Include="resources\icons\icons.qrc" />

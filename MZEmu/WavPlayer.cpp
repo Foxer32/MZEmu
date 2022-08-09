@@ -10,8 +10,7 @@ WavPlayer::WavPlayer()
 
 WavPlayer::~WavPlayer()
 {
-    if (samples != nullptr)
-        delete[] samples;
+
 }
 
 void WavPlayer::setSampleFrequency(uint32_t sampleRate)
@@ -23,6 +22,8 @@ float WavPlayer::updateAudio()
 {
     if (isPlaying)
     {
+        updatePercents();
+
         if (sampleIterator < sampleCount)
             return samples[sampleIterator++];
         else
@@ -74,25 +75,47 @@ void WavPlayer::readFile(std::string path)
 void WavPlayer::play()
 {
     isPlaying = canPlay;
+    isPaused = false;
+}
+
+void WavPlayer::resume()
+{
+    isPlaying = isPaused && canPlay;
 }
 
 void WavPlayer::pause()
 {
+    isPaused = isPlaying;
     isPlaying = false;
 }
 
 void WavPlayer::stop()
 {
     isPlaying = false;
+    isPaused = false;
     sampleIterator = 0;
+
+    updatePercents();
+
+    if (deleteAfterStop)
+        deleteSamples();
+}
+
+void WavPlayer::updatePercents()
+{
+    int newPercents = ((float)sampleIterator / (float)sampleCount) * 100;
+
+    if (oldPercents != newPercents)
+        updateProgressBar(newPercents);
+
+    oldPercents = newPercents;
 }
 
 void WavPlayer::convertDataToSamples(uint8_t* data)
 {
     sampleCount = header.subchunk2Size / header.blockAlign;
 
-    if (samples != nullptr)
-        delete[] samples;
+    deleteSamples();
 
     samples = new float[sampleCount];
 
@@ -113,5 +136,16 @@ void WavPlayer::convertDataToSamples(uint8_t* data)
         }
 
         samples[i] /= header.numChannels;
+    }
+}
+
+void WavPlayer::deleteSamples()
+{
+    canPlay = false;
+
+    if (samples != nullptr)
+    {
+        delete[] samples;
+        samples = nullptr;
     }
 }

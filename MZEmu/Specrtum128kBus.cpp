@@ -3,9 +3,6 @@
 
 Specrtum128kBus::Specrtum128kBus()
 {
-	cpu.connectBus(this);
-	video.connectBus(this);
-
 	for (auto& i : rom) i = 0x00;
 	for (auto& i : ram) i = 0x00;
 
@@ -43,6 +40,8 @@ uint8_t Specrtum128kBus::readMemory(uint16_t addr)
 		return ram[addr];
 	case 3: // C000 - FFFF
 		return ram[(addr - 0xC000) + (0x4000 * (port7FFD & 7))];
+	default:
+		return 0x00;
 	}
 }
 
@@ -86,12 +85,7 @@ void Specrtum128kBus::writePeripheral(uint16_t addr, uint8_t data)
 {
 	if ((addr & 0xFF) == 0xFE)
 	{
-		//speakerOut = 0;
-		//speakerOut += (data & 0x10) ? 0.25f : 0.0f;
-		//speakerOut += (data & 0x08) ? 0.f : 0.0f;
-
 		speakerOut = ((data & 0x18) >> 3) * 0.5f - 1.0f;
-
 		video.borderColor = data & 0x07;
 	}
 
@@ -99,12 +93,6 @@ void Specrtum128kBus::writePeripheral(uint16_t addr, uint8_t data)
 	{
 		port7FFD = data;
 	}
-}
-
-void Specrtum128kBus::setSampleFrequency(uint32_t sampleRate)
-{
-	cpu.setSampleFrequency(sampleRate);
-	video.setSampleFrequency(sampleRate);
 }
 
 void Specrtum128kBus::reset(bool hardReset)
@@ -115,25 +103,9 @@ void Specrtum128kBus::reset(bool hardReset)
 
 void Specrtum128kBus::clock()
 {
-	if (!pausedStatus)
-	{
-		do
-		{
-			cpu.updateCpu();
-			video.updateVideo();
-			mixAudioInputs();
-		} while (maxSpeedStatus && !pausedStatus);
-	}
-}
-
-void Specrtum128kBus::setPausedStatus(bool status)
-{
-	pausedStatus = status;
-}
-
-void Specrtum128kBus::setMaxSpeedStatus(bool status)
-{
-	maxSpeedStatus = status;
+	cpu.updateCpu();
+	video.updateVideo();
+	mixAudioInputs();
 }
 
 void Specrtum128kBus::mixAudioInputs()

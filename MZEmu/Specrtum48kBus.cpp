@@ -3,9 +3,6 @@
 
 Specrtum48kBus::Specrtum48kBus()
 {
-	cpu.connectBus(this);
-	video.connectBus(this);
-
 	for (auto& i : mem) i = 0x00;
 
 	std::ifstream ifs;
@@ -50,15 +47,9 @@ void Specrtum48kBus::writePeripheral(uint16_t addr, uint8_t data)
 {
 	if ((addr & 0xFF) == 0xFE)
 	{
-		speakerOut = (data & 0x18) ? 1.0f : 0.0f;
+		speakerOut = ((data & 0x18) >> 3) * 0.5f - 1.0f;
 		video.borderColor = data & 0x07;
 	}
-}
-
-void Specrtum48kBus::setSampleFrequency(uint32_t sampleRate)
-{
-	cpu.setSampleFrequency(sampleRate);
-	video.setSampleFrequency(sampleRate);
 }
 
 void Specrtum48kBus::reset(bool hardReset)

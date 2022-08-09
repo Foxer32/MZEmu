@@ -9,5 +9,8 @@
         <file>hard_reset.png</file>
         <file>soft_reset.png</file>
         <file>full_screen.png</file>
+        <file>play.png</file>
+        <file>stop.png</file>
+        <file>Speaker.png</file>
     </qresource>
 </RCC>

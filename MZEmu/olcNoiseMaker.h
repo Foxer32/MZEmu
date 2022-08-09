@@ -63,6 +63,7 @@
 #include <thread>
 #include <atomic>
 #include <condition_variable>
+#include <functional>
 
 #include <Windows.h>
 
@@ -154,7 +155,8 @@ public:
 	void Stop()
 	{
 		m_bReady = false;
-		m_thread.join();
+		if (m_thread.joinable())
+			m_thread.join();
 	}
 
 	// Override to process current sample
@@ -182,7 +184,7 @@ public:
 		return sDevices;
 	}
 
-	void SetUserFunction(float(*func)(int, float))
+	void SetUserFunction(std::function<float(int, float)> func)
 	{
 		m_userFunction = func;
 	}
@@ -197,7 +199,7 @@ public:
 
 
 private:
-	float(*m_userFunction)(int, float);
+	std::function<float(int, float)> m_userFunction = nullptr;
 
 	unsigned int m_nSampleRate;
 	unsigned int m_nChannels;

@@ -12,23 +12,24 @@
 #include <QMessageBox>
 #include <QFileDialog>
 
-#include "olcNoiseMaker.h"
+#include "GeneralThings.h"
 #include "Specrtum128kBus.h"
+#include "TapeBrowserWindow.h"
 #include "Screen.h"
-#include "WavPlayer.h"
 
-class MZEmu : public QMainWindow
+class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
 public:
-    MZEmu(QWidget* parent = nullptr);
-    ~MZEmu();
+    MainWindow(QWidget* parent = nullptr);
+    ~MainWindow();
 
 protected:
     void keyPressEvent(QKeyEvent* event);
     void keyReleaseEvent(QKeyEvent* event);
     void showEvent(QShowEvent* event);
+    void closeEvent(QCloseEvent* event);
 
 private slots:
     void open();
@@ -45,6 +46,7 @@ private slots:
     void screenScale4X();
     void toolBarShow();
     void statusBarShow();
+    void tapeBrowserShow();
     void about();
 
 private:
@@ -55,7 +57,6 @@ private:
     void hideBars();
     void updateBars();
     void scaleWindow(int scale = -1);
-    static float makeNoise(int nChanel, float dTime);
 
     int screenWidth = 320;
     int screenHeight = 256;
@@ -64,13 +65,13 @@ private:
     bool showToolBar = true;
     bool showStatusBar = true;
 
+    Screen* screen;
     QToolBar* mainToolBar;
     QAction* pauseAct;
     QAction* maxSpeedAct;
     QAction* showToolBarAct;
     QAction* showStatusBarAct;
 
-    static WavPlayer wavPlayer;
-    static Specrtum128kBus bus;
-    olcNoiseMaker<short>* noiseMaker;
+    TapeBrowserWindow* tapeBrowserWindow;
+
 };

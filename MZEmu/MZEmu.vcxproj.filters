@@ -23,12 +23,18 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="MZEmu.h">
+    <QtMoc Include="MainWindow.h">
       <Filter>Header Files</Filter>
     </QtMoc>
-    <ClCompile Include="MZEmu.cpp">
+    <ClCompile Include="MainWindow.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <QtMoc Include="TapeBrowserWindow.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="WavPlayer.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -52,6 +58,15 @@
     <ClCompile Include="WavPlayer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="SpectrumBus.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TapeBrowserWindow.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneralThings.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Screen.h">
@@ -72,7 +87,10 @@
     <ClInclude Include="olcNoiseMaker.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="WavPlayer.h">
+    <ClInclude Include="SpectrumBus.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GeneralThings.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

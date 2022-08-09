@@ -1,14 +1,12 @@
-#include "MZEmu.h"
+#include "MainWindow.h"
 
-Specrtum128kBus MZEmu::bus = Specrtum128kBus();
-WavPlayer MZEmu::wavPlayer = WavPlayer();
-
-MZEmu::MZEmu(QWidget* parent)
+MainWindow::MainWindow(QWidget* parent)
 	: QMainWindow(parent)
 {
-	Screen* screen = new Screen(screenWidth, screenHeight);
+	tapeBrowserWindow = new TapeBrowserWindow();
+
+	screen = new Screen(screenWidth, screenHeight);
 	setCentralWidget(screen);
-	bus.video.setScreen(screen);
 
 	configWindow();
 	configSystem();
@@ -16,13 +14,14 @@ MZEmu::MZEmu(QWidget* parent)
 	statusBar()->showMessage("Ready");
 }
 
-MZEmu::~MZEmu()
+MainWindow::~MainWindow()
 {
-	noiseMaker->Stop();
-	//delete noiseMaker;
+	GeneralThings::bus->stopSound();
+	delete GeneralThings::bus;
+	delete tapeBrowserWindow;
 }
 
-void MZEmu::configWindow()
+void MainWindow::configWindow()
 {
 	resize(screenWidth, screenHeight);
 	setWindowTitle("MZEmu");
@@ -30,28 +29,28 @@ void MZEmu::configWindow()
 
 	mainToolBar = addToolBar("main toolbar");
 	mainToolBar->setIconSize(QSize(32, 32));
-	QMenu* fileMenu = menuBar()->addMenu("&File");
-	QMenu* viewMenu = menuBar()->addMenu("&View");
-	QMenu* machineMenu = menuBar()->addMenu("&Machine");
-	QMenu* toolsMenu = menuBar()->addMenu("&Tools");
-	QMenu* helpMenu = menuBar()->addMenu("&Help");
+	QMenu* fileMenu = menuBar()->addMenu("File");
+	QMenu* viewMenu = menuBar()->addMenu("View");
+	QMenu* machineMenu = menuBar()->addMenu("Machine");
+	QMenu* toolsMenu = menuBar()->addMenu("Tools");
+	QMenu* helpMenu = menuBar()->addMenu("Help");
 	QMenu* customizeMenu;
 	QMenu* sizeMenu;
 
 //	============= File =============
 
-	QAction* openAct = new QAction(QIcon(":/icons/open.png"), "&Open", this);
+	QAction* openAct = new QAction(QIcon(":/icons/open.png"), "Open", this);
 	openAct->setShortcut(QKeySequence::Open);
 	openAct->setStatusTip("Open supported file");
-	connect(openAct, &QAction::triggered, this, &MZEmu::open);
+	connect(openAct, &QAction::triggered, this, &MainWindow::open);
 	mainToolBar->addAction(openAct);
 	fileMenu->addAction(openAct);
 	this->addAction(openAct);
 
-	QAction* saveAct = new QAction(QIcon(":/icons/save.png"), "&Save", this);
+	QAction* saveAct = new QAction(QIcon(":/icons/save.png"), "Save", this);
 	saveAct->setShortcut(QKeySequence::Save);
 	saveAct->setStatusTip("Save snapshot");
-	connect(saveAct, &QAction::triggered, this, &MZEmu::save);
+	connect(saveAct, &QAction::triggered, this, &MainWindow::save);
 	mainToolBar->addAction(saveAct);
 	fileMenu->addAction(saveAct);
 	this->addAction(saveAct);
@@ -59,7 +58,7 @@ void MZEmu::configWindow()
 	fileMenu->addSeparator();
 	mainToolBar->addSeparator();
 
-	QAction* exitAct = new QAction(QIcon(":/icons/exit.png"), "&Exit", this);
+	QAction* exitAct = new QAction(QIcon(":/icons/exit.png"), "Exit", this);
 	exitAct->setShortcut(QKeySequence::Quit);
 	exitAct->setStatusTip("Quit this program");
 	connect(exitAct, &QAction::triggered, this, &QApplication::quit);
@@ -69,53 +68,53 @@ void MZEmu::configWindow()
 	//	============= File =============
 	//	============= Viev =============
 
-	customizeMenu = viewMenu->addMenu("&Customize");
+	customizeMenu = viewMenu->addMenu("Customize");
 
-	showToolBarAct = new QAction("&Tool bar", this);
+	showToolBarAct = new QAction("Tool bar", this);
 	showToolBarAct->setStatusTip("Show / hide tool bar");
-	connect(showToolBarAct, &QAction::triggered, this, &MZEmu::toolBarShow);
+	connect(showToolBarAct, &QAction::triggered, this, &MainWindow::toolBarShow);
 	showToolBarAct->setCheckable(true);
 	showToolBarAct->setChecked(true);
 	customizeMenu->addAction(showToolBarAct);
 
-	showStatusBarAct = new QAction("&Status bar", this);
+	showStatusBarAct = new QAction("Status bar", this);
 	showStatusBarAct->setStatusTip("Show / hide status bar");
-	connect(showStatusBarAct, &QAction::triggered, this, &MZEmu::statusBarShow);
+	connect(showStatusBarAct, &QAction::triggered, this, &MainWindow::statusBarShow);
 	showStatusBarAct->setCheckable(true);
 	showStatusBarAct->setChecked(true);
 	customizeMenu->addAction(showStatusBarAct);
 
 	viewMenu->addSeparator();
-	sizeMenu = viewMenu->addMenu("&Size");
+	sizeMenu = viewMenu->addMenu("Size");
 
 	QActionGroup* screenScaleActionGroup = new QActionGroup(this);
 	screenScaleActionGroup->setExclusive(true);
 
-	QAction* scale1x = new QAction("&100%", this);
+	QAction* scale1x = new QAction("100%", this);
 	scale1x->setStatusTip("Scale display 100%");
-	connect(scale1x, &QAction::triggered, this, &MZEmu::screenScale1X);
+	connect(scale1x, &QAction::triggered, this, &MainWindow::screenScale1X);
 	screenScaleActionGroup->addAction(scale1x);
 	scale1x->setCheckable(true);
 	sizeMenu->addAction(scale1x);
 
-	QAction* scale2x = new QAction("&200%", this);
+	QAction* scale2x = new QAction("200%", this);
 	scale2x->setStatusTip("Scale display 200%");
-	connect(scale2x, &QAction::triggered, this, &MZEmu::screenScale2X);
+	connect(scale2x, &QAction::triggered, this, &MainWindow::screenScale2X);
 	screenScaleActionGroup->addAction(scale2x);
 	scale2x->setCheckable(true);
 	sizeMenu->addAction(scale2x);
 
-	QAction* scale3x = new QAction("&300%", this);
+	QAction* scale3x = new QAction("300%", this);
 	scale3x->setStatusTip("Scale display 300%");
-	connect(scale3x, &QAction::triggered, this, &MZEmu::screenScale3X);
+	connect(scale3x, &QAction::triggered, this, &MainWindow::screenScale3X);
 	screenScaleActionGroup->addAction(scale3x);
 	scale3x->setCheckable(true);
 	scale3x->setChecked(true);
 	sizeMenu->addAction(scale3x);
 
-	QAction* scale4x = new QAction("&400%", this);
+	QAction* scale4x = new QAction("400%", this);
 	scale4x->setStatusTip("Scale display 400%");
-	connect(scale4x, &QAction::triggered, this, &MZEmu::screenScale4X);
+	connect(scale4x, &QAction::triggered, this, &MainWindow::screenScale4X);
 	screenScaleActionGroup->addAction(scale4x);
 	scale4x->setCheckable(true);
 	sizeMenu->addAction(scale4x);
@@ -123,52 +122,52 @@ void MZEmu::configWindow()
 	//	============= Viev =============
 	//	============= Machine =============
 
-	pauseAct = new QAction(QIcon(":/icons/pause.png"), "&Pause", this);
+	pauseAct = new QAction(QIcon(":/icons/pause.png"), "Pause", this);
 	pauseAct->setCheckable(true);
 	pauseAct->setShortcut(QKeySequence(Qt::Key_F1));
 	pauseAct->setStatusTip("Pause and unpause the machine");
-	connect(pauseAct, &QAction::triggered, this, &MZEmu::pause);
+	connect(pauseAct, &QAction::triggered, this, &MainWindow::pause);
 	mainToolBar->addAction(pauseAct);
 	machineMenu->addAction(pauseAct);
 	this->addAction(pauseAct);
 
-	maxSpeedAct = new QAction(QIcon(":/icons/max_speed.png"), "&Max speed", this);
+	maxSpeedAct = new QAction(QIcon(":/icons/max_speed.png"), "Max speed", this);
 	maxSpeedAct->setCheckable(true);
 	maxSpeedAct->setShortcut(QKeySequence(Qt::Key_F2));
 	maxSpeedAct->setStatusTip("Max speed");
-	connect(maxSpeedAct, &QAction::triggered, this, &MZEmu::maxSpeed);
+	connect(maxSpeedAct, &QAction::triggered, this, &MainWindow::maxSpeed);
 	mainToolBar->addAction(maxSpeedAct);
 	machineMenu->addAction(maxSpeedAct);
 	this->addAction(maxSpeedAct);
 
 	machineMenu->addSeparator();
 
-	QAction* softResetAct = new QAction(QIcon(":/icons/soft_reset.png"), "&Soft reset", this);
+	QAction* softResetAct = new QAction(QIcon(":/icons/soft_reset.png"), "Soft reset", this);
 	softResetAct->setShortcut(QKeySequence(Qt::Key_F3));
 	softResetAct->setStatusTip("Reset the current machine");
-	connect(softResetAct, &QAction::triggered, this, &MZEmu::softReset);
+	connect(softResetAct, &QAction::triggered, this, &MainWindow::softReset);
 	mainToolBar->addAction(softResetAct);
 	machineMenu->addAction(softResetAct);
 	this->addAction(softResetAct);
 
-	QAction* hardResetAct = new QAction(QIcon(":/icons/hard_reset.png"), "&Hard reset", this);
+	QAction* hardResetAct = new QAction(QIcon(":/icons/hard_reset.png"), "Hard reset", this);
 	hardResetAct->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_F3));
 	hardResetAct->setStatusTip("Perform a hard machine reset");
-	connect(hardResetAct, &QAction::triggered, this, &MZEmu::hardReset);
+	connect(hardResetAct, &QAction::triggered, this, &MainWindow::hardReset);
 	machineMenu->addAction(hardResetAct);
 	this->addAction(hardResetAct);
 
-	QAction* nonMaskableInterruptAct = new QAction("&NMI", this);
+	QAction* nonMaskableInterruptAct = new QAction("NMI", this);
 	nonMaskableInterruptAct->setStatusTip("Generate non maskable interrupt");
-	connect(nonMaskableInterruptAct, &QAction::triggered, this, &MZEmu::nonMaskableInterrupt);
+	connect(nonMaskableInterruptAct, &QAction::triggered, this, &MainWindow::nonMaskableInterrupt);
 	machineMenu->addAction(nonMaskableInterruptAct);
 
 	mainToolBar->addSeparator();
 
-	QAction* fullScreenAct = new QAction(QIcon(":/icons/full_screen.png"), "&Full screen", this);
+	QAction* fullScreenAct = new QAction(QIcon(":/icons/full_screen.png"), "Full screen", this);
 	fullScreenAct->setShortcut(QKeySequence(Qt::ALT + Qt::Key_Return));
 	fullScreenAct->setStatusTip("Set full screen mode");
-	connect(fullScreenAct, &QAction::triggered, this, &MZEmu::fullScreen);
+	connect(fullScreenAct, &QAction::triggered, this, &MainWindow::fullScreen);
 	mainToolBar->addAction(fullScreenAct);
 	viewMenu->addAction(fullScreenAct);
 	this->addAction(fullScreenAct);
@@ -176,12 +175,15 @@ void MZEmu::configWindow()
 	//	============= Machine =============
 	//	============= Tools =============
 
-
+	QAction* tapeBrowserAct = new QAction(QIcon(":/icons/Speaker.png"), "Tape browser", this);
+	tapeBrowserAct->setStatusTip("Open tape browser");
+	connect(tapeBrowserAct, &QAction::triggered, this, &MainWindow::tapeBrowserShow);
+	toolsMenu->addAction(tapeBrowserAct);
 
 	//	============= Tools =============
 	//	============= Help =============
 
-	QAction* aboutAct = helpMenu->addAction("&About MZEmu", this, &MZEmu::about);
+	QAction* aboutAct = helpMenu->addAction("About MZEmu", this, &MainWindow::about);
 	aboutAct->setStatusTip("Show info about application");
 
 	QAction* aboutQtAct = helpMenu->addAction("About &Qt", this, &QApplication::aboutQt);
@@ -190,21 +192,18 @@ void MZEmu::configWindow()
 	//	============= Help =============
 }
 
-void MZEmu::configSystem()
+void MainWindow::configSystem()
 {
-	bus.reset();
-	bus.cpu.cpuFrequency = 3500000;
-	bus.setSampleFrequency(44100);
+	GeneralThings::bus = new Specrtum128kBus;
 
-	wavPlayer.setSampleFrequency(44100);
+	QObject::connect(&GeneralThings::bus->wavPlayer, SIGNAL(updateProgressBar(int)), tapeBrowserWindow, SLOT(onUpdateProgressBar(int)));
 
-	std::vector<std::wstring> devices = olcNoiseMaker<short>::Enumerate();
-
-	noiseMaker = new olcNoiseMaker<short>(devices[0], 44100, 1, 8, 256);
-	noiseMaker->SetUserFunction(makeNoise);
+	GeneralThings::bus->video.setScreen(screen);
+	GeneralThings::bus->reset();
+	GeneralThings::bus->setSampleFrequency(44100);
 }
 
-void MZEmu::open()
+void MainWindow::open()
 {
 	std::string fileName = QFileDialog::getOpenFileName(this,"","","WAV files (*.wav)").toStdString();
 
@@ -212,48 +211,56 @@ void MZEmu::open()
 	{
 		if (!fileName.empty())
 		{
-			wavPlayer.readFile(fileName);
-			wavPlayer.play();
+			auto stringEndsWith = [](const std::string& mainStr, const std::string& toMatch) {
+				return (mainStr.size() >= toMatch.size() &&
+					mainStr.compare(mainStr.size() - toMatch.size(), toMatch.size(), toMatch) == 0);
+			};
+
+			if (stringEndsWith(fileName, ".wav"))
+			{
+				GeneralThings::bus->wavPlayer.readFile(fileName);
+				tapeBrowserWindow->show();
+			}
+
 		}
 	}
 	catch (const std::exception &e)
 	{
 		QMessageBox::critical(this,"Error",e.what());
 	}
-
 }
 
-void MZEmu::save()
+void MainWindow::save()
 {
 
 }
 
-void MZEmu::pause()
+void MainWindow::pause()
 {
-	bus.setPausedStatus(pauseAct->isChecked());
+	GeneralThings::bus->setPausedStatus(pauseAct->isChecked());
 }
 
-void MZEmu::maxSpeed()
+void MainWindow::maxSpeed()
 {
-	bus.setMaxSpeedStatus(maxSpeedAct->isChecked());
+	GeneralThings::bus->setMaxSpeedStatus(maxSpeedAct->isChecked());
 }
 
-void MZEmu::softReset()
+void MainWindow::softReset()
 {
-	bus.reset();
+	GeneralThings::bus->reset();
 }
 
-void MZEmu::hardReset()
+void MainWindow::hardReset()
 {
-	bus.reset(true);
+	GeneralThings::bus->reset(true);
 }
 
-void MZEmu::nonMaskableInterrupt()
+void MainWindow::nonMaskableInterrupt()
 {
-	bus.cpu.nonMaskableInterrupt();
+	GeneralThings::bus->cpu.nonMaskableInterrupt();
 }
 
-void MZEmu::fullScreen()
+void MainWindow::fullScreen()
 {
 	if (isFullScreen())
 	{
@@ -267,61 +274,71 @@ void MZEmu::fullScreen()
 	}
 }
 
-void MZEmu::screenScale1X()
+void MainWindow::screenScale1X()
 {
 	scaleWindow(1);
 }
 
-void MZEmu::screenScale2X()
+void MainWindow::screenScale2X()
 {
 	scaleWindow(2);
 }
 
-void MZEmu::screenScale3X()
+void MainWindow::screenScale3X()
 {
 	scaleWindow(3);
 }
 
-void MZEmu::screenScale4X()
+void MainWindow::screenScale4X()
 {
 	scaleWindow(4);
 }
 
-void MZEmu::toolBarShow()
+void MainWindow::toolBarShow()
 {
 	showToolBar = showToolBarAct->isChecked();
 	updateBars();
 }
 
-void MZEmu::statusBarShow()
+void MainWindow::statusBarShow()
 {
 	showStatusBar = showStatusBarAct->isChecked();
 	updateBars();
 }
 
-void MZEmu::about()
+void MainWindow::tapeBrowserShow()
+{
+	tapeBrowserWindow->show();
+}
+
+void MainWindow::about()
 {
 	QMessageBox::about(this, "About MZEmu",
 		"Emulator of ZX Spectrum 48k and 128k computers, and possibly other devices on the Z80 processor." 
 		"<br>Github: <a href='https://github.com/Borys456/MZEmu'>https://github.com/Borys456/MZEmu</a>" );
 }
 
-void MZEmu::keyPressEvent(QKeyEvent* event)
+void MainWindow::keyPressEvent(QKeyEvent* event)
 {
-	bus.keyboard.keyPressed(event->key());
+	GeneralThings::bus->keyboard.keyPressed(event->key());
 }
 
-void MZEmu::keyReleaseEvent(QKeyEvent* event)
+void MainWindow::keyReleaseEvent(QKeyEvent* event)
 {
-	bus.keyboard.keyReleased(event->key());
+	GeneralThings::bus->keyboard.keyReleased(event->key());
 }
 
-void MZEmu::showEvent(QShowEvent* event)
+void MainWindow::showEvent(QShowEvent* event)
 {
 	scaleWindow();
 }
 
-void MZEmu::showBars()
+void MainWindow::closeEvent(QCloseEvent* event)
+{
+	tapeBrowserWindow->close();
+}
+
+void MainWindow::showBars()
 {
 	menuBar()->show();
 
@@ -332,14 +349,14 @@ void MZEmu::showBars()
 		statusBar()->show();
 }
 
-void MZEmu::hideBars()
+void MainWindow::hideBars()
 {
 	menuBar()->hide();
 	mainToolBar->hide();
 	statusBar()->hide();
 }
 
-void MZEmu::updateBars()
+void MainWindow::updateBars()
 {
 	menuBar()->show();
 
@@ -356,7 +373,7 @@ void MZEmu::updateBars()
 	scaleWindow();
 }
 
-void MZEmu::scaleWindow(int scale)
+void MainWindow::scaleWindow(int scale)
 {
 	if(scale > 0)
 		scrrenScale = scale;
@@ -365,12 +382,4 @@ void MZEmu::scaleWindow(int scale)
 	int statusBarHeight = (statusBar()->isHidden()) ? 0 : statusBar()->height();
 
 	resize(screenWidth * scrrenScale, screenHeight * scrrenScale + (menuBar()->height() + toolBarHeight + statusBarHeight));
-}
-
-float MZEmu::makeNoise(int nChanel, float dTime)
-{
-	bus.audioIn = wavPlayer.updateAudio();
-	bus.clock();
-	return bus.audioOut;
-	return 0;
 }

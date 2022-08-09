@@ -1,9 +1,15 @@
 #pragma once
 #include <cstdint>
-#include <string>
+#include <functional>
+#include <QApplication>
 
-class WavPlayer
+class WavPlayer : public QObject
 {
+    Q_OBJECT
+
+signals:
+    void updateProgressBar(int value);
+
 public:
     WavPlayer();
     ~WavPlayer();
@@ -13,11 +19,16 @@ public:
     void readFile(std::string path);
 
     void play();
+    void resume();
     void pause();
     void stop();
 
+    bool deleteAfterStop = false;
+
 private:
+    void updatePercents();
     void convertDataToSamples(uint8_t* data);
+    void deleteSamples();
 
     struct WavHeader
     {
@@ -37,10 +48,12 @@ private:
     };
 
     WavHeader header;
+    int oldPercents = 0;
     uint32_t updateSampleRate = 0;
     uint32_t sampleIterator = 0;
     uint32_t sampleCount = 0;
     float* samples = nullptr;
     bool canPlay = false;
     bool isPlaying = false;
+    bool isPaused = false;
 };

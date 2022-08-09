@@ -133,4 +133,3 @@ void SpectrumKeyboard::keyReleased(int key)
 		}
 	}
 }
-

@@ -1,15 +1,11 @@
 #pragma once
-#include <cstdint>
-#include <vector>
-
-#include "IBus.h"
+#include "SpectrumBus.h"
 #include "SpectrumVideo.h"
 #include "SpectrumKeyboard.h"
 
-class Specrtum48kBus : public IBus
+class Specrtum48kBus : public SpectrumBus
 {
 public:
-
 	Specrtum48kBus();
 	~Specrtum48kBus();
 
@@ -18,22 +14,12 @@ public:
 	virtual uint8_t readPeripheral(uint16_t addr) override;
 	virtual void writePeripheral(uint16_t addr, uint8_t data) override;
 
-	void setSampleFrequency(uint32_t sampleRate);
-
-	void reset(bool hardReset = false);
-	void clock();
-
-	SpectrumVideo video;
-	SpectrumKeyboard keyboard;
-
-	float audioOut = 0;
-	float audioIn = 0;
+	virtual void reset(bool hardReset = false) override;
+	virtual void clock() override;
 
 	uint8_t mem[64 * 1024];
+
 private:
+	virtual void mixAudioInputs() override;
 
-	float speakerOut = 0;
-
-	void mixAudioInputs();
 };
-
