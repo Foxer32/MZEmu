@@ -25,7 +25,7 @@ void SpectrumBus::stopSound()
 void SpectrumBus::setSampleFrequency(uint32_t sampleRate)
 {
 	std::vector<std::wstring> devices = olcNoiseMaker<short>::Enumerate();
-	noiseMaker = new olcNoiseMaker<short>(devices[0], 44100, 1, 8, 256);
+	noiseMaker = new olcNoiseMaker<short>(devices[0], sampleRate, 1, 8, 256);
 	noiseMaker->SetUserFunction([&](int nChanel, float dTime) -> float { return makeNoise(nChanel, dTime); });
 
 	cpu.setSampleFrequency(sampleRate);

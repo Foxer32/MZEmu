@@ -56,10 +56,8 @@ private:
     void showBars();
     void hideBars();
     void updateBars();
-    void scaleWindow(int scale = -1);
+    void scaleWindow(int additionalHeight = 0 ,int scale = -1);
 
-    int screenWidth = 320;
-    int screenHeight = 256;
     int scrrenScale = 3;
 
     bool showToolBar = true;

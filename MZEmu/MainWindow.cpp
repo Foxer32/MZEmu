@@ -3,13 +3,14 @@
 MainWindow::MainWindow(QWidget* parent)
 	: QMainWindow(parent)
 {
-	tapeBrowserWindow = new TapeBrowserWindow();
+	this->setFocusPolicy(Qt::StrongFocus);
 
-	screen = new Screen(screenWidth, screenHeight);
-	setCentralWidget(screen);
+	tapeBrowserWindow = new TapeBrowserWindow();
 
 	configWindow();
 	configSystem();
+
+	setCentralWidget(screen);
 
 	statusBar()->showMessage("Ready");
 }
@@ -23,7 +24,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::configWindow()
 {
-	resize(screenWidth, screenHeight);
+	//resize(GeneralThings::bus->video.screenWidth, GeneralThings::bus->video.screenHeight);
 	setWindowTitle("MZEmu");
 	setWindowIcon(QIcon(":/icons/app.png"));
 
@@ -196,6 +197,8 @@ void MainWindow::configSystem()
 {
 	GeneralThings::bus = new Specrtum128kBus;
 
+	screen = new Screen(GeneralThings::bus->video.screenWidth, GeneralThings::bus->video.screenHeight);
+
 	QObject::connect(&GeneralThings::bus->wavPlayer, SIGNAL(updateProgressBar(int)), tapeBrowserWindow, SLOT(onUpdateProgressBar(int)));
 
 	GeneralThings::bus->video.setScreen(screen);
@@ -276,22 +279,22 @@ void MainWindow::fullScreen()
 
 void MainWindow::screenScale1X()
 {
-	scaleWindow(1);
+	scaleWindow(0, 1);
 }
 
 void MainWindow::screenScale2X()
 {
-	scaleWindow(2);
+	scaleWindow(0, 2);
 }
 
 void MainWindow::screenScale3X()
 {
-	scaleWindow(3);
+	scaleWindow(0, 3);
 }
 
 void MainWindow::screenScale4X()
 {
-	scaleWindow(4);
+	scaleWindow(0, 4);
 }
 
 void MainWindow::toolBarShow()
@@ -330,7 +333,7 @@ void MainWindow::keyReleaseEvent(QKeyEvent* event)
 
 void MainWindow::showEvent(QShowEvent* event)
 {
-	scaleWindow();
+	scaleWindow(2);
 }
 
 void MainWindow::closeEvent(QCloseEvent* event)
@@ -373,7 +376,7 @@ void MainWindow::updateBars()
 	scaleWindow();
 }
 
-void MainWindow::scaleWindow(int scale)
+void MainWindow::scaleWindow(int additionalHeight, int scale)
 {
 	if(scale > 0)
 		scrrenScale = scale;
@@ -381,5 +384,5 @@ void MainWindow::scaleWindow(int scale)
 	int toolBarHeight = (mainToolBar->isHidden()) ? 0 : mainToolBar->height();
 	int statusBarHeight = (statusBar()->isHidden()) ? 0 : statusBar()->height();
 
-	resize(screenWidth * scrrenScale, screenHeight * scrrenScale + (menuBar()->height() + toolBarHeight + statusBarHeight));
+	resize(GeneralThings::bus->video.screenWidth * scrrenScale, GeneralThings::bus->video.screenHeight * scrrenScale + (menuBar()->height() + toolBarHeight + statusBarHeight) + additionalHeight);
 }
