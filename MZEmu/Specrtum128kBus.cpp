@@ -103,8 +103,8 @@ void Specrtum128kBus::reset(bool hardReset)
 
 void Specrtum128kBus::clock()
 {
-	cpu.updateCpu();
-	video.updateVideo();
+	cpu.update();
+	video.update();
 	mixAudioInputs();
 }
 

@@ -16,6 +16,7 @@
   <ItemGroup>
     <ClInclude Include="$(MSBuildThisFileDirectory)Device.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)IBus.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)IClockable.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Z80.h" />
   </ItemGroup>
   <ItemGroup>

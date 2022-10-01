@@ -14,20 +14,12 @@ Z80::~Z80()
 
 }
 
-void Z80::setSampleFrequency(uint32_t sampleRate)
+void Z80::setCpuFrequency(int frequency)
 {
-	cpuUpdFreq = (float)cpuFrequency / (float)sampleRate;
+	deviceClockFrequency = frequency;
 }
 
-void Z80::updateCpu()
-{
-	float tCount = lastTCount;
-	while (tCount < cpuUpdFreq)
-		tCount += step();
-	lastTCount = tCount - cpuUpdFreq;
-}
-
-uint8_t Z80::step()
+int Z80::step()
 {
 	clockCycles = 0;
 	refresh = 2;

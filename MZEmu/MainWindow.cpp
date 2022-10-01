@@ -317,8 +317,9 @@ void MainWindow::tapeBrowserShow()
 void MainWindow::about()
 {
 	QMessageBox::about(this, "About MZEmu",
-		"Emulator of ZX Spectrum 48k and 128k computers, and possibly other devices on the Z80 processor." 
-		"<br>Github: <a href='https://github.com/Borys456/MZEmu'>https://github.com/Borys456/MZEmu</a>" );
+		"Emulator of ZX Spectrum 48k and 128k computers, and possibly other devices on the Z80 processor."
+		"<br><br>Written by Borys Antonyak"
+		"<br><br>Github: <a href='https://github.com/Borys456/MZEmu'>https://github.com/Borys456/MZEmu</a>" );
 }
 
 void MainWindow::keyPressEvent(QKeyEvent* event)

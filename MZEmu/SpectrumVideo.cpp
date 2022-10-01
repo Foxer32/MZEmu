@@ -3,6 +3,8 @@
 
 SpectrumVideo::SpectrumVideo()
 {
+	deviceClockFrequency = totalPixelsCount * imageUpdateFreq;
+
 	pal[0] = qRgb(0x00, 0x00, 0x00);
 	pal[1] = qRgb(0x00, 0x00, 0xD7);
 	pal[2] = qRgb(0xD7, 0x00, 0x00);
@@ -34,34 +36,24 @@ void SpectrumVideo::setScreen(Screen* screen)
 	this->screen = screen;
 }
 
-void SpectrumVideo::setSampleFrequency(uint32_t sampleRate)
+int SpectrumVideo::step()
 {
-	pixelUpdFreq = (float)(totalPixelsCount * imageUpdateFreq) / (float)sampleRate;
-}
+	drawPixel(pixelCount++);
 
-void SpectrumVideo::updateVideo()
-{
-	float tCount = lastPixel;
-	while (tCount < pixelUpdFreq)
+	if (pixelCount >= totalPixelsCount)
 	{
-		drawPixel(pixelCount++);
-
-		if (pixelCount >= totalPixelsCount)
+		if (++frameCount >= 16)
 		{
-			if (++frameCount >= 16)
-			{
-				videoFlashInvert = !videoFlashInvert;
-				frameCount = 0;
-			}
-
-			screen->update();
-			pixelCount = 0;
-			bus->cpu.maskableInterrupt();
+			videoFlashInvert = !videoFlashInvert;
+			frameCount = 0;
 		}
 
-		tCount++;
+		screen->update();
+		pixelCount = 0;
+		bus->cpu.maskableInterrupt();
 	}
-	lastPixel = tCount - pixelUpdFreq;
+
+	return 1;
 }
 
 void SpectrumVideo::drawPixel(uint32_t pixelNum)

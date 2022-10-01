@@ -5,7 +5,7 @@ olcNoiseMaker<short>* SpectrumBus::noiseMaker = nullptr;
 SpectrumBus::SpectrumBus()
 {
 	//wavPlayer.deleteAfterStop = true;
-	cpu.cpuFrequency = 3500000;
+	cpu.setCpuFrequency(3500000);
 
 	cpu.connectBus(this);
 	video.connectBus(this);

@@ -1,9 +1,9 @@
 #pragma once
 #include "Device.h"
-#include <string>
+#include "IClockable.h"
 #include <vector>
 
-class Z80 : public Device
+class Z80 : public Device, public IClockable
 {
 public:
 
@@ -23,17 +23,15 @@ public:
 
     uint8_t interruptMode = 0;
 
-    uint32_t cpuFrequency = 0;
-
     bool IFF1;
     bool IFF2;
     bool isHalted;
     bool irIsIX;
 
-    void setSampleFrequency(uint32_t sampleRate);
-    void updateCpu();
+    void setCpuFrequency(int frequency);
 
-    uint8_t step();
+    virtual int step() override;
+
     void reset(bool hardReset = false);
 
     void maskableInterrupt();
@@ -80,7 +78,7 @@ private:
 
     struct Instruction
     {
-        std::string mnemonic;
+        const char* mnemonic;
         AddressingModes addressingMode;
         uint8_t(Z80::* op)(void);
         uint8_t tCycles;
@@ -91,9 +89,6 @@ private:
     std::vector <Instruction> cbInstructions;
     std::vector <Instruction> irInstructions;
     std::vector <Instruction> ircbInstructions;
-
-    float cpuUpdFreq = 0;
-    float lastTCount = 0;
 
     bool genINT, genNMI;
 

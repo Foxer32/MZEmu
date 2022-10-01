@@ -59,8 +59,8 @@ void Specrtum48kBus::reset(bool hardReset)
 
 void Specrtum48kBus::clock()
 {
-	cpu.updateCpu();
-	video.updateVideo();
+	cpu.update();
+	video.update();
 	mixAudioInputs();
 }
 

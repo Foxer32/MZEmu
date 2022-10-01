@@ -1,8 +1,9 @@
 #pragma once
 #include "Device.h"
+#include "IClockable.h"
 #include "Screen.h"
 
-class SpectrumVideo : public Device
+class SpectrumVideo : public Device, public IClockable
 {
 public:
 
@@ -10,8 +11,8 @@ public:
 	~SpectrumVideo();
 
 	void setScreen(Screen* screen);
-	void setSampleFrequency(uint32_t sampleRate);
-	void updateVideo();
+
+	virtual int step() override;
 
 	uint8_t borderColor = 0;
 
@@ -33,9 +34,6 @@ private:
 
 	unsigned int pal[16];
 
-	float pixelUpdFreq = 0;
-
-	float lastPixel = 0;
 	uint32_t pixelCount = 0;
 	uint8_t frameCount = 0;
 	bool videoFlashInvert = false;
