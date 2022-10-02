@@ -28,7 +28,7 @@ public:
     bool isHalted;
     bool irIsIX;
 
-    void setCpuFrequency(int frequency);
+    void setFrequency(int frequency);
 
     virtual int step() override;
 

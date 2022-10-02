@@ -2,6 +2,7 @@
 #include "SpectrumBus.h"
 #include "SpectrumVideo.h"
 #include "SpectrumKeyboard.h"
+#include "AY8910.h"
 
 class Specrtum128kBus : public SpectrumBus
 {
@@ -16,6 +17,10 @@ public:
 
 	virtual void reset(bool hardReset = false) override;
 	virtual void clock() override;
+
+	virtual void setSampleFrequency(uint32_t sampleRate) override;
+
+	AY8910 ay8910;
 
 	uint8_t port7FFD = 0;
 	uint8_t rom[32 * 1024];

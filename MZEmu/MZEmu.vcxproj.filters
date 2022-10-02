@@ -67,6 +67,9 @@
     <ClCompile Include="GeneralThings.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="AY8910.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Screen.h">
@@ -91,6 +94,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="GeneralThings.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AY8910.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -3,6 +3,8 @@
 
 Specrtum128kBus::Specrtum128kBus()
 {
+	ay8910.setFrequency(1773400);
+
 	for (auto& i : rom) i = 0x00;
 	for (auto& i : ram) i = 0x00;
 
@@ -78,6 +80,19 @@ uint8_t Specrtum128kBus::readPeripheral(uint16_t addr)
 		result = port7FFD;
 	}
 
+	if ((addr & 0xFF) == 0xFD)
+	{
+		switch (addr >> 8)
+		{
+		case 0x7F:
+			if (!(port7FFD & 0x20)) { result = port7FFD; }
+			break;
+		case 0xFF:
+			result = ay8910.readSelectedRegister();
+			break;
+		}
+	}
+
 	return result;
 }
 
@@ -85,13 +100,24 @@ void Specrtum128kBus::writePeripheral(uint16_t addr, uint8_t data)
 {
 	if ((addr & 0xFF) == 0xFE)
 	{
-		speakerOut = ((data & 0x18) >> 3) * 0.5f - 1.0f;
+		speakerOut = (((data & 0x18) >> 3) * 0.5f - 1.0f) * 0.5f;
 		video.borderColor = data & 0x07;
 	}
 
-	if (addr == 0x7FFD && !(port7FFD & 0x20))
+	if ((addr & 0xFF) == 0xFD)
 	{
-		port7FFD = data;
+		switch (addr >> 8)
+		{
+		case 0x7F:
+			if (!(port7FFD & 0x20)) { port7FFD = data; }
+			break;
+		case 0xBF:
+			ay8910.writeSelectedRegister(data);
+			break;
+		case 0xFF:
+			ay8910.selectRegister(data);
+			break;
+		}
 	}
 }
 
@@ -99,16 +125,25 @@ void Specrtum128kBus::reset(bool hardReset)
 {
 	cpu.reset(hardReset);
 	port7FFD = 0;
+	ay8910.reset();
 }
 
 void Specrtum128kBus::clock()
 {
 	cpu.update();
 	video.update();
+	ay8910.update();
 	mixAudioInputs();
+}
+
+void Specrtum128kBus::setSampleFrequency(uint32_t sampleRate)
+{
+	SpectrumBus::setSampleFrequency(sampleRate);
+	ay8910.setSampleFrequency(sampleRate);
 }
 
 void Specrtum128kBus::mixAudioInputs()
 {
-	audioOut = ((speakerOut * 0.5) + audioIn) / 2;
+	audioOut[0] = (speakerOut + audioIn + ay8910.audioOut[0]) / 3;
+	audioOut[1] = (speakerOut + audioIn + ay8910.audioOut[1]) / 3;
 }

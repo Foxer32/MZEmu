@@ -14,7 +14,7 @@ Z80::~Z80()
 
 }
 
-void Z80::setCpuFrequency(int frequency)
+void Z80::setFrequency(int frequency)
 {
 	deviceClockFrequency = frequency;
 }

@@ -97,6 +97,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AY8910.cpp" />
     <ClCompile Include="GeneralThings.cpp" />
     <ClCompile Include="Screen.cpp" />
     <ClCompile Include="Specrtum128kBus.cpp" />
@@ -111,6 +112,7 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AY8910.h" />
     <ClInclude Include="GeneralThings.h" />
     <ClInclude Include="olcNoiseMaker.h" />
     <ClInclude Include="Screen.h" />

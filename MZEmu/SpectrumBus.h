@@ -12,7 +12,7 @@ public:
 	SpectrumBus();
 	~SpectrumBus();
 
-	void setSampleFrequency(uint32_t sampleRate);
+	virtual void setSampleFrequency(uint32_t sampleRate);
 
 	virtual void reset(bool hardReset = false) = 0;
 	virtual void clock() = 0;
@@ -25,7 +25,7 @@ public:
 	SpectrumVideo video;
 	SpectrumKeyboard keyboard;
 
-	float audioOut = 0;
+	float audioOut[2] = { 0,0 };
 	float audioIn = 0;
 
 	WavPlayer wavPlayer;

@@ -47,7 +47,7 @@ void Specrtum48kBus::writePeripheral(uint16_t addr, uint8_t data)
 {
 	if ((addr & 0xFF) == 0xFE)
 	{
-		speakerOut = ((data & 0x18) >> 3) * 0.5f - 1.0f;
+		speakerOut = (((data & 0x18) >> 3) * 0.5f - 1.0f) * 0.5f;
 		video.borderColor = data & 0x07;
 	}
 }
@@ -66,5 +66,5 @@ void Specrtum48kBus::clock()
 
 void Specrtum48kBus::mixAudioInputs()
 {
-	audioOut = ((speakerOut * 0.5) + audioIn) / 2;
+	audioOut[0] = audioOut[1] = (speakerOut + audioIn) / 2;
 }
