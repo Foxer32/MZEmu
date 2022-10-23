@@ -70,6 +70,9 @@
     <ClCompile Include="AY8910.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="KempstonJoystick.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Screen.h">
@@ -100,6 +103,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="WinNativeKeycodes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="KempstonJoystick.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

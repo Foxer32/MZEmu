@@ -339,11 +339,13 @@ void MainWindow::keyboardHelp()
 void MainWindow::keyPressEvent(QKeyEvent* event)
 {
 	GeneralThings::bus->keyboard.keyPressed(event->nativeVirtualKey());
+	GeneralThings::bus->joystick.keyPressed(event->nativeVirtualKey());
 }
 
 void MainWindow::keyReleaseEvent(QKeyEvent* event)
 {
 	GeneralThings::bus->keyboard.keyReleased(event->nativeVirtualKey());
+	GeneralThings::bus->joystick.keyReleased(event->nativeVirtualKey());
 }
 
 void MainWindow::showEvent(QShowEvent* event)

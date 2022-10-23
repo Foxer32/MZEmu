@@ -19,5 +19,4 @@ private:
 
 	uint8_t row = 0;
 	uint8_t value = 0;
-	int key = 0;
 };

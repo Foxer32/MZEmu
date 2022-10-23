@@ -4,6 +4,7 @@
 #include "olcNoiseMaker.h"
 #include "SpectrumVideo.h"
 #include "SpectrumKeyboard.h"
+#include "KempstonJoystick.h"
 #include "WavPlayer.h"
 
 class SpectrumBus : public IBus
@@ -24,6 +25,7 @@ public:
 
 	SpectrumVideo video;
 	SpectrumKeyboard keyboard;
+	KempstonJoystick joystick;
 
 	float audioOut[2] = { 0,0 };
 	float audioIn = 0;

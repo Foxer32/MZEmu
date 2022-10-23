@@ -34,6 +34,11 @@ uint8_t Specrtum48kBus::readPeripheral(uint16_t addr)
 {
 	uint8_t result = video.attributePort;
 
+	if ((addr & 0xFF) == 0x1F)
+	{
+		result = joystick.getJoystickPort();
+	}
+
 	if ((addr & 0xFF) == 0xFE)
 	{
 		result = keyboard.getKey(addr >> 8);
