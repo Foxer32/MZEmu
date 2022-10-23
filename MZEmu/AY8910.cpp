@@ -90,8 +90,8 @@ int AY8910::step()
 		mixR += vols[5][tmpVol];
 	}
 
-	audioOut[0] = mixL / maxL;
-	audioOut[1] = mixR / maxR;
+	audioOut[0] = (mixL / maxL) - 1;
+	audioOut[1] = (mixR / maxR) - 1;
 
 	return 1;
 }

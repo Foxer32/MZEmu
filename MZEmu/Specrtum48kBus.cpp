@@ -32,7 +32,7 @@ void Specrtum48kBus::writeMemory(uint16_t addr, uint8_t data)
 
 uint8_t Specrtum48kBus::readPeripheral(uint16_t addr)
 {
-	uint8_t result = 0xFF;
+	uint8_t result = video.attributePort;
 
 	if ((addr & 0xFF) == 0xFE)
 	{
@@ -47,7 +47,7 @@ void Specrtum48kBus::writePeripheral(uint16_t addr, uint8_t data)
 {
 	if ((addr & 0xFF) == 0xFE)
 	{
-		speakerOut = (((data & 0x18) >> 3) * 0.5f - 1.0f) * 0.5f;
+		speakerOut = (((data & 0x18) >> 3) * 0.25f) - 1;
 		video.borderColor = data & 0x07;
 	}
 }

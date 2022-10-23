@@ -2,8 +2,6 @@
 #include <cstdint>
 #include <map>
 
-#include <QKeyEvent>
-
 class SpectrumKeyboard
 {
 public:

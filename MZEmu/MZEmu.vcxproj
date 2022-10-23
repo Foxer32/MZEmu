@@ -121,6 +121,7 @@
     <ClInclude Include="SpectrumBus.h" />
     <ClInclude Include="SpectrumKeyboard.h" />
     <ClInclude Include="SpectrumVideo.h" />
+    <ClInclude Include="WinNativeKeycodes.h" />
     <QtMoc Include="TapeBrowserWindow.h" />
     <QtMoc Include="WavPlayer.h" />
   </ItemGroup>

@@ -40,10 +40,14 @@ int SpectrumVideo::step()
 {
 	drawPixel(pixelCount++);
 
+	//pixelCount++;
+
 	if (pixelCount >= totalPixelsCount)
 	{
 		if (++frameCount >= 16)
 		{
+			//drawAllScreen();
+			//screen->update();
 			videoFlashInvert = !videoFlashInvert;
 			frameCount = 0;
 		}
@@ -52,7 +56,7 @@ int SpectrumVideo::step()
 		pixelCount = 0;
 		bus->cpu.maskableInterrupt();
 	}
-
+	
 	return 1;
 }
 
@@ -60,6 +64,8 @@ void SpectrumVideo::drawPixel(uint32_t pixelNum)
 {
 	uint16_t x = pixelNum % columns;
 	uint16_t y = pixelNum / columns;
+
+	attributePort = 0xFF;
 
 	if (x >= (horizontalOffset - borderSize) && x < (horizontalOffset + imageWidth + borderSize) && y >= (vericalOffset - borderSize) && y < (vericalOffset + imageHeight + borderSize))
 	{
@@ -78,7 +84,7 @@ void SpectrumVideo::drawPixel(uint32_t pixelNum)
 
 			uint16_t addr = 0x4000 | ((y & 0x07) << 8) | ((y & 0x38) << 2) | ((y & 0xC0) << 5) | charX & 0x1F;
 
-			uint8_t att = bus->readMemory(charY + charX);
+			uint8_t att = attributePort = bus->readMemory(charY + charX);
 			uint8_t ink = att & 0x07;
 			uint8_t paper = (att & 0x38) >> 3;
 			if (att & 0x40)
@@ -96,4 +102,44 @@ void SpectrumVideo::drawPixel(uint32_t pixelNum)
 			screen->screenBuffer.setPixel(x, y, pal[(doFlash != (bool)(val & (0x80 >> (x % 8)))) ? ink : paper]);
 		}
 	}
+}
+
+void SpectrumVideo::drawAllScreen()
+{
+	for (uint16_t x = 0; x < (imageWidth + borderSize * 2); x++)
+		for (uint16_t y = 0; y < (imageHeight + borderSize * 2); y++)
+		{
+			if (x < borderSize || x >= (imageWidth + borderSize) || y < borderSize || y >= (imageHeight + borderSize))
+			{
+				screen->screenBuffer.setPixel(x, y, pal[borderColor]);
+			}
+			else
+			{			
+				y -= borderSize;
+				x -= borderSize;
+
+				uint16_t charY = 0x5800 + ((y >> 3) << 5);
+				//uint8_t charX = x / (float)imageWidth * 32;
+				uint8_t charX = x >> 3;
+
+				uint16_t addr = 0x4000 | ((y & 0x07) << 8) | ((y & 0x38) << 2) | ((y & 0xC0) << 5) | charX & 0x1F;
+
+				uint8_t att = bus->readMemory(charY + charX);
+				uint8_t ink = att & 0x07;
+				uint8_t paper = (att & 0x38) >> 3;
+				if (att & 0x40)
+				{
+					ink |= 0x08;
+					paper |= 0x08;
+				}
+				bool doFlash = (att & 0x80) && videoFlashInvert;
+
+				uint8_t val = bus->readMemory(addr);
+
+				y += borderSize;
+				x += borderSize;
+
+				screen->screenBuffer.setPixel(x, y, pal[(doFlash != (bool)(val & (0x80 >> (x % 8)))) ? ink : paper]);			
+			}
+		}
 }

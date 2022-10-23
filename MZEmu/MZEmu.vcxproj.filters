@@ -99,6 +99,9 @@
     <ClInclude Include="AY8910.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="WinNativeKeycodes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <QtRcc Include="resources\icons\icons.qrc">

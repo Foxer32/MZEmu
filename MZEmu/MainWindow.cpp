@@ -7,6 +7,12 @@ MainWindow::MainWindow(QWidget* parent)
 
 	tapeBrowserWindow = new TapeBrowserWindow();
 
+	QGraphicsScene* scene = new QGraphicsScene();
+	keyboardHelpView = new QGraphicsView(scene);
+	keyboardHelpView->setWindowIcon(QIcon(":/icons/app.png"));
+	QGraphicsPixmapItem* item = new QGraphicsPixmapItem(QPixmap(":/images/spectrum_keyboard.png"));
+	scene->addItem(item);
+
 	configWindow();
 	configSystem();
 
@@ -190,6 +196,9 @@ void MainWindow::configWindow()
 	QAction* aboutQtAct = helpMenu->addAction("About &Qt", this, &QApplication::aboutQt);
 	aboutQtAct->setStatusTip("Show info about Qt library");
 
+	QAction* keyboardHelpAct = helpMenu->addAction("Keyboard help", this, &MainWindow::keyboardHelp);
+	keyboardHelpAct->setStatusTip("Show info about Qt library");
+
 	//	============= Help =============
 }
 
@@ -322,14 +331,19 @@ void MainWindow::about()
 		"<br><br>Github: <a href='https://github.com/Borys456/MZEmu'>https://github.com/Borys456/MZEmu</a>" );
 }
 
+void MainWindow::keyboardHelp()
+{
+	keyboardHelpView->show();
+}
+
 void MainWindow::keyPressEvent(QKeyEvent* event)
 {
-	GeneralThings::bus->keyboard.keyPressed(event->key());
+	GeneralThings::bus->keyboard.keyPressed(event->nativeVirtualKey());
 }
 
 void MainWindow::keyReleaseEvent(QKeyEvent* event)
 {
-	GeneralThings::bus->keyboard.keyReleased(event->key());
+	GeneralThings::bus->keyboard.keyReleased(event->nativeVirtualKey());
 }
 
 void MainWindow::showEvent(QShowEvent* event)
@@ -340,6 +354,7 @@ void MainWindow::showEvent(QShowEvent* event)
 void MainWindow::closeEvent(QCloseEvent* event)
 {
 	tapeBrowserWindow->close();
+	keyboardHelpView->close();
 }
 
 void MainWindow::showBars()

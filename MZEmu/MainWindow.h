@@ -11,6 +11,8 @@
 #include <QStatusBar>
 #include <QMessageBox>
 #include <QFileDialog>
+#include <QGraphicsView>
+#include <QGraphicsPixmapItem>
 
 #include "GeneralThings.h"
 #include "Specrtum128kBus.h"
@@ -48,6 +50,7 @@ private slots:
     void statusBarShow();
     void tapeBrowserShow();
     void about();
+    void keyboardHelp();
 
 private:
     void configWindow();
@@ -71,5 +74,6 @@ private:
     QAction* showStatusBarAct;
 
     TapeBrowserWindow* tapeBrowserWindow;
+    QGraphicsView* keyboardHelpView;
 
 };

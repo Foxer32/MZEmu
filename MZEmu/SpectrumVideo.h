@@ -6,7 +6,6 @@
 class SpectrumVideo : public Device, public IClockable
 {
 public:
-
 	SpectrumVideo();
 	~SpectrumVideo();
 
@@ -18,6 +17,8 @@ public:
 
 	int screenWidth = 0;
 	int screenHeight = 0;
+
+	uint8_t attributePort = 0xFF;
 
 private:
 	const unsigned int imageWidth = 256;
@@ -39,4 +40,5 @@ private:
 	bool videoFlashInvert = false;
 
 	void drawPixel(uint32_t pixelNum);
+	void drawAllScreen();
 };

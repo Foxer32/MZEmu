@@ -1,6 +1,19 @@
 #include "Specrtum128kBus.h"
 #include <fstream>
 
+//#define MEASURE_EMULATION_SPEED
+
+#ifdef MEASURE_EMULATION_SPEED
+#include <QDebug>
+#include <chrono>
+using std::chrono::high_resolution_clock;
+using std::chrono::duration_cast;
+using std::chrono::duration;
+using std::chrono::milliseconds;
+int globalCounter = 0;
+float cpuTime, videoTime, ayTime, mixTime, totalTime;
+#endif // MEASURE_EMULATION_SPEED
+
 Specrtum128kBus::Specrtum128kBus()
 {
 	ay8910.setFrequency(1773400);
@@ -67,7 +80,7 @@ void Specrtum128kBus::writeMemory(uint16_t addr, uint8_t data)
 
 uint8_t Specrtum128kBus::readPeripheral(uint16_t addr)
 {
-	uint8_t result = 0xFF;
+	uint8_t result = video.attributePort;
 
 	if ((addr & 0xFF) == 0xFE)
 	{
@@ -75,17 +88,12 @@ uint8_t Specrtum128kBus::readPeripheral(uint16_t addr)
 		result = (audioIn > 0.3f) ? result | 0x40 : result & ~(0x40);
 	}
 	
-	if (addr == 0x7FFD && !(port7FFD & 0x20))
-	{
-		result = port7FFD;
-	}
-
-	if ((addr & 0xFF) == 0xFD)
+	if ((addr & 0xFF) == 0xFD && !(port7FFD & 0x20))
 	{
 		switch (addr >> 8)
 		{
 		case 0x7F:
-			if (!(port7FFD & 0x20)) { result = port7FFD; }
+			result = port7FFD;
 			break;
 		case 0xFF:
 			result = ay8910.readSelectedRegister();
@@ -100,16 +108,16 @@ void Specrtum128kBus::writePeripheral(uint16_t addr, uint8_t data)
 {
 	if ((addr & 0xFF) == 0xFE)
 	{
-		speakerOut = (((data & 0x18) >> 3) * 0.5f - 1.0f) * 0.5f;
+		speakerOut = (((data & 0x18) >> 3) * 0.25f) - 1;
 		video.borderColor = data & 0x07;
 	}
 
-	if ((addr & 0xFF) == 0xFD)
+	if ((addr & 0xFF) == 0xFD && !(port7FFD & 0x20))
 	{
 		switch (addr >> 8)
 		{
 		case 0x7F:
-			if (!(port7FFD & 0x20)) { port7FFD = data; }
+			port7FFD = data;
 			break;
 		case 0xBF:
 			ay8910.writeSelectedRegister(data);
@@ -130,10 +138,48 @@ void Specrtum128kBus::reset(bool hardReset)
 
 void Specrtum128kBus::clock()
 {
+#ifdef MEASURE_EMULATION_SPEED
+
+	if (++globalCounter >= (44100 / 2))
+	{
+		globalCounter = 0;
+		auto t1 = high_resolution_clock::now();
+		cpu.update();
+		auto t2 = high_resolution_clock::now();
+		video.update();
+		auto t3 = high_resolution_clock::now();
+		ay8910.update();
+		auto t4 = high_resolution_clock::now();
+		mixAudioInputs();
+		auto t5 = high_resolution_clock::now();
+
+		cpuTime = duration<float, std::micro>(t2 - t1).count();
+		videoTime = duration<float, std::micro>(t3 - t2).count();
+		ayTime = duration<float, std::micro>(t4 - t3).count();
+		mixTime = duration<float, std::micro>(t5 - t4).count();
+		totalTime = cpuTime + videoTime + ayTime + mixTime;
+
+		qInfo() << "--------------------------------";
+		qInfo() << "cpu\t\t" << cpuTime << "us";
+		qInfo() << "video\t" << videoTime << "us";
+		qInfo() << "ay\t\t" << ayTime << "us";
+		qInfo() << "mix\t\t" << mixTime << "us";
+		qInfo() << "Total:\t" << totalTime << "us, System load: " << (totalTime / (1.0f / 44100.0f * 1000000.0f)) * 100.0f << "%";
+		qInfo() << "--------------------------------";
+	}
+	else
+	{
+		cpu.update();
+		video.update();
+		ay8910.update();
+		mixAudioInputs();
+	}
+#else
 	cpu.update();
 	video.update();
 	ay8910.update();
 	mixAudioInputs();
+#endif // MEASURE_EMULATION_SPEED
 }
 
 void Specrtum128kBus::setSampleFrequency(uint32_t sampleRate)
