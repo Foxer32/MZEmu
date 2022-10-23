@@ -17,7 +17,7 @@
 #include "GeneralThings.h"
 #include "Specrtum128kBus.h"
 #include "TapeBrowserWindow.h"
-#include "Screen.h"
+#include "GLScreen.h"
 
 class MainWindow : public QMainWindow
 {
@@ -66,7 +66,7 @@ private:
     bool showToolBar = true;
     bool showStatusBar = true;
 
-    Screen* screen;
+    GLScreen* screen;
     QToolBar* mainToolBar;
     QAction* pauseAct;
     QAction* maxSpeedAct;

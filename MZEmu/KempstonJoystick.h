@@ -16,4 +16,5 @@ public:
 private:
 	std::map <int, uint8_t> keyMap;
 	uint8_t joystickPort = 0;
+
 };

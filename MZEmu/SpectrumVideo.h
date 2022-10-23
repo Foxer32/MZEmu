@@ -1,7 +1,7 @@
 #pragma once
 #include "Device.h"
 #include "IClockable.h"
-#include "Screen.h"
+#include "GLScreen.h"
 
 class SpectrumVideo : public Device, public IClockable
 {
@@ -9,7 +9,7 @@ public:
 	SpectrumVideo();
 	~SpectrumVideo();
 
-	void setScreen(Screen* screen);
+	void setScreen(GLScreen* screen);
 
 	virtual int step() override;
 
@@ -31,7 +31,7 @@ private:
 	const unsigned int totalPixelsCount = lines * columns;
 	const unsigned int borderSize = 32;
 
-	Screen* screen = nullptr;
+	GLScreen* screen = nullptr;
 
 	unsigned int pal[16];
 
@@ -41,4 +41,5 @@ private:
 
 	void drawPixel(uint32_t pixelNum);
 	void drawAllScreen();
+
 };

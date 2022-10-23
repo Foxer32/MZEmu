@@ -100,7 +100,7 @@
     <ClCompile Include="AY8910.cpp" />
     <ClCompile Include="GeneralThings.cpp" />
     <ClCompile Include="KempstonJoystick.cpp" />
-    <ClCompile Include="Screen.cpp" />
+    <ClCompile Include="GLScreen.cpp" />
     <ClCompile Include="Specrtum128kBus.cpp" />
     <ClCompile Include="Specrtum48kBus.cpp" />
     <ClCompile Include="SpectrumBus.cpp" />
@@ -117,7 +117,7 @@
     <ClInclude Include="GeneralThings.h" />
     <ClInclude Include="KempstonJoystick.h" />
     <ClInclude Include="olcNoiseMaker.h" />
-    <ClInclude Include="Screen.h" />
+    <ClInclude Include="GLScreen.h" />
     <ClInclude Include="Specrtum128kBus.h" />
     <ClInclude Include="Specrtum48kBus.h" />
     <ClInclude Include="SpectrumBus.h" />

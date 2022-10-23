@@ -206,7 +206,7 @@ void MainWindow::configSystem()
 {
 	GeneralThings::bus = new Specrtum128kBus;
 
-	screen = new Screen(GeneralThings::bus->video.screenWidth, GeneralThings::bus->video.screenHeight);
+	screen = new GLScreen(GeneralThings::bus->video.screenWidth, GeneralThings::bus->video.screenHeight);
 
 	QObject::connect(&GeneralThings::bus->wavPlayer, SIGNAL(updateProgressBar(int)), tapeBrowserWindow, SLOT(onUpdateProgressBar(int)));
 

@@ -31,7 +31,7 @@ SpectrumVideo::~SpectrumVideo()
 
 }
 
-void SpectrumVideo::setScreen(Screen* screen)
+void SpectrumVideo::setScreen(GLScreen* screen)
 {
 	this->screen = screen;
 }
