@@ -1,4 +1,5 @@
 #include "TapeBrowserWindow.h"
+#include <filesystem>
 
 TapeBrowserWindow::TapeBrowserWindow(QWidget* parent)
 	: QMainWindow(parent)
@@ -13,7 +14,7 @@ TapeBrowserWindow::~TapeBrowserWindow()
 
 void TapeBrowserWindow::configWindow()
 {
-	//resize(screenWidth, screenHeight);
+	resize(400, 200);
 	setWindowTitle("Tape browser");
 	setWindowIcon(QIcon(":/icons/Speaker.png"));
 
@@ -53,6 +54,37 @@ void TapeBrowserWindow::configWindow()
 	progressBar->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 	mainToolBar->addWidget(progressBar);
 
+	table = new QTableWidget(0, 3);
+	table->setHorizontalHeaderLabels(QStringList() << "#" << "Block Details" << "Length");
+
+	table->setEditTriggers(QAbstractItemView::NoEditTriggers);
+	table->setFocusPolicy(Qt::NoFocus);
+	table->verticalHeader()->setVisible(false);
+	table->horizontalHeader()->setSectionResizeMode(QHeaderView::Fixed);
+	table->horizontalHeader()->setMinimumSectionSize(0);
+
+	table->setColumnWidth(0, 20);
+	table->setColumnWidth(2, 60);
+	table->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Interactive);
+	table->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Stretch);
+	table->horizontalHeader()->setSectionResizeMode(2, QHeaderView::Interactive);
+
+	setCentralWidget(table);
+}
+
+void TapeBrowserWindow::addRow(std::string data, int length)
+{
+	table->insertRow(table->rowCount());
+
+	QTableWidgetItem* col0 = new QTableWidgetItem(QString::number(table->rowCount()));
+	QTableWidgetItem* col1 = new QTableWidgetItem(QString::fromStdString(data));
+	QTableWidgetItem* col2 = new QTableWidgetItem(QString::number(length));
+
+	col0->setData(Qt::TextAlignmentRole, Qt::AlignCenter);
+
+	table->setItem(table->rowCount() - 1, 0, col0);
+	table->setItem(table->rowCount() - 1, 1, col1);
+	table->setItem(table->rowCount() - 1, 2, col2);
 }
 
 void TapeBrowserWindow::open()
@@ -77,6 +109,12 @@ void TapeBrowserWindow::open()
 	{
 		QMessageBox::critical(this, "Error", e.what());
 	}
+
+	if (GeneralThings::bus->wavPlayer.getOpenedFileLength() != 0)
+	{
+		table->setRowCount(0);
+		addRow(std::filesystem::path(GeneralThings::bus->wavPlayer.getOpenedFilePath()).filename().generic_string(), GeneralThings::bus->wavPlayer.getOpenedFileLength());
+	}
 }
 
 void TapeBrowserWindow::play()
@@ -97,6 +135,15 @@ void TapeBrowserWindow::stop()
 void TapeBrowserWindow::onUpdateProgressBar(int percents)
 {
 	progressBar->setValue(percents);
+}
+
+void TapeBrowserWindow::showEvent(QShowEvent* event)
+{
+	if (GeneralThings::bus->wavPlayer.getOpenedFileLength() != 0)
+	{
+		table->setRowCount(0);
+		addRow(std::filesystem::path(GeneralThings::bus->wavPlayer.getOpenedFilePath()).filename().generic_string(), GeneralThings::bus->wavPlayer.getOpenedFileLength());
+	}
 }
 
 void TapeBrowserWindow::closeEvent(QCloseEvent* event)

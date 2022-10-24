@@ -23,6 +23,9 @@ public:
     void pause();
     void stop();
 
+    std::string getOpenedFilePath();
+    int getOpenedFileLength();
+
     bool deleteAfterStop = false;
 
 private:
@@ -46,6 +49,9 @@ private:
         uint8_t         subchunk2ID[4];
         uint32_t        subchunk2Size;
     };
+
+    std::string openedFilePath = "";
+    int openedFileLength = 0;
 
     WavHeader header;
     int oldPercents = 0;

@@ -37,6 +37,9 @@ void WavPlayer::readFile(std::string path)
 {
     stop();
 
+    openedFilePath = "";
+    openedFileLength = 0;
+
     std::ifstream ifs;
     ifs.open(path, std::ifstream::binary);
     if (ifs.is_open())
@@ -59,6 +62,10 @@ void WavPlayer::readFile(std::string path)
         uint8_t* data = new uint8_t[header.subchunk2Size];
 
         ifs.read((char*)data, (unsigned int)header.subchunk2Size);
+
+        openedFilePath = path;
+        openedFileLength = ifs.tellg();
+
         ifs.close();
 
         convertDataToSamples(data);
@@ -99,6 +106,16 @@ void WavPlayer::stop()
 
     if (deleteAfterStop)
         deleteSamples();
+}
+
+std::string WavPlayer::getOpenedFilePath()
+{
+    return openedFilePath;
+}
+
+int WavPlayer::getOpenedFileLength()
+{
+    return openedFileLength;
 }
 
 void WavPlayer::updatePercents()

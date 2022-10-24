@@ -24,6 +24,8 @@ void SpectrumBus::stopSound()
 
 void SpectrumBus::setSampleFrequency(uint32_t sampleRate)
 {
+	this->sampleRate = sampleRate;
+
 	std::vector<std::wstring> devices = olcNoiseMaker<short>::Enumerate();
 	noiseMaker = new olcNoiseMaker<short>(devices[0], sampleRate, 2, 8, 512);
 	noiseMaker->SetUserFunction([&](int nChanel, float dTime) -> float { return makeNoise(nChanel, dTime); });
@@ -31,6 +33,11 @@ void SpectrumBus::setSampleFrequency(uint32_t sampleRate)
 	cpu.setSampleFrequency(sampleRate);
 	video.setSampleFrequency(sampleRate);
 	wavPlayer.setSampleFrequency(sampleRate);
+}
+
+uint32_t SpectrumBus::getSampleFrequency()
+{
+	return sampleRate;
 }
 
 void SpectrumBus::setPausedStatus(bool status)
@@ -48,15 +55,37 @@ void SpectrumBus::setMaxSpeedStatus(bool status)
 	maxSpeedStatus = status;
 }
 
+const char* SpectrumBus::getStatus()
+{
+	if (pausedStatus)
+		return "Paused";
+
+	if (maxSpeedStatus)
+		return "Runnig at max speed";
+
+	return "Runnig";
+}
+
+float SpectrumBus::getSystemLoad()
+{
+	return (execTime / (1.0f / 44100.0f * 1000000.0f)) * 100.0f;
+}
+
 float SpectrumBus::makeNoise(int nChanel, float dTime)
 {
 	if (!pausedStatus && (nChanel == 0))
 	{
+		tStart = high_resolution_clock::now();
+
 		do
 		{
 			audioIn = wavPlayer.updateAudio();
 			clock();
 		} while (maxSpeedStatus && !pausedStatus);
+
+		tEnd = high_resolution_clock::now();
+
+		execTime = duration<float, std::micro>(tEnd - tStart).count();
 	}
 
 	return audioOut[nChanel];

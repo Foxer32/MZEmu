@@ -52,7 +52,7 @@ int SpectrumVideo::step()
 			frameCount = 0;
 		}
 
-		screen->update();
+		//screen->update();
 		pixelCount = 0;
 		bus->cpu.maskableInterrupt();
 	}

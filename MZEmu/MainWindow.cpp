@@ -13,12 +13,14 @@ MainWindow::MainWindow(QWidget* parent)
 	QGraphicsPixmapItem* item = new QGraphicsPixmapItem(QPixmap(":/images/spectrum_keyboard.png"));
 	scene->addItem(item);
 
-	configWindow();
 	configSystem();
+	configWindow();
+
+	systemLoadTimer = new QTimer();
+	connect(systemLoadTimer, SIGNAL(timeout()), this, SLOT(updateSystemLoad()));
+	systemLoadTimer->start(500);
 
 	setCentralWidget(screen);
-
-	statusBar()->showMessage("Ready");
 }
 
 MainWindow::~MainWindow()
@@ -200,6 +202,21 @@ void MainWindow::configWindow()
 	keyboardHelpAct->setStatusTip("Show info about Qt library");
 
 	//	============= Help =============
+
+	QLabel* separatorLabel = new QLabel(this);
+	separatorLabel->setFixedWidth(1);
+
+	systemLoadLabel = new QLabel("100%");
+	systemLoadLabel->setFixedWidth(120);
+
+	statusLabel = new QLabel(this);
+	statusLabel->setFixedWidth(150);
+
+	statusBar()->addPermanentWidget(separatorLabel);
+	statusBar()->addPermanentWidget(systemLoadLabel);
+	statusBar()->addPermanentWidget(statusLabel);
+
+	updateStatusLabel();
 }
 
 void MainWindow::configSystem()
@@ -250,11 +267,13 @@ void MainWindow::save()
 void MainWindow::pause()
 {
 	GeneralThings::bus->setPausedStatus(pauseAct->isChecked());
+	updateStatusLabel();
 }
 
 void MainWindow::maxSpeed()
 {
 	GeneralThings::bus->setMaxSpeedStatus(maxSpeedAct->isChecked());
+	updateStatusLabel();
 }
 
 void MainWindow::softReset()
@@ -336,6 +355,18 @@ void MainWindow::keyboardHelp()
 	keyboardHelpView->show();
 }
 
+void MainWindow::updateSystemLoad()
+{
+	std::ostringstream streamObj3;
+	streamObj3 << std::fixed;
+	streamObj3 << std::setprecision(2);
+	streamObj3 << GeneralThings::bus->getSystemLoad();
+	std::string strObj3 = streamObj3.str();
+
+	std::string text = "System load: " + strObj3 + " %";
+	systemLoadLabel->setText(QString::fromStdString(text));
+}
+
 void MainWindow::keyPressEvent(QKeyEvent* event)
 {
 	GeneralThings::bus->keyboard.keyPressed(event->nativeVirtualKey());
@@ -403,4 +434,9 @@ void MainWindow::scaleWindow(int additionalHeight, int scale)
 	int statusBarHeight = (statusBar()->isHidden()) ? 0 : statusBar()->height();
 
 	resize(GeneralThings::bus->video.screenWidth * scrrenScale, GeneralThings::bus->video.screenHeight * scrrenScale + (menuBar()->height() + toolBarHeight + statusBarHeight) + additionalHeight);
+}
+
+void MainWindow::updateStatusLabel()
+{
+	statusLabel->setText(GeneralThings::bus->getStatus());
 }

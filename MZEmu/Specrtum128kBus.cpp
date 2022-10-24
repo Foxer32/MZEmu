@@ -9,8 +9,8 @@
 using std::chrono::high_resolution_clock;
 using std::chrono::duration_cast;
 using std::chrono::duration;
-using std::chrono::milliseconds;
 int globalCounter = 0;
+steady_clock::time_point t1, t2, t3, t4, t5;
 float cpuTime, videoTime, ayTime, mixTime, totalTime;
 #endif // MEASURE_EMULATION_SPEED
 
@@ -144,40 +144,32 @@ void Specrtum128kBus::reset(bool hardReset)
 void Specrtum128kBus::clock()
 {
 #ifdef MEASURE_EMULATION_SPEED
+	t1 = high_resolution_clock::now();
+	cpu.update();
+	t2 = high_resolution_clock::now();
+	video.update();
+	t3 = high_resolution_clock::now();
+	ay8910.update();
+	t4 = high_resolution_clock::now();
+	mixAudioInputs();
+	t5 = high_resolution_clock::now();
 
-	if (++globalCounter >= (44100 / 2))
+	cpuTime = duration<float, std::micro>(t2 - t1).count();
+	videoTime = duration<float, std::micro>(t3 - t2).count();
+	ayTime = duration<float, std::micro>(t4 - t3).count();
+	mixTime = duration<float, std::micro>(t5 - t4).count();
+	totalTime = duration<float, std::micro>(t5 - t1).count();
+
+	if (++globalCounter >= (getSampleFrequency() / 2))
 	{
 		globalCounter = 0;
-		auto t1 = high_resolution_clock::now();
-		cpu.update();
-		auto t2 = high_resolution_clock::now();
-		video.update();
-		auto t3 = high_resolution_clock::now();
-		ay8910.update();
-		auto t4 = high_resolution_clock::now();
-		mixAudioInputs();
-		auto t5 = high_resolution_clock::now();
-
-		cpuTime = duration<float, std::micro>(t2 - t1).count();
-		videoTime = duration<float, std::micro>(t3 - t2).count();
-		ayTime = duration<float, std::micro>(t4 - t3).count();
-		mixTime = duration<float, std::micro>(t5 - t4).count();
-		totalTime = cpuTime + videoTime + ayTime + mixTime;
-
 		qInfo() << "--------------------------------";
 		qInfo() << "cpu\t\t" << cpuTime << "us";
 		qInfo() << "video\t" << videoTime << "us";
 		qInfo() << "ay\t\t" << ayTime << "us";
 		qInfo() << "mix\t\t" << mixTime << "us";
-		qInfo() << "Total:\t" << totalTime << "us, System load: " << (totalTime / (1.0f / 44100.0f * 1000000.0f)) * 100.0f << "%";
+		qInfo() << "Total:\t" << totalTime << "us, System load: " << (totalTime / (1.0f / getSampleFrequency() * 1000000.0f)) * 100.0f << "%";
 		qInfo() << "--------------------------------";
-	}
-	else
-	{
-		cpu.update();
-		video.update();
-		ay8910.update();
-		mixAudioInputs();
 	}
 #else
 	cpu.update();

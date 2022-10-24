@@ -13,6 +13,11 @@
 #include <QFileDialog>
 #include <QGraphicsView>
 #include <QGraphicsPixmapItem>
+#include <QLabel>
+#include <QTimer>
+#include <QTime>
+#include <sstream>
+#include <iomanip>
 
 #include "GeneralThings.h"
 #include "Specrtum128kBus.h"
@@ -51,6 +56,7 @@ private slots:
     void tapeBrowserShow();
     void about();
     void keyboardHelp();
+    void updateSystemLoad();
 
 private:
     void configWindow();
@@ -60,6 +66,7 @@ private:
     void hideBars();
     void updateBars();
     void scaleWindow(int additionalHeight = 0 ,int scale = -1);
+    void updateStatusLabel();
 
     int scrrenScale = 3;
 
@@ -72,6 +79,10 @@ private:
     QAction* maxSpeedAct;
     QAction* showToolBarAct;
     QAction* showStatusBarAct;
+    QLabel* statusLabel;
+    QLabel* systemLoadLabel;
+
+    QTimer* systemLoadTimer;
 
     TapeBrowserWindow* tapeBrowserWindow;
     QGraphicsView* keyboardHelpView;

@@ -9,6 +9,9 @@
 #include <QMenuBar>
 #include <QMessageBox>
 #include <QFileDialog>
+#include <QTableWidget>
+#include <QHeaderView>
+#include <string>
 
 #include "GeneralThings.h"
 
@@ -24,6 +27,7 @@ public slots:
 	void onUpdateProgressBar(int value);
 
 protected:
+	void showEvent(QShowEvent* event);
 	void closeEvent(QCloseEvent* event);
 
 private slots:
@@ -35,6 +39,9 @@ private slots:
 
 private:
 	void configWindow();
+	void addRow(std::string data,int length);
+
+	QTableWidget* table;
 
 	QToolBar* mainToolBar;
 	QProgressBar* progressBar;
