@@ -17,7 +17,7 @@ public:
 	virtual void reset(bool hardReset = false) override;
 	virtual void clock() override;
 
-	uint8_t mem[64 * 1024];
+	uint8_t mem[64 * 1024] = { 0 };
 
 private:
 	virtual void mixAudioInputs() override;

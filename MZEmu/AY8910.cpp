@@ -9,9 +9,11 @@ AY8910::AY8910()
 	for (int n = 0; n < 32; n++)
 		for (int m = 0; m < 6; m++)
 			vols[m][n] = (int)(((double)lion17AYTable[n / 2] * defaultLayout[1][m]) / 100);
-	
-	maxL = vols[0][31] + vols[2][31] + vols[3][31];
-	maxR = vols[1][31] + vols[3][31] + vols[5][31];
+
+	int maxL = (vols[0][31] + vols[2][31] + vols[3][31]);
+	int maxR = (vols[1][31] + vols[3][31] + vols[5][31]);
+
+	ampGlobal = ((maxL > maxR) ? maxL : maxR) / (0xFFFF / 2);
 }
 
 AY8910::~AY8910()
@@ -34,8 +36,8 @@ void AY8910::setFrequency(int frequency)
 int AY8910::step()
 {
 	int tmpVol = 0;
-	float mixL = 0;
-	float mixR = 0;
+	int mixL = 0;
+	int mixR = 0;
 
 	if (++counterA >= toneA)
 	{
@@ -90,8 +92,8 @@ int AY8910::step()
 		mixR += vols[5][tmpVol];
 	}
 
-	audioOut[0] = (mixL / maxL) - 1;
-	audioOut[1] = (mixR / maxR) - 1;
+	audioOut[0] = (mixL / ampGlobal) - (0xFFFF / 4);
+	audioOut[1] = (mixR / ampGlobal) - (0xFFFF / 4);
 
 	return 1;
 }
@@ -163,9 +165,9 @@ void AY8910::generateEnvelope()
 				{
 					if (env & 8)
 					{
-						if (env & 2) 
+						if (env & 2)
 						{
-							dir = -dir;						
+							dir = -dir;
 						}
 						vol = (dir > 0) ? 0 : 31;
 						if (env & 1)

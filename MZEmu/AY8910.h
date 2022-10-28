@@ -17,7 +17,7 @@ public:
 	void writeSelectedRegister(uint8_t val);
 	void selectRegister(uint8_t reg);
 
-	float audioOut[2] = { 0,0 };
+	int16_t audioOut[2] = { 0,0 };
 
 private:
 	void updateRegisters();
@@ -26,8 +26,7 @@ private:
 	uint8_t selectedRegister = 0;
 	uint8_t registers[16];
 
-	float maxL = 0;
-	float maxR = 0;
+	int ampGlobal = 0;
 
 	int envelope[16][128];
 	int vols[6][32];

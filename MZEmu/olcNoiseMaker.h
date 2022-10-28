@@ -67,7 +67,6 @@
 
 #include <Windows.h>
 
-const double PI = 2.0 * acos(0.0);
 
 template<class T>
 class olcNoiseMaker
@@ -160,18 +159,11 @@ public:
 	}
 
 	// Override to process current sample
-	virtual float UserProcess(int nChannel, float dTime)
+	virtual T UserProcess(int nChannel)
 	{
 		return 0.0;
 	}
-
-	float GetTime()
-	{
-		return m_dGlobalTime;
-	}
-
 	
-
 public:
 	static std::vector<std::wstring> Enumerate()
 	{
@@ -184,22 +176,13 @@ public:
 		return sDevices;
 	}
 
-	void SetUserFunction(std::function<float(int, float)> func)
+	void SetUserFunction(std::function<T(int)> func)
 	{
 		m_userFunction = func;
 	}
 
-	float clip(float dSample, float dMax)
-	{
-		if (dSample >= 0.0)
-			return fmin(dSample, dMax);
-		else
-			return fmax(dSample, -dMax);
-	}
-
-
 private:
-	std::function<float(int, float)> m_userFunction = nullptr;
+	std::function<T(int)> m_userFunction = nullptr;
 
 	unsigned int m_nSampleRate;
 	unsigned int m_nChannels;
@@ -216,8 +199,6 @@ private:
 	std::atomic<unsigned int> m_nBlockFree;
 	std::condition_variable m_cvBlockNotZero;
 	std::mutex m_muxBlockNotZero;
-
-	std::atomic<float> m_dGlobalTime;
 
 	// Handler for soundcard request for more data
 	void waveOutProc(HWAVEOUT hWaveOut, UINT uMsg, DWORD dwParam1, DWORD dwParam2)
@@ -240,13 +221,7 @@ private:
 	// card is ready for more data. The block is fille by the "user" in some manner
 	// and then issued to the soundcard.
 	void MainThread()
-	{
-		m_dGlobalTime = 0.0;
-		float dTimeStep = 1.0 / (float)m_nSampleRate;
-
-		// Goofy hack to get maximum integer for a type at run-time
-		T nMaxSample = (T)pow(2, (sizeof(T) * 8) - 1) - 1;
-		float dMaxSample = (float)nMaxSample;
+	{						   
 		T nPreviousSample = 0;
 
 		while (m_bReady)
@@ -275,15 +250,13 @@ private:
 				for (unsigned int c = 0; c < m_nChannels; c++)
 				{
 					if (m_userFunction == nullptr)
-						nNewSample = (T)(clip(UserProcess(c, m_dGlobalTime), 1.0) * dMaxSample);
+						nNewSample = UserProcess(c);
 					else
-						nNewSample = (T)(clip(m_userFunction(c, m_dGlobalTime), 1.0) * dMaxSample);
+						nNewSample = m_userFunction(c);
 					
 					m_pBlockMemory[nCurrentBlock + n + c] = nNewSample;
 					nPreviousSample = nNewSample;
 				}
-				
-				m_dGlobalTime = m_dGlobalTime + dTimeStep;
 			}
 
 			// Send block to sound device

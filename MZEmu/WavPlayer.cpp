@@ -18,7 +18,7 @@ void WavPlayer::setSampleFrequency(uint32_t sampleRate)
     updateSampleRate = sampleRate;
 }
 
-float WavPlayer::updateAudio()
+int16_t WavPlayer::updateAudio()
 {
     if (isPlaying)
     {
@@ -134,13 +134,14 @@ void WavPlayer::convertDataToSamples(uint8_t* data)
 
     deleteSamples();
 
-    samples = new float[sampleCount];
+    samples = new int16_t[sampleCount];
 
     bool isSigned = (header.bitsPerSample > 8);
     uint64_t bitMask = (_UI64_MAX >> (64 - header.bitsPerSample));
+    int64_t buffSample = 0;
     for (uint32_t i = 0; i < sampleCount; i++)
     {
-        samples[i] = 0;
+        buffSample = 0;
 
         for (uint32_t j = 0; j < header.numChannels; j++)
         {
@@ -149,10 +150,10 @@ void WavPlayer::convertDataToSamples(uint8_t* data)
             if (isSigned && (buffSample2 >> (header.bitsPerSample - 1)))
                 buffSample2 |= ~bitMask;
 
-            samples[i] += (float)(buffSample2) / (float)(bitMask >> isSigned);
+            buffSample += buffSample2 / (float)bitMask * (0xFFFF / 2);
         }
 
-        samples[i] /= header.numChannels;
+        samples[i] = buffSample / header.numChannels;
     }
 }
 

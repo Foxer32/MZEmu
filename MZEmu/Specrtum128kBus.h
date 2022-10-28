@@ -23,8 +23,8 @@ public:
 	AY8910 ay8910;
 
 	uint8_t port7FFD = 0;
-	uint8_t rom[32 * 1024];
-	uint8_t ram[128 * 1024];
+	uint8_t rom[32 * 1024] = { 0 };
+	uint8_t ram[128 * 1024] = { 0 };
 
 private:
 	virtual void mixAudioInputs() override;

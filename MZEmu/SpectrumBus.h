@@ -36,21 +36,21 @@ public:
 	SpectrumKeyboard keyboard;
 	KempstonJoystick joystick;
 
-	float audioOut[2] = { 0,0 };
-	float audioIn = 0;
+	int16_t audioOut[2] = { 0,0 };
+	int16_t audioIn = 0;
 
 	WavPlayer wavPlayer;
 
 protected:
-	float makeNoise(int nChanel, float dTime);
+	int16_t makeNoise(int nChanel);
 	virtual void mixAudioInputs() = 0;
 
 	bool pausedStatus = false;
 	bool maxSpeedStatus = false;
 
-	float speakerOut = 0;
+	int16_t speakerOut = 0;
 
-	static olcNoiseMaker<short>* noiseMaker;
+	static olcNoiseMaker<int16_t>* noiseMaker;
 
 private:
 	steady_clock::time_point tStart;

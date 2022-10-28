@@ -15,7 +15,7 @@ public:
     ~WavPlayer();
 
     void setSampleFrequency(uint32_t sampleRate);
-    float updateAudio();
+    int16_t updateAudio();
     void readFile(std::string path);
 
     void play();
@@ -58,7 +58,7 @@ private:
     uint32_t updateSampleRate = 0;
     uint32_t sampleIterator = 0;
     uint32_t sampleCount = 0;
-    float* samples = nullptr;
+    int16_t* samples = nullptr;
     bool canPlay = false;
     bool isPlaying = false;
     bool isPaused = false;

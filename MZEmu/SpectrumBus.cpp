@@ -27,8 +27,8 @@ void SpectrumBus::setSampleFrequency(uint32_t sampleRate)
 	this->sampleRate = sampleRate;
 
 	std::vector<std::wstring> devices = olcNoiseMaker<short>::Enumerate();
-	noiseMaker = new olcNoiseMaker<short>(devices[0], sampleRate, 2, 8, 512);
-	noiseMaker->SetUserFunction([&](int nChanel, float dTime) -> float { return makeNoise(nChanel, dTime); });
+	noiseMaker = new olcNoiseMaker<int16_t>(devices[0], sampleRate, 2, 8, 512);
+	noiseMaker->SetUserFunction([&](int nChanel) -> int16_t { return makeNoise(nChanel); });
 
 	cpu.setSampleFrequency(sampleRate);
 	video.setSampleFrequency(sampleRate);
@@ -71,7 +71,7 @@ float SpectrumBus::getSystemLoad()
 	return (execTime / (1.0f / 44100.0f * 1000000.0f)) * 100.0f;
 }
 
-float SpectrumBus::makeNoise(int nChanel, float dTime)
+int16_t SpectrumBus::makeNoise(int nChanel)
 {
 	if (!pausedStatus && (nChanel == 0))
 	{

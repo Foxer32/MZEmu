@@ -18,9 +18,6 @@ Specrtum128kBus::Specrtum128kBus()
 {
 	ay8910.setFrequency(1773400);
 
-	for (auto& i : rom) i = 0x00;
-	for (auto& i : ram) i = 0x00;
-
 	std::ifstream ifs;
 	ifs.open("roms/128.rom", std::ifstream::binary);
 	if (ifs.is_open())
@@ -90,7 +87,7 @@ uint8_t Specrtum128kBus::readPeripheral(uint16_t addr)
 	if ((addr & 0xFF) == 0xFE)
 	{
 		result = keyboard.getKey(addr >> 8);
-		result = (audioIn > 0.3f) ? result | 0x40 : result & ~(0x40);
+		result = (audioIn > (0xFFFF / 4)) ? result | 0x40 : result & ~(0x40);
 	}
 	
 	if ((addr & 0xFF) == 0xFD && !(port7FFD & 0x20))
@@ -113,7 +110,7 @@ void Specrtum128kBus::writePeripheral(uint16_t addr, uint8_t data)
 {
 	if ((addr & 0xFF) == 0xFE)
 	{
-		speakerOut = (((data & 0x18) >> 3) * 0.25f) - 1;
+		speakerOut = (((data & 0x18) >> 3) * (0xFFFF / 2 / 4)) - (0xFFFF / 4);
 		video.borderColor = data & 0x07;
 	}
 
@@ -187,6 +184,6 @@ void Specrtum128kBus::setSampleFrequency(uint32_t sampleRate)
 
 void Specrtum128kBus::mixAudioInputs()
 {
-	audioOut[0] = (speakerOut + audioIn + ay8910.audioOut[0]) / 3;
-	audioOut[1] = (speakerOut + audioIn + ay8910.audioOut[1]) / 3;
+	audioOut[0] = ((int)speakerOut + (int)audioIn + (int)ay8910.audioOut[0]) / 3;
+	audioOut[1] = ((int)speakerOut + (int)audioIn + (int)ay8910.audioOut[1]) / 3;
 }

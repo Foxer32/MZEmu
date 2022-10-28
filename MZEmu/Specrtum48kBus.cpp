@@ -3,8 +3,6 @@
 
 Specrtum48kBus::Specrtum48kBus()
 {
-	for (auto& i : mem) i = 0x00;
-
 	std::ifstream ifs;
 	ifs.open("roms/48.rom", std::ifstream::binary);
 	if (ifs.is_open())
@@ -42,7 +40,7 @@ uint8_t Specrtum48kBus::readPeripheral(uint16_t addr)
 	if ((addr & 0xFF) == 0xFE)
 	{
 		result = keyboard.getKey(addr >> 8);
-		result = (audioIn > 0.3f) ? result | 0x40 : result & ~(0x40);
+		result = (audioIn > (0xFFFF / 4)) ? result | 0x40 : result & ~(0x40);
 	}
 
 	return result;
@@ -52,7 +50,7 @@ void Specrtum48kBus::writePeripheral(uint16_t addr, uint8_t data)
 {
 	if ((addr & 0xFF) == 0xFE)
 	{
-		speakerOut = (((data & 0x18) >> 3) * 0.25f) - 1;
+		speakerOut = (((data & 0x18) >> 3) * (0xFFFF / 2 / 4)) - (0xFFFF / 4);
 		video.borderColor = data & 0x07;
 	}
 }
@@ -71,5 +69,5 @@ void Specrtum48kBus::clock()
 
 void Specrtum48kBus::mixAudioInputs()
 {
-	audioOut[0] = audioOut[1] = (speakerOut + audioIn) / 2;
+	audioOut[0] = audioOut[1] = ((int)speakerOut + (int)audioIn) / 2;
 }
