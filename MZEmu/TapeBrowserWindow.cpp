@@ -65,31 +65,40 @@ void TapeBrowserWindow::configWindow()
 
 	table->setColumnWidth(0, 20);
 	table->setColumnWidth(2, 60);
-	table->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Interactive);
+	table->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Fixed);
 	table->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Stretch);
-	table->horizontalHeader()->setSectionResizeMode(2, QHeaderView::Interactive);
+	table->horizontalHeader()->setSectionResizeMode(2, QHeaderView::Fixed);
 
 	setCentralWidget(table);
+
+	table->insertRow(table->rowCount());
+	table->verticalHeader()->setSectionResizeMode(table->rowCount() - 1, QHeaderView::Stretch);
 }
 
 void TapeBrowserWindow::addRow(std::string data, int length)
 {
+	if (table->rowCount() == 0)
+		table->insertRow(table->rowCount());
+
 	table->insertRow(table->rowCount());
 
-	QTableWidgetItem* col0 = new QTableWidgetItem(QString::number(table->rowCount()));
+	table->verticalHeader()->setSectionResizeMode(table->rowCount() - 2, QHeaderView::Fixed);
+	table->verticalHeader()->setSectionResizeMode(table->rowCount() - 1, QHeaderView::Stretch);
+
+	QTableWidgetItem* col0 = new QTableWidgetItem(QString::number(table->rowCount() - 2));
 	QTableWidgetItem* col1 = new QTableWidgetItem(QString::fromStdString(data));
 	QTableWidgetItem* col2 = new QTableWidgetItem(QString::number(length));
 
 	col0->setData(Qt::TextAlignmentRole, Qt::AlignCenter);
 
-	table->setItem(table->rowCount() - 1, 0, col0);
-	table->setItem(table->rowCount() - 1, 1, col1);
-	table->setItem(table->rowCount() - 1, 2, col2);
+	table->setItem(table->rowCount() - 2, 0, col0);
+	table->setItem(table->rowCount() - 2, 1, col1);
+	table->setItem(table->rowCount() - 2, 2, col2);
 }
 
 void TapeBrowserWindow::open()
 {
-	
+
 	std::string fileName = QFileDialog::getOpenFileName(this, "", "", "WAV files (*.wav)").toStdString();
 
 	try

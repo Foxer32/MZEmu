@@ -87,7 +87,7 @@ uint8_t Specrtum128kBus::readPeripheral(uint16_t addr)
 	if ((addr & 0xFF) == 0xFE)
 	{
 		result = keyboard.getKey(addr >> 8);
-		result = (audioIn > (0xFFFF / 4)) ? result | 0x40 : result & ~(0x40);
+		result = (audioIn > (0xFFFF / 6)) ? result | 0x40 : result & ~(0x40);
 	}
 	
 	if ((addr & 0xFF) == 0xFD && !(port7FFD & 0x20))

@@ -53,6 +53,17 @@ protected:
 	static olcNoiseMaker<int16_t>* noiseMaker;
 
 private:
+	void removeDC();
+
+	const int dividend = 1;
+	const int divisor = 10000;
+
+	int16_t lastOutChannnel0 = 0;
+	int16_t lastOutChannnel1 = 0;
+
+	int correctionChannnel0 = 0;
+	int correctionChannnel1 = 0;
+
 	steady_clock::time_point tStart;
 	steady_clock::time_point tEnd;
 

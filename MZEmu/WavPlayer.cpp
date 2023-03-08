@@ -150,7 +150,11 @@ void WavPlayer::convertDataToSamples(uint8_t* data)
             if (isSigned && (buffSample2 >> (header.bitsPerSample - 1)))
                 buffSample2 |= ~bitMask;
 
-            buffSample += buffSample2 / (float)bitMask * (0xFFFF / 2);
+            if (!isSigned)
+                buffSample2 -= ((1 << header.bitsPerSample) / 2);
+
+            //buffSample += (buffSample2 / (float)(bitMask / 2)) * (0xFFFF / 2);
+            buffSample += (buffSample2 / (float)bitMask) * 0xFFFF;
         }
 
         samples[i] = buffSample / header.numChannels;

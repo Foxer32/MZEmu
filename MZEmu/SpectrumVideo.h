@@ -13,6 +13,8 @@ public:
 
 	virtual int step() override;
 
+	bool fastRender = false;
+
 	uint8_t borderColor = 0;
 
 	int screenWidth = 0;

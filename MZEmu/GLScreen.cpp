@@ -70,5 +70,5 @@ void GLScreen::paintGL()
 	glDisable(GL_TEXTURE_2D);
 	
 	//repaint();
-	update();
+	//update();
 }

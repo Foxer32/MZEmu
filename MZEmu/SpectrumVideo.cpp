@@ -38,25 +38,32 @@ void SpectrumVideo::setScreen(GLScreen* screen)
 
 int SpectrumVideo::step()
 {
-	drawPixel(pixelCount++);
+	if (!fastRender)
+		drawPixel(pixelCount);
 
-	//pixelCount++;
+	pixelCount++;
 
 	if (pixelCount >= totalPixelsCount)
 	{
 		if (++frameCount >= 16)
 		{
-			//drawAllScreen();
-			//screen->update();
+			if (fastRender)
+			{
+				drawAllScreen();
+				screen->update();
+			}
+
 			videoFlashInvert = !videoFlashInvert;
 			frameCount = 0;
 		}
 
-		//screen->update();
+		if (!fastRender)
+			screen->update();
+
 		pixelCount = 0;
 		bus->cpu.maskableInterrupt();
 	}
-	
+
 	return 1;
 }
 
