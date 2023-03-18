@@ -1,14 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>qml;cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
-    </Filter>
     <Filter Include="Resource Files">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>qrc;rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
@@ -21,92 +13,121 @@
       <UniqueIdentifier>{639EADAA-A684-42e4-A9AD-28FC9BCB8F7C}</UniqueIdentifier>
       <Extensions>ts</Extensions>
     </Filter>
+    <Filter Include="General">
+      <UniqueIdentifier>{ca1c6437-ab65-4eb9-b3fd-8eca373ee538}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="General\Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="General\Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>qml;cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="File Workers">
+      <UniqueIdentifier>{33e3e9b2-5700-4933-8644-828a93c6cd30}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ZX Spectrum">
+      <UniqueIdentifier>{212bcd2a-17b7-4933-bbef-38283feceb7b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ZX Spectrum\Header Files">
+      <UniqueIdentifier>{166d932d-8429-434e-bddd-cdab011fc9c6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ZX Spectrum\Source Files">
+      <UniqueIdentifier>{0e9db9df-f7c9-47a6-9b19-a2e4cd2f6395}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="File Workers\Source Files">
+      <UniqueIdentifier>{9c77cc74-fac9-4926-bd1e-999f2b1dc372}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="File Workers\Header Files">
+      <UniqueIdentifier>{830e19fe-14f1-4f67-af89-9eb430d4f5e6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="MainWindow.h">
-      <Filter>Header Files</Filter>
+      <Filter>General\Header Files</Filter>
     </QtMoc>
     <ClCompile Include="MainWindow.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>General\Source Files</Filter>
     </ClCompile>
     <QtMoc Include="TapeBrowserWindow.h">
-      <Filter>Header Files</Filter>
+      <Filter>General\Header Files</Filter>
     </QtMoc>
     <QtMoc Include="WavPlayer.h">
-      <Filter>Header Files</Filter>
+      <Filter>File Workers\Header Files</Filter>
     </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>General\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="GLScreen.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Specrtum48kBus.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Specrtum128kBus.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SpectrumKeyboard.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SpectrumVideo.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="WavPlayer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SpectrumBus.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>General\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="TapeBrowserWindow.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>General\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="GeneralThings.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>General\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="AY8910.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>ZX Spectrum\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="KempstonJoystick.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>ZX Spectrum\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Specrtum128kBus.cpp">
+      <Filter>ZX Spectrum\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Specrtum48kBus.cpp">
+      <Filter>ZX Spectrum\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SpectrumBus.cpp">
+      <Filter>ZX Spectrum\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SpectrumKeyboard.cpp">
+      <Filter>ZX Spectrum\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SpectrumVideo.cpp">
+      <Filter>ZX Spectrum\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="WavPlayer.cpp">
+      <Filter>File Workers\Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GLScreen.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Specrtum48kBus.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Specrtum128kBus.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SpectrumKeyboard.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SpectrumVideo.h">
-      <Filter>Header Files</Filter>
+      <Filter>General\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="olcNoiseMaker.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SpectrumBus.h">
-      <Filter>Header Files</Filter>
+      <Filter>General\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="GeneralThings.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="AY8910.h">
-      <Filter>Header Files</Filter>
+      <Filter>General\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="WinNativeKeycodes.h">
-      <Filter>Header Files</Filter>
+      <Filter>General\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AY8910.h">
+      <Filter>ZX Spectrum\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="KempstonJoystick.h">
-      <Filter>Header Files</Filter>
+      <Filter>ZX Spectrum\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Specrtum48kBus.h">
+      <Filter>ZX Spectrum\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Specrtum128kBus.h">
+      <Filter>ZX Spectrum\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SpectrumBus.h">
+      <Filter>ZX Spectrum\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SpectrumKeyboard.h">
+      <Filter>ZX Spectrum\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SpectrumVideo.h">
+      <Filter>ZX Spectrum\Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

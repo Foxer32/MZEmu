@@ -40,6 +40,7 @@ private slots:
 private:
 	void configWindow();
 	void addRow(std::string data,int length);
+	std::string getBaseName(std::string const& path);
 
 	QTableWidget* table;
 

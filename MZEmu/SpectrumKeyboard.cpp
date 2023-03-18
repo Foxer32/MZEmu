@@ -58,8 +58,8 @@ SpectrumKeyboard::SpectrumKeyboard()
 
 SpectrumKeyboard::~SpectrumKeyboard()
 {
-	for (auto& [key, value] : keyMap)
-		delete[] value;
+	for (auto& kv : keyMap)
+		delete[] kv.second;
 }
 
 uint8_t SpectrumKeyboard::getKey(uint8_t keyRow)

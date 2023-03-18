@@ -1,5 +1,4 @@
 #include "TapeBrowserWindow.h"
-#include <filesystem>
 
 TapeBrowserWindow::TapeBrowserWindow(QWidget* parent)
 	: QMainWindow(parent)
@@ -96,6 +95,11 @@ void TapeBrowserWindow::addRow(std::string data, int length)
 	table->setItem(table->rowCount() - 2, 2, col2);
 }
 
+std::string TapeBrowserWindow::getBaseName(std::string const& path)
+{
+	return path.substr(path.find_last_of("/\\") + 1);
+}
+
 void TapeBrowserWindow::open()
 {
 
@@ -122,7 +126,7 @@ void TapeBrowserWindow::open()
 	if (GeneralThings::bus->wavPlayer.getOpenedFileLength() != 0)
 	{
 		table->setRowCount(0);
-		addRow(std::filesystem::path(GeneralThings::bus->wavPlayer.getOpenedFilePath()).filename().generic_string(), GeneralThings::bus->wavPlayer.getOpenedFileLength());
+		addRow(getBaseName(GeneralThings::bus->wavPlayer.getOpenedFilePath()), GeneralThings::bus->wavPlayer.getOpenedFileLength());
 	}
 }
 
@@ -151,7 +155,7 @@ void TapeBrowserWindow::showEvent(QShowEvent* event)
 	if (GeneralThings::bus->wavPlayer.getOpenedFileLength() != 0)
 	{
 		table->setRowCount(0);
-		addRow(std::filesystem::path(GeneralThings::bus->wavPlayer.getOpenedFilePath()).filename().generic_string(), GeneralThings::bus->wavPlayer.getOpenedFileLength());
+		addRow(getBaseName(GeneralThings::bus->wavPlayer.getOpenedFilePath()), GeneralThings::bus->wavPlayer.getOpenedFileLength());
 	}
 }
 
